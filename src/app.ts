@@ -2,12 +2,16 @@ import express from "express";
 import helmet from "helmet";
 import cors from "cors";
 import { errorHandler } from "./shared/middlewares/error.middleware";
+import { DataBase } from "./db";
+import { MainRoutes } from "./route";
 import { NotfoundError } from "./shared/errors/not-found.error";
 
 class App {
-  app: express.Express;
+  public app: express.Express;
+  private db: DataBase;
   constructor() {
     this.app = express();
+    this.db = new DataBase();
     this.init();
   }
 
@@ -18,19 +22,17 @@ class App {
   }
 
   private routes() {
-    this.app.get("/", (req, res) => {
-      res.json({ message: "Hello from Express!" });
+    this.app.use("/api/v1", new MainRoutes(this.db).router);
+    this.app.use((_req, _res, next) => {
+      next(new NotfoundError("Endpoint não encontrado"));
     });
   }
 
   private handlers() {
-    this.app.use((req, res, next) => {
-      next(new NotfoundError("Endpoint não encontrado"));
-    });
     this.app.use(errorHandler);
   }
 
-  public init() {
+  private init() {
     this.middlewares();
     this.routes();
     this.handlers();
