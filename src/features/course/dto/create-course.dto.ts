@@ -7,7 +7,7 @@ export const createCourseSchema = z
       .min(3, "Slug deve ter no mínimo 3 caracteres")
       .max(30, "Slug deve ter no máximo 30 caracteres")
       .regex(/^[a-z0-9-]+$/, "Slug deve conter apenas letras minúsculas, números e hífens")
-      .transform((val) => val.toLowerCase().trim()),
+      .transform((val) => val.toLowerCase().trim().replace(" ", "-")),
 
     title: z
       .string()
@@ -22,8 +22,8 @@ export const createCourseSchema = z
       .transform((val) => val.trim()),
 
     // Opcionais na criação (o service pode definir como 0 se não informado)
-    lessons: z.number().int().nonnegative().default(0),
-    hours: z.number().int().nonnegative().default(0),
+    lessons: z.number().int().nonnegative(),
+    hours: z.number().int().nonnegative(),
   })
   .strict();
 
