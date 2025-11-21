@@ -22,8 +22,8 @@ export const createCourseSchema = z
       .transform((val) => val.trim()),
 
     // Opcionais na criação (o service pode definir como 0 se não informado)
-    lessons: z.number().int().nonnegative(),
-    hours: z.number().int().nonnegative(),
+    lessons: z.int().nonnegative(),
+    hours: z.int().nonnegative(),
   })
   .strict();
 

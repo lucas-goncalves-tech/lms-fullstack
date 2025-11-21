@@ -1,9 +1,9 @@
 import { ConflictError } from "../../shared/errors/conflict.error";
-import { ICourseRepository } from "./interface/course.repo.interface";
+import { CourseRepository } from "./course.repository";
 import { CreateCourseInput } from "./interface/create-course.interface";
 
 export class CourseService {
-  constructor(private readonly courseRepository: ICourseRepository) {}
+  constructor(private readonly courseRepository: CourseRepository) {}
 
   async findAll() {
     return this.courseRepository.findAll();

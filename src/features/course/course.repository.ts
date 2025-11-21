@@ -1,10 +1,9 @@
 import { eq } from "drizzle-orm";
 import { DataBase } from "../../db";
 import { courses } from "../../db/schema";
-import { ICourseRepository } from "./interface/course.repo.interface";
 import { CreateCourseInput } from "./interface/create-course.interface";
 
-export class CourseRepository implements ICourseRepository {
+export class CourseRepository {
   constructor(private readonly db: DataBase) {}
 
   async findAll() {

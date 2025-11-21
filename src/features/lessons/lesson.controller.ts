@@ -12,4 +12,11 @@ export class LessonController {
 
     res.status(201).json(result);
   };
+
+  findManyByCourseSlug = async (req: Request, res: Response) => {
+    const { courseSlug } = req.params;
+    const result = await this.lessonService.findManyByCourseSlug(courseSlug);
+
+    res.status(200).json(result);
+  };
 }
