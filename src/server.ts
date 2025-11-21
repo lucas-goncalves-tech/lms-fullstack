@@ -1,12 +1,13 @@
-import app from "./app.ts";
+import { App } from "./app.ts";
 import { envCheck } from "./shared/helper/env-check.ts";
+import type { Express } from "express";
 
 class Server {
   private PORT: string;
-  private app: typeof app;
+  private app: Express;
   constructor() {
     this.PORT = envCheck().PORT;
-    this.app = app;
+    this.app = new App().app;
     this.init();
   }
 
