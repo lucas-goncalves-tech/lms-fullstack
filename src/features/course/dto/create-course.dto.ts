@@ -5,14 +5,14 @@ export const createCourseSchema = z
     slug: z
       .string()
       .min(3, "Slug deve ter no mínimo 3 caracteres")
-      .max(20, "Título deve ter no máximo 20 caracteres")
+      .max(30, "Slug deve ter no máximo 30 caracteres")
       .regex(/^[a-z0-9-]+$/, "Slug deve conter apenas letras minúsculas, números e hífens")
       .transform((val) => val.toLowerCase().trim()),
 
     title: z
       .string()
       .min(3, "Título deve ter no mínimo 3 caracteres")
-      .max(20, "Título deve ter no máximo 20 caracteres")
+      .max(30, "Título deve ter no máximo 30 caracteres")
       .transform((val) => val.trim()),
 
     description: z
