@@ -18,6 +18,7 @@ export class CourseRoutes {
   }
 
   initRoutes() {
+    this.router.get("/", this.controller.findAll);
     this.router.post(
       "/",
       validateMiddleware({ body: createCourseSchema }),

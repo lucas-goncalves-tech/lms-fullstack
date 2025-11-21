@@ -4,4 +4,5 @@ import { ICourses } from "./course.interface";
 export interface ICourseRepository {
   createCourse(courseData: CreateCourseDTO): Promise<ICourses | null>;
   findBySlug(courseSlug: string): Promise<ICourses | null>;
+  findAll(): Promise<ICourses[]>;
 }

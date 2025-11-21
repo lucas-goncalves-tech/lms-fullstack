@@ -11,4 +11,9 @@ export class CourseController {
 
     res.status(201).json(result);
   };
+
+  findAll = async (req: Request, res: Response) => {
+    const result = await this.courseService.findAll();
+    res.status(200).json(result);
+  };
 }
