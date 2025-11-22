@@ -10,7 +10,8 @@ import { createLessonParamsSchema, findLessonParamsSchema } from "./dto/lesson-p
 
 export class LessonRoutes {
   private readonly controller: LessonController;
-  router: Router;
+  private readonly router: Router;
+
   constructor(private readonly db: DataBase) {
     const repository = new LessonRepository(this.db);
     const courseRepository = new CourseRepository(this.db);
@@ -26,6 +27,9 @@ export class LessonRoutes {
       validateMiddleware({ params: createLessonParamsSchema }),
       this.controller.findManyByCourseSlug
     );
+
+    // fazer complete lesson após auth middleware
+
     this.router.get(
       "/:lessonSlug",
       validateMiddleware({ params: findLessonParamsSchema }),
@@ -36,5 +40,9 @@ export class LessonRoutes {
       validateMiddleware({ params: createLessonParamsSchema, body: createLessonSchema }),
       this.controller.createLesson
     );
+  }
+
+  getRouter() {
+    return this.router;
   }
 }

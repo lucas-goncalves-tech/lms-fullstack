@@ -1,5 +1,5 @@
 import { App } from "./app.ts";
-import { envCheck } from "./shared/helper/env-check.ts";
+import { envCheck } from "./shared/helper/env-check.helper.ts";
 import type { Express } from "express";
 
 class Server {

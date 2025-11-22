@@ -1,3 +1,4 @@
 import { users } from "../../../db/schema";
 
-export type User = typeof users.$inferSelect;
+export type IUser = typeof users.$inferSelect;
+export type CreateUserInput = Pick<IUser, "name" | "email" | "password_hash">;

@@ -2,9 +2,9 @@ CREATE TABLE `users` (
 	`id` text PRIMARY KEY NOT NULL,
 	`name` text NOT NULL,
 	`email` TEXT COLLATE NOCASE NOT NULL,
-	`password_hash` text NOT NULL,
-	`role` text DEFAULT 'USER' NOT NULL,
-	`created_at` integer,
+	`password_hash` TEXT NOT NULL,
+	`role` TEXT DEFAULT 'USER' NOT NULL,
+	`created` TEXT DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	CONSTRAINT "role_check" CHECK("users"."role" IN ('USER', 'ADMIN'))
 ) STRICT;
 --> statement-breakpoint

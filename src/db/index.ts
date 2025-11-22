@@ -1,7 +1,7 @@
 import { BetterSQLite3Database, drizzle } from "drizzle-orm/better-sqlite3";
 import DatabaseDriver from "better-sqlite3";
 import * as schema from "./schema";
-import { envCheck } from "../shared/helper/env-check";
+import { envCheck } from "../shared/helper/env-check.helper";
 
 export class DataBase {
   public connection: BetterSQLite3Database<typeof schema>;

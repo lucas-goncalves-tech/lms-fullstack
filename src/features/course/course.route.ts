@@ -7,8 +7,9 @@ import { validateMiddleware } from "../../shared/middlewares/validate.middleware
 import { createCourseSchema } from "./dto/create-course.dto";
 
 export class CourseRoutes {
-  private controller: CourseController;
-  public router: Router;
+  private readonly controller: CourseController;
+  private readonly router: Router;
+
   constructor(private readonly db: DataBase) {
     const repository = new CourseRepository(this.db);
     const service = new CourseService(repository);
@@ -17,7 +18,7 @@ export class CourseRoutes {
     this.initRoutes();
   }
 
-  initRoutes() {
+  private initRoutes() {
     this.router.get("/", this.controller.findAll);
     this.router.post(
       "/",
@@ -25,5 +26,9 @@ export class CourseRoutes {
       this.controller.createCourse
     );
     this.router.get("/:courseSlug", this.controller.findBySlug);
+  }
+
+  getRouter() {
+    return this.router;
   }
 }

@@ -1,9 +1,8 @@
 import { DataBase } from "../../db";
 import { users } from "../../db/schema";
-import { CreateUserInput } from "./interface/create-user.interface";
-import { IUserRepository } from "./interface/user-repo.interface";
+import { CreateUserInput } from "./interface/user.interface";
 
-export class UserRepository implements IUserRepository {
+export class UserRepository {
   constructor(private readonly db: DataBase) {}
 
   async createUser(user: CreateUserInput) {
