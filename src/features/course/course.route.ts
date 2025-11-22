@@ -24,5 +24,6 @@ export class CourseRoutes {
       validateMiddleware({ body: createCourseSchema }),
       this.controller.createCourse
     );
+    this.router.get("/:courseSlug", this.controller.findBySlug);
   }
 }

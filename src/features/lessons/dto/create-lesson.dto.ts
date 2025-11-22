@@ -19,7 +19,10 @@ export const createLessonSchema = z.strictObject({
     .int("Duração deve ser um número inteiro")
     .nonnegative("Duração não pode ser negativa"),
 
-  video: z.url("URL do vídeo inválida").or(z.string().min(1)),
+  video: z
+    .url("URL do vídeo inválida")
+    .or(z.string().min(1))
+    .transform((val) => val.trim()),
 
   description: z
     .string("Descrição deve ser uma string")

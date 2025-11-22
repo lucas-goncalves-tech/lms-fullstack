@@ -19,6 +19,6 @@ export class MainRoutes {
       res.json({ message: "Servidor está funcionando!" });
     });
     this.router.use("/courses", this.courseRoutes.router);
-    this.router.use("/courses/:courseSlug", this.lessonRoutes.router);
+    this.router.use("/courses/:courseSlug/lessons", this.lessonRoutes.router);
   }
 }

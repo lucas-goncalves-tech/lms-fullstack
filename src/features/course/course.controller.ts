@@ -16,4 +16,10 @@ export class CourseController {
     const result = await this.courseService.findAll();
     res.status(200).json(result);
   };
+
+  findBySlug = async (req: Request, res: Response) => {
+    const { courseSlug } = req.params;
+    const result = await this.courseService.findBySlug(courseSlug);
+    res.status(200).json(result);
+  };
 }
