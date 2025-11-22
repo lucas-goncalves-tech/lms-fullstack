@@ -28,8 +28,9 @@ export class LessonRepository {
         .select()
         .from(lessons)
         .where(eq(lessons.courseId, courseId))
-        .orderBy(asc(lessons.order));
-      if (!result) return [];
+        .orderBy(asc(lessons.order))
+        .all();
+      if (result.length === 0) return [];
       return result;
     } catch (error) {
       console.error("Error ao buscar aulas por curso", error);

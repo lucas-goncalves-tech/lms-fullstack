@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 import { DataBase } from "../../db";
 import { courses } from "../../db/schema";
 import { ICreateCourseInput } from "./interface/course.interface";
@@ -8,7 +8,12 @@ export class CourseRepository {
 
   async findAll() {
     try {
-      const result = this.db.connection.select().from(courses).all();
+      const result = this.db.connection
+        .select()
+        .from(courses)
+        .limit(100)
+        .orderBy(asc(courses.created))
+        .all();
       if (result.length === 0) return [];
       return result;
     } catch (error) {
