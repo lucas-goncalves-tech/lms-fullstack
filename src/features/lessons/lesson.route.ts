@@ -6,7 +6,7 @@ import { CourseRepository } from "../course/course.repository";
 import { Router } from "express";
 import { validateMiddleware } from "../../shared/middlewares/validate.middleware";
 import { createLessonSchema } from "./dto/create-lesson.dto";
-import { createLessonParamsSchema } from "./dto/lesson-params.dto";
+import { createLessonParamsSchema, findLessonParamsSchema } from "./dto/lesson-params.dto";
 
 export class LessonRoutes {
   private readonly controller: LessonController;
@@ -25,6 +25,11 @@ export class LessonRoutes {
       "/",
       validateMiddleware({ params: createLessonParamsSchema }),
       this.controller.findManyByCourseSlug
+    );
+    this.router.get(
+      "/:lessonSlug",
+      validateMiddleware({ params: findLessonParamsSchema }),
+      this.controller.findBySlug
     );
     this.router.post(
       "/",

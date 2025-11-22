@@ -34,4 +34,16 @@ export class LessonService {
     const result = await this.lessonRepository.findManyByCourseId(course.id);
     return result;
   }
+
+  async findBySlug(courseSlug: string, lessonSlug: string) {
+    const course = await this.courseRepository.findBySlug(courseSlug);
+    if (!course) {
+      throw new NotfoundError("Curso não encontrado");
+    }
+    const result = await this.lessonRepository.findBySlug(course.id, lessonSlug);
+    if (!result) {
+      throw new NotfoundError("Aula não encontrada");
+    }
+    return result;
+  }
 }

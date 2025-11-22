@@ -1,6 +1,6 @@
-import { asc, eq } from "drizzle-orm";
+import { and, asc, eq } from "drizzle-orm";
 import { DataBase } from "../../db";
-import { lessons } from "../../db/schema";
+import { courses, lessons } from "../../db/schema";
 import { ICreateLessonInput, ILesson } from "./interface/lesson.interface";
 
 export class LessonRepository {
@@ -34,6 +34,21 @@ export class LessonRepository {
       return result;
     } catch (error) {
       console.error("Error ao buscar aulas por curso", error);
+      throw error;
+    }
+  }
+
+  async findBySlug(courseId: string, lessonSlug: string): Promise<ILesson | null> {
+    try {
+      const result = this.db.connection
+        .select()
+        .from(lessons)
+        .where(and(eq(lessons.slug, lessonSlug), eq(lessons.courseId, courseId)))
+        .get();
+
+      return result ?? null;
+    } catch (error) {
+      console.error("💥 Error ao buscar aula por slug", error);
       throw error;
     }
   }

@@ -19,4 +19,11 @@ export class LessonController {
 
     res.status(200).json(result);
   };
+
+  findBySlug = async (req: Request, res: Response) => {
+    const { courseSlug, lessonSlug } = req.params;
+    const result = await this.lessonService.findBySlug(courseSlug, lessonSlug);
+
+    res.status(200).json(result);
+  };
 }
