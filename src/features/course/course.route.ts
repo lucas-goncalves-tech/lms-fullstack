@@ -28,7 +28,7 @@ export class CourseRoutes {
     this.router.get("/:courseSlug", this.controller.findBySlug);
   }
 
-  getRouter() {
+  get getRouter() {
     return this.router;
   }
 }

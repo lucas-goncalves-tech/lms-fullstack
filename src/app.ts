@@ -22,7 +22,7 @@ class App {
   }
 
   private routes() {
-    this.app.use("/api/v1", new MainRoutes(this.db).router);
+    this.app.use("/api/v1", new MainRoutes(this.db).getRouter);
     this.app.use((_req, _res, next) => {
       next(new NotfoundError("Endpoint não encontrado"));
     });

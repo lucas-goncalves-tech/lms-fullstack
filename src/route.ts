@@ -5,10 +5,10 @@ import { LessonRoutes } from "./features/lessons/lesson.route";
 import { AuthRoutes } from "./features/auth/auth.routes";
 
 export class MainRoutes {
-  public router: Router;
-  private courseRoutes: CourseRoutes;
-  private lessonRoutes: LessonRoutes;
-  private authRoutes: AuthRoutes;
+  private readonly router: Router;
+  private readonly courseRoutes: CourseRoutes;
+  private readonly lessonRoutes: LessonRoutes;
+  private readonly authRoutes: AuthRoutes;
 
   constructor(private readonly db: DataBase) {
     this.router = Router();
@@ -19,11 +19,12 @@ export class MainRoutes {
   }
 
   private initRoutes() {
-    this.router.get("/health", (_req, res) => {
-      res.json({ message: "Servidor está funcionando!" });
-    });
-    this.router.use("/courses", this.courseRoutes.getRouter());
-    this.router.use("/lessons/:courseSlug", this.lessonRoutes.getRouter());
-    this.router.use("/auth", this.authRoutes.getRouter());
+    this.router.use("/courses", this.courseRoutes.getRouter);
+    this.router.use("/lessons/:courseSlug", this.lessonRoutes.getRouter);
+    this.router.use("/auth", this.authRoutes.getRouter);
+  }
+
+  get getRouter() {
+    return this.router;
   }
 }

@@ -42,7 +42,7 @@ export class LessonRoutes {
     );
   }
 
-  getRouter() {
+  get getRouter() {
     return this.router;
   }
 }

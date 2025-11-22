@@ -25,7 +25,7 @@ export class AuthRoutes {
     );
   }
 
-  getRouter() {
+  get getRouter() {
     return this.router;
   }
 }
