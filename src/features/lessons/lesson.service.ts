@@ -27,23 +27,20 @@ export class LessonService {
   }
 
   async findManyByCourseSlug(courseSlug: string) {
-    const course = await this.courseRepository.findBySlug(courseSlug);
-    if (!course) {
-      throw new NotfoundError("Curso não encontrado");
-    }
-    const result = await this.lessonRepository.findManyByCourseId(course.id);
+    const result = await this.lessonRepository.findManyByCourseSlug(courseSlug);
     return result;
   }
 
   async findBySlug(courseSlug: string, lessonSlug: string) {
-    const course = await this.courseRepository.findBySlug(courseSlug);
-    if (!course) {
-      throw new NotfoundError("Curso não encontrado");
-    }
-    const result = await this.lessonRepository.findBySlug(course.id, lessonSlug);
-    if (!result) {
+    const lesson = await this.lessonRepository.findBySlug(courseSlug, lessonSlug);
+    if (!lesson) {
       throw new NotfoundError("Aula não encontrada");
     }
-    return result;
+    const lessonNav = await this.lessonRepository.lessonNav(courseSlug, lessonSlug);
+    const i = lessonNav.findIndex((l) => l.slug === lesson.slug);
+    const prevLesson = lessonNav[i - 1]?.slug ?? null;
+    const nextLesson = lessonNav[i + 1]?.slug ?? null;
+
+    return { ...lesson, prevLesson, nextLesson };
   }
 }
