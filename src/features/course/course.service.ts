@@ -1,6 +1,6 @@
 import { ConflictError } from "../../shared/errors/conflict.error";
 import { CourseRepository } from "./course.repository";
-import { CreateCourseInput } from "./interface/create-course.interface";
+import { ICreateCourseInput } from "./interface/course.interface";
 
 export class CourseService {
   constructor(private readonly courseRepository: CourseRepository) {}
@@ -9,7 +9,7 @@ export class CourseService {
     return this.courseRepository.findAll();
   }
 
-  async createCourse(courseData: CreateCourseInput) {
+  async createCourse(courseData: ICreateCourseInput) {
     const result = await this.courseRepository.createCourse(courseData);
     if (!result) {
       throw new ConflictError("Este curso já existe");

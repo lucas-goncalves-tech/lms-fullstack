@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { DataBase } from "../../db";
 import { courses } from "../../db/schema";
-import { CreateCourseInput } from "./interface/create-course.interface";
+import { ICreateCourseInput } from "./interface/course.interface";
 
 export class CourseRepository {
   constructor(private readonly db: DataBase) {}
@@ -32,7 +32,7 @@ export class CourseRepository {
     }
   }
 
-  async createCourse(courseData: CreateCourseInput) {
+  async createCourse(courseData: ICreateCourseInput) {
     try {
       const result = this.db.connection
         .insert(courses)

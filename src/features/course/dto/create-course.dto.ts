@@ -20,8 +20,6 @@ export const createCourseSchema = z
       .min(10, "Descrição deve ter no mínimo 10 caracteres")
       .max(300, "Descrição deve ter no máximo 300 caracteres")
       .transform((val) => val.trim()),
-
-    // Opcionais na criação (o service pode definir como 0 se não informado)
     lessons: z.int().nonnegative(),
     hours: z.int().nonnegative(),
   })

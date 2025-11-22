@@ -1,13 +1,12 @@
 import { asc, eq } from "drizzle-orm";
 import { DataBase } from "../../db";
 import { lessons } from "../../db/schema";
-import { CreateLessonInput } from "./interface/create-lesson.interface";
-import { ILesson } from "./interface/lesson.interface";
+import { ICreateLessonInput, ILesson } from "./interface/lesson.interface";
 
 export class LessonRepository {
   constructor(private readonly db: DataBase) {}
 
-  async createLesson(lessonData: CreateLessonInput): Promise<ILesson | null> {
+  async createLesson(lessonData: ICreateLessonInput): Promise<ILesson | null> {
     try {
       const result = this.db.connection
         .insert(lessons)
