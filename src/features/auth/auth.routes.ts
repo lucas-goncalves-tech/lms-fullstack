@@ -9,10 +9,12 @@ import { loginUserSchema } from "./dto/login-user.dto";
 import { SessionsRepository } from "../sessions/sessions.repository";
 import { CryptoService } from "../../shared/security/crypto-service.security";
 import { SessionsService } from "../sessions/sessions.service";
+import { ValidateSessionMiddleware } from "../../shared/middlewares/validate-session.middleware";
 
 export class AuthRoutes {
   private readonly controller: AuthController;
   private readonly router: Router;
+  private readonly validateSessionMiddleware: ValidateSessionMiddleware;
 
   constructor(private readonly db: DataBase) {
     const sessionsRepository = new SessionsRepository(this.db);
@@ -20,12 +22,18 @@ export class AuthRoutes {
     const cryptoService = new CryptoService();
     const sessionsService = new SessionsService(sessionsRepository, userRepository, cryptoService);
     const authService = new AuthService(userRepository);
+    this.validateSessionMiddleware = new ValidateSessionMiddleware(sessionsService);
     this.controller = new AuthController(authService, sessionsService);
     this.router = Router();
     this.initRoutes();
   }
 
   private initRoutes() {
+    this.router.get(
+      "/logout",
+      this.validateSessionMiddleware.validateSession,
+      this.controller.logoutUser
+    );
     this.router.post(
       "/register",
       validateMiddleware({ body: createUserSchema }),

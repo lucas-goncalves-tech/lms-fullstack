@@ -33,4 +33,18 @@ export class AuthController {
     });
     res.status(204).end();
   };
+
+  logoutUser = async (req: Request, res: Response) => {
+    const sid = req.cookies["__Secure-sid"]!;
+
+    await this.sessionsService.revokeSession(sid);
+
+    res.clearCookie("__Secure-sid", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "lax",
+      path: "/",
+    });
+    res.status(204).end();
+  };
 }
