@@ -5,6 +5,7 @@ import { UserRepository } from "../user/user.repository";
 import { Router } from "express";
 import { validateMiddleware } from "../../shared/middlewares/validate.middleware";
 import { createUserSchema } from "./dto/create-user.dto";
+import { loginUserSchema } from "./dto/login-user.dto";
 
 export class AuthRoutes {
   private readonly controller: AuthController;
@@ -23,6 +24,7 @@ export class AuthRoutes {
       validateMiddleware({ body: createUserSchema }),
       this.controller.createUser
     );
+    this.router.post("/", validateMiddleware({ body: loginUserSchema }), this.controller.loginUser);
   }
 
   get getRouter() {

@@ -1,3 +1,4 @@
+import { eq } from "drizzle-orm";
 import { DataBase } from "../../db";
 import { users } from "../../db/schema";
 import { CreateUserInput } from "./interface/user.interface";
@@ -5,18 +6,29 @@ import { CreateUserInput } from "./interface/user.interface";
 export class UserRepository {
   constructor(private readonly db: DataBase) {}
 
+  async findUserByEmail(email: string) {
+    try {
+      const result = this.db.connection.select().from(users).where(eq(users.email, email)).get();
+      return result ?? null;
+    } catch (err) {
+      console.error("Erro ao buscar usuário por email:", err);
+      throw err;
+    }
+  }
+
   async createUser(user: CreateUserInput) {
     try {
       const result = this.db.connection
         .insert(users)
         .values(user)
         .onConflictDoNothing()
-        .returning()
+        .returning({
+          name: users.name,
+          email: users.email,
+          role: users.role,
+        })
         .get();
-      if (!result) {
-        return null;
-      }
-      return result;
+      return result ?? null;
     } catch (err) {
       console.error("Erro ao criar usuário:", err);
       throw err;
