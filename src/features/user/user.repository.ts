@@ -6,12 +6,26 @@ import { CreateUserInput } from "./interface/user.interface";
 export class UserRepository {
   constructor(private readonly db: DataBase) {}
 
-  async findUserByEmail(email: string) {
+  async findUserByKey(key: "email" | "id", value: string) {
     try {
-      const result = this.db.connection.select().from(users).where(eq(users.email, email)).get();
+      const result = this.db.connection.select().from(users).where(eq(users[key], value)).get();
       return result ?? null;
     } catch (err) {
-      console.error("Erro ao buscar usuário por email:", err);
+      console.error(`Erro ao buscar usuário por ${key}:`, err);
+      throw err;
+    }
+  }
+
+  async findUserRole(userId: string) {
+    try {
+      const result = this.db.connection
+        .select({ role: users.role })
+        .from(users)
+        .where(eq(users.id, userId))
+        .get();
+      return result ?? null;
+    } catch (err) {
+      console.error(`Erro ao buscar usuário role do usuário:`, err);
       throw err;
     }
   }

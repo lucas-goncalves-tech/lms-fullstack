@@ -6,14 +6,21 @@ import { Router } from "express";
 import { validateMiddleware } from "../../shared/middlewares/validate.middleware";
 import { createUserSchema } from "./dto/create-user.dto";
 import { loginUserSchema } from "./dto/login-user.dto";
+import { SessionsRepository } from "../sessions/sessions.repository";
+import { CryptoService } from "../../shared/security/crypto-service.security";
+import { SessionsService } from "../sessions/sessions.service";
 
 export class AuthRoutes {
   private readonly controller: AuthController;
   private readonly router: Router;
 
   constructor(private readonly db: DataBase) {
-    const authService = new AuthService(new UserRepository(this.db));
-    this.controller = new AuthController(authService);
+    const sessionsRepository = new SessionsRepository(this.db);
+    const userRepository = new UserRepository(this.db);
+    const cryptoService = new CryptoService();
+    const sessionsService = new SessionsService(sessionsRepository, userRepository, cryptoService);
+    const authService = new AuthService(userRepository);
+    this.controller = new AuthController(authService, sessionsService);
     this.router = Router();
     this.initRoutes();
   }

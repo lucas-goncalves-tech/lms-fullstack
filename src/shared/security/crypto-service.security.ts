@@ -1,5 +1,6 @@
 import {
   type BinaryLike,
+  createHash,
   createHmac,
   randomBytes,
   scrypt,
@@ -40,12 +41,13 @@ export class CryptoService {
     },
   };
   private readonly scryptAsync: Scrypt_Async = promisify(scrypt);
-  private readonly randomBytesAsync: RandomBytes_Async = promisify(randomBytes);
+  public readonly randomBytesAsync: RandomBytes_Async = promisify(randomBytes);
   private readonly PEPPER: string = envCheck().PEPPER;
   private readonly NORM: Normalize = "NFC";
   private readonly ENCODE: BufferEncoding = "hex";
   private readonly ALGORITHM: Algorithm = "sha256";
-  constructor() {}
+  
+  
 
   private parseHash(storedHash: string) {
     const [stored_salt_hex, stored_dk_hex] = storedHash.split(this.SCRYPT_CONFIG.separator);
@@ -59,6 +61,9 @@ export class CryptoService {
     return createHmac(this.ALGORITHM, this.PEPPER).update(toEncode_normalized).digest();
   }
 
+  public sha256(data: string | Buffer): Buffer {
+    return createHash("sha256").update(data).digest();
+  }
   public async hash(password: string) {
     const pasword_hmac = this.createHmac(password);
     const salt_buffer = await this.randomBytesAsync(this.SCRYPT_CONFIG.saltLength);
