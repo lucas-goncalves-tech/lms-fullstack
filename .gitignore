@@ -14,3 +14,4 @@ coverage
 *.db
 sqlite.db
 sqlite.db-journal
+.agent
