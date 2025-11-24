@@ -47,4 +47,8 @@ export class AuthController {
     });
     res.status(204).end();
   };
+
+  me = async (req: Request, res: Response) => {
+    res.status(200).json(req.session);
+  };
 }

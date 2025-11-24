@@ -11,8 +11,9 @@ export class ValidateSessionMiddleware {
     try {
       const session = await this.sessionsService.validateSession(sid);
       req.session = {
-        userId: session.userId,
-        role: session.userRole.role,
+        role: session.user.role,
+        name: session.user.name,
+        email: session.user.email,
       };
       if (session.renewed) {
         res.cookie("__Secure-sid", sid, {

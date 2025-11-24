@@ -16,16 +16,20 @@ export class UserRepository {
     }
   }
 
-  async findUserRole(userId: string) {
+  async findUserSessionInfo(userId: string) {
     try {
       const result = this.db.connection
-        .select({ role: users.role })
+        .select({
+          name: users.name,
+          email: users.email,
+          role: users.role,
+        })
         .from(users)
         .where(eq(users.id, userId))
         .get();
       return result ?? null;
     } catch (err) {
-      console.error(`Erro ao buscar usuário role do usuário:`, err);
+      console.error(`Erro ao buscar informações de sessão do usuário:`, err);
       throw err;
     }
   }

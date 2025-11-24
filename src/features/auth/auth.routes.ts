@@ -34,6 +34,7 @@ export class AuthRoutes {
       this.validateSessionMiddleware.validateSession,
       this.controller.logoutUser
     );
+    this.router.get("/me", this.validateSessionMiddleware.validateSession, this.controller.me);
     this.router.post(
       "/register",
       validateMiddleware({ body: createUserSchema }),

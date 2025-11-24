@@ -46,16 +46,15 @@ export class SessionsService {
       await this.sessionsRepository.updateExpiresBySidHash(sidHash, expires_ms);
       renewed = true;
     }
-    const userRole = await this.userRepository.findUserRole(session.userId);
-    if (!userRole) {
+    const user = await this.userRepository.findUserSessionInfo(session.userId);
+    if (!user) {
       await this.sessionsRepository.revokeSessionByKey("userId", session.userId);
       throw new SessionError();
     }
 
     return {
-      userId: session.userId,
       expires_ms: expires_ms - now,
-      userRole,
+      user,
       renewed,
     };
   }
