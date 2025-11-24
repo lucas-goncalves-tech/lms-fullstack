@@ -57,13 +57,26 @@ export class LessonService {
   async completeLesson(userId: string, courseSlug: string, lessonSlug: string) {
     const lesson = await this.lessonRepository.findBySlug(courseSlug, lessonSlug);
     if (!lesson) {
-      throw new NotfoundError("Aula não encontrada");
+      throw new NotfoundError("Curso ou aula não encontrada");
     }
     const result = await this.lessonRepository.completeLesson(userId, lesson.courseId, lesson.id);
     if (!result) {
       throw new BadRequestError("Aula já foi completada");
     }
-    return result;
+    const progress = await this.lessonRepository.lessonsProgress(userId, lesson.courseId);
+    const incompleteLessons = progress.filter((l) => !l.completed);
+    let hasCertificate = "";
+    if (progress.length > 0 && incompleteLessons.length === 0) {
+      const certificate = await this.courseRepository.completeCourse(userId, lesson.courseId);
+      if (!certificate) {
+        throw new BadRequestError("Não foi possível emitir o certificado");
+      }
+      hasCertificate = certificate.id;
+    }
+    return {
+      completed: result.completed,
+      hasCertificate,
+    };
   }
 
   async resetCourseCompleted(userId: string, courseSlug: string) {

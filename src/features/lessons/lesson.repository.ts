@@ -121,6 +121,25 @@ export class LessonRepository {
     }
   }
 
+  async lessonsProgress(userId: string, courseId: string) {
+    try {
+      const result = this.db.connection
+        .select({ id: lessons.id, completed: lessonsCompleted.completed })
+        .from(lessons)
+        .leftJoin(
+          lessonsCompleted,
+          and(eq(lessons.id, lessonsCompleted.lessonId), eq(lessonsCompleted.userId, userId))
+        )
+        .where(eq(lessons.courseId, courseId))
+        .orderBy(asc(lessons.order))
+        .all();
+      return result;
+    } catch (error) {
+      console.error("Error ao buscar progresso de aulas", error);
+      throw error;
+    }
+  }
+
   async resetCourseCompleted(userId: string, courseId: string) {
     try {
       return this.db.connection

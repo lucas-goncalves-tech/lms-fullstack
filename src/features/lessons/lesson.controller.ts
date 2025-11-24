@@ -31,9 +31,9 @@ export class LessonController {
   completeLesson = async (req: Request, res: Response) => {
     const userId = req.session!.userId;
     const { courseSlug, lessonSlug } = req.params;
-    await this.lessonService.completeLesson(userId, courseSlug, lessonSlug);
+    const result = await this.lessonService.completeLesson(userId, courseSlug, lessonSlug);
 
-    res.status(204).end();
+    res.status(200).json(result);
   };
 
   resetCourseCompleted = async (req: Request, res: Response) => {
