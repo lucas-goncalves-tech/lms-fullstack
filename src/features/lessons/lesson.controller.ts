@@ -21,9 +21,26 @@ export class LessonController {
   };
 
   findBySlug = async (req: Request, res: Response) => {
+    const userId = req.session!.userId;
     const { courseSlug, lessonSlug } = req.params;
-    const result = await this.lessonService.findBySlug(courseSlug, lessonSlug);
+    const result = await this.lessonService.findBySlug(userId, courseSlug, lessonSlug);
 
     res.status(200).json(result);
+  };
+
+  completeLesson = async (req: Request, res: Response) => {
+    const userId = req.session!.userId;
+    const { courseSlug, lessonSlug } = req.params;
+    await this.lessonService.completeLesson(userId, courseSlug, lessonSlug);
+
+    res.status(204).end();
+  };
+
+  resetCourseCompleted = async (req: Request, res: Response) => {
+    const userId = req.session!.userId;
+    const { courseSlug } = req.params;
+    await this.lessonService.resetCourseCompleted(userId, courseSlug);
+
+    res.status(204).end();
   };
 }

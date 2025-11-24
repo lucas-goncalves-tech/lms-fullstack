@@ -11,6 +11,7 @@ import { SessionsRepository } from "../sessions/sessions.repository";
 import { CryptoService } from "../../shared/security/crypto-service.security";
 import { UserRepository } from "../user/user.repository";
 import { GuardRoleMiddleware } from "../../shared/middlewares/guard-role.middleware";
+import { LessonRepository } from "../lessons/lesson.repository";
 
 export class CourseRoutes {
   private readonly controller: CourseController;
@@ -20,11 +21,12 @@ export class CourseRoutes {
 
   constructor(private readonly db: DataBase) {
     const repository = new CourseRepository(this.db);
+    const lessonRepository = new LessonRepository(this.db);
     const sessionsRepository = new SessionsRepository(this.db);
     const userRepository = new UserRepository(this.db);
     const cryptoService = new CryptoService();
     const sessionsService = new SessionsService(sessionsRepository, userRepository, cryptoService);
-    const service = new CourseService(repository);
+    const service = new CourseService(repository, lessonRepository);
     this.validateSessionMiddleware = new ValidateSessionMiddleware(sessionsService);
     this.guardRoleMiddleware = new GuardRoleMiddleware();
     this.controller = new CourseController(service);

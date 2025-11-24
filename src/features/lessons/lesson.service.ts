@@ -1,3 +1,4 @@
+import { BadRequestError } from "../../shared/errors/bad-request.error";
 import { ConflictError } from "../../shared/errors/conflict.error";
 import { NotfoundError } from "../../shared/errors/not-found.error";
 import { CourseRepository } from "../course/course.repository";
@@ -30,7 +31,7 @@ export class LessonService {
     return await this.lessonRepository.findManyByCourseSlug(courseSlug);
   }
 
-  async findBySlug(courseSlug: string, lessonSlug: string) {
+  async findBySlug(userId: string, courseSlug: string, lessonSlug: string) {
     const lesson = await this.lessonRepository.findBySlug(courseSlug, lessonSlug);
     if (!lesson) {
       throw new NotfoundError("Aula não encontrada");
@@ -40,6 +41,39 @@ export class LessonService {
     const prevLesson = lessonNav[i - 1]?.slug ?? null;
     const nextLesson = lessonNav[i + 1]?.slug ?? null;
 
-    return { ...lesson, prevLesson, nextLesson };
+    let completed = "";
+    const whenComplete = await this.lessonRepository.findWhenLessonCompleted(
+      userId,
+      lesson.courseId,
+      lesson.id
+    );
+    if (whenComplete) {
+      completed = whenComplete;
+    }
+
+    return { ...lesson, prevLesson, nextLesson, completed };
+  }
+
+  async completeLesson(userId: string, courseSlug: string, lessonSlug: string) {
+    const lesson = await this.lessonRepository.findBySlug(courseSlug, lessonSlug);
+    if (!lesson) {
+      throw new NotfoundError("Aula não encontrada");
+    }
+    const result = await this.lessonRepository.completeLesson(userId, lesson.courseId, lesson.id);
+    if (!result) {
+      throw new BadRequestError("Aula já foi completada");
+    }
+    return result;
+  }
+
+  async resetCourseCompleted(userId: string, courseSlug: string) {
+    const course = await this.courseRepository.findBySlug(courseSlug);
+    if (!course) {
+      throw new NotfoundError("Curso não encontrado");
+    }
+    const result = await this.lessonRepository.resetCourseCompleted(userId, course.id);
+    if (!result) {
+      throw new BadRequestError("Aulas do curso já foram resetadas");
+    }
   }
 }

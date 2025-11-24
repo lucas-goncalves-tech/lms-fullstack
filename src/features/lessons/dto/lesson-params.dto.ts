@@ -1,6 +1,6 @@
 import z from "zod";
 
-export const createLessonParamsSchema = z.object({
+export const LessonParamsSchema = z.object({
   courseSlug: z
     .string()
     .min(5, "Slug do curso deve ter no mínimo 5 caracteres")

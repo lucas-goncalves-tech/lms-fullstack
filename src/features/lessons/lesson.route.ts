@@ -6,13 +6,14 @@ import { CourseRepository } from "../course/course.repository";
 import { Router } from "express";
 import { validateMiddleware } from "../../shared/middlewares/validate.middleware";
 import { createLessonSchema } from "./dto/create-lesson.dto";
-import { createLessonParamsSchema, findLessonParamsSchema } from "./dto/lesson-params.dto";
+import { LessonParamsSchema, findLessonParamsSchema } from "./dto/lesson-params.dto";
 import { SessionsRepository } from "../sessions/sessions.repository";
 import { UserRepository } from "../user/user.repository";
 import { CryptoService } from "../../shared/security/crypto-service.security";
 import { SessionsService } from "../sessions/sessions.service";
 import { ValidateSessionMiddleware } from "../../shared/middlewares/validate-session.middleware";
 import { GuardRoleMiddleware } from "../../shared/middlewares/guard-role.middleware";
+import { completeLessonParamsSchema } from "./dto/complete-lesson.dto";
 
 export class LessonRoutes {
   private readonly controller: LessonController;
@@ -39,11 +40,15 @@ export class LessonRoutes {
     this.router.use(this.validateSessionMiddleware.validateSession);
     this.router.get(
       "/",
-      validateMiddleware({ params: createLessonParamsSchema }),
+      validateMiddleware({ params: LessonParamsSchema }),
       this.controller.findManyByCourseSlug
     );
 
-    // fazer complete lesson após auth middleware
+    this.router.get(
+      "/:lessonSlug/complete",
+      validateMiddleware({ params: completeLessonParamsSchema }),
+      this.controller.completeLesson
+    );
 
     this.router.get(
       "/:lessonSlug",
@@ -52,9 +57,14 @@ export class LessonRoutes {
     );
     this.router.post(
       "/",
-      validateMiddleware({ params: createLessonParamsSchema, body: createLessonSchema }),
+      validateMiddleware({ params: LessonParamsSchema, body: createLessonSchema }),
       this.guardRoleMiddleware.adminGuard,
       this.controller.createLesson
+    );
+    this.router.delete(
+      "/",
+      validateMiddleware({ params: LessonParamsSchema }),
+      this.controller.resetCourseCompleted
     );
   }
 

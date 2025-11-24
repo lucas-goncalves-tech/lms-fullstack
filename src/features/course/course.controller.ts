@@ -18,8 +18,9 @@ export class CourseController {
   };
 
   findBySlug = async (req: Request, res: Response) => {
+    const userId = req.session!.userId;
     const { courseSlug } = req.params;
-    const result = await this.courseService.findBySlug(courseSlug);
+    const result = await this.courseService.findBySlug(userId, courseSlug);
     res.status(200).json(result);
   };
 }

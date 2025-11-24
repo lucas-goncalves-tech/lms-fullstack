@@ -1,10 +1,14 @@
 import { ConflictError } from "../../shared/errors/conflict.error";
 import { NotfoundError } from "../../shared/errors/not-found.error";
+import { LessonRepository } from "../lessons/lesson.repository";
 import { CourseRepository } from "./course.repository";
 import { ICreateCourseInput } from "./interface/course.interface";
 
 export class CourseService {
-  constructor(private readonly courseRepository: CourseRepository) {}
+  constructor(
+    private readonly courseRepository: CourseRepository,
+    private readonly lessonRepository: LessonRepository
+  ) {}
 
   async findAll() {
     return this.courseRepository.findAll();
@@ -18,11 +22,12 @@ export class CourseService {
     return result;
   }
 
-  async findBySlug(slug: string) {
+  async findBySlug(userId: string, slug: string) {
     const result = await this.courseRepository.findBySlug(slug);
     if (!result) {
       throw new NotfoundError("Curso não encontrado");
     }
-    return result;
+    const completed = await this.lessonRepository.findManyLessonsCompleted(userId, result.id);
+    return { ...result, completed };
   }
 }
