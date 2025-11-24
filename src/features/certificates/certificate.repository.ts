@@ -1,5 +1,7 @@
+import { eq } from "drizzle-orm";
 import { DataBase } from "../../db";
 import { certificates } from "../../db/schema";
+import { certificatesFull } from "../../db/schema/views.schema";
 
 export class CertificateRepository {
   constructor(private readonly db: DataBase) {}
@@ -14,6 +16,18 @@ export class CertificateRepository {
         .get();
     } catch (error) {
       console.error("Error ao criar certificado", error);
+      throw error;
+    }
+  }
+
+  async findManyCertificatesByUserId(userId: string) {
+    try {
+      return this.db.connection
+        .select()
+        .from(certificatesFull)
+        .where(eq(certificatesFull.userId, userId));
+    } catch (error) {
+      console.error("Error ao buscar certificados", error);
       throw error;
     }
   }

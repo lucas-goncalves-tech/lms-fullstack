@@ -8,6 +8,7 @@ import { SessionsService } from "./features/sessions/sessions.service";
 import { SessionsRepository } from "./features/sessions/sessions.repository";
 import { UserRepository } from "./features/user/user.repository";
 import { CryptoService } from "./shared/security/crypto-service.security";
+import { CertificatesRoutes } from "./features/certificates/certificates.routes";
 
 export class MainRoutes {
   private readonly router: Router;
@@ -15,6 +16,7 @@ export class MainRoutes {
   private readonly lessonRoutes: LessonRoutes;
   private readonly authRoutes: AuthRoutes;
   private readonly validateSessionMiddleware: ValidateSessionMiddleware;
+  private readonly certificatesRoutes: CertificatesRoutes;
 
   constructor(private readonly db: DataBase) {
     this.router = Router();
@@ -24,6 +26,7 @@ export class MainRoutes {
     const cryptoService = new CryptoService();
     const sessionsService = new SessionsService(sessionsRepository, userRepository, cryptoService);
     this.validateSessionMiddleware = new ValidateSessionMiddleware(sessionsService);
+    this.certificatesRoutes = new CertificatesRoutes(this.db);
     this.courseRoutes = new CourseRoutes(this.db);
     this.lessonRoutes = new LessonRoutes(this.db);
     this.authRoutes = new AuthRoutes(this.db);
@@ -42,6 +45,11 @@ export class MainRoutes {
       "/lessons/:courseSlug",
       this.validateSessionMiddleware.validateSession,
       this.lessonRoutes.getRouter
+    );
+    this.router.use(
+      "/certificates",
+      this.validateSessionMiddleware.validateSession,
+      this.certificatesRoutes.getRouter
     );
   }
 

@@ -17,7 +17,7 @@ export class LessonController {
     const { courseSlug } = req.params;
     const result = await this.lessonService.findManyByCourseSlug(courseSlug);
 
-    res.status(200).json(result);
+    res.json(result);
   };
 
   findBySlug = async (req: Request, res: Response) => {
@@ -25,7 +25,7 @@ export class LessonController {
     const { courseSlug, lessonSlug } = req.params;
     const result = await this.lessonService.findBySlug(userId, courseSlug, lessonSlug);
 
-    res.status(200).json(result);
+    res.json(result);
   };
 
   completeLesson = async (req: Request, res: Response) => {
@@ -33,7 +33,7 @@ export class LessonController {
     const { courseSlug, lessonSlug } = req.params;
     const result = await this.lessonService.completeLesson(userId, courseSlug, lessonSlug);
 
-    res.status(200).json(result);
+    res.json(result);
   };
 
   resetCourseCompleted = async (req: Request, res: Response) => {

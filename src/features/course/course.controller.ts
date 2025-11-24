@@ -14,13 +14,13 @@ export class CourseController {
 
   findAll = async (_req: Request, res: Response) => {
     const result = await this.courseService.findAll();
-    res.status(200).json(result);
+    res.json(result);
   };
 
   findBySlug = async (req: Request, res: Response) => {
     const userId = req.session!.userId;
     const { courseSlug } = req.params;
     const result = await this.courseService.findBySlug(userId, courseSlug);
-    res.status(200).json(result);
+    res.json(result);
   };
 }
