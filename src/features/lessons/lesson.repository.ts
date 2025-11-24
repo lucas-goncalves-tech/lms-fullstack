@@ -104,11 +104,15 @@ export class LessonRepository {
 
   async lessonNav(courseSlug: string, lessonSlug: string) {
     try {
+      const courseIdSubquery = this.db.connection
+        .select({ id: courses.id })
+        .from(courses)
+        .where(eq(courses.slug, courseSlug));
+
       const result = this.db.connection
         .select({ slug: lessonNav.slug })
         .from(lessonNav)
-        .innerJoin(courses, eq(lessonNav.courseId, courses.id))
-        .where(and(eq(lessonNav.currentSlug, lessonSlug), eq(courses.slug, courseSlug)))
+        .where(and(eq(lessonNav.currentSlug, lessonSlug), eq(lessonNav.courseId, courseIdSubquery)))
         .all();
       return result;
     } catch (error) {
