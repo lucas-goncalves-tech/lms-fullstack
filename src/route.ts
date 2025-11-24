@@ -3,25 +3,46 @@ import { DataBase } from "./db";
 import { CourseRoutes } from "./features/course/course.route";
 import { LessonRoutes } from "./features/lessons/lesson.route";
 import { AuthRoutes } from "./features/auth/auth.routes";
+import { ValidateSessionMiddleware } from "./shared/middlewares/validate-session.middleware";
+import { SessionsService } from "./features/sessions/sessions.service";
+import { SessionsRepository } from "./features/sessions/sessions.repository";
+import { UserRepository } from "./features/user/user.repository";
+import { CryptoService } from "./shared/security/crypto-service.security";
 
 export class MainRoutes {
   private readonly router: Router;
   private readonly courseRoutes: CourseRoutes;
   private readonly lessonRoutes: LessonRoutes;
   private readonly authRoutes: AuthRoutes;
+  private readonly validateSessionMiddleware: ValidateSessionMiddleware;
 
   constructor(private readonly db: DataBase) {
     this.router = Router();
+
+    const sessionsRepository = new SessionsRepository(this.db);
+    const userRepository = new UserRepository(this.db);
+    const cryptoService = new CryptoService();
+    const sessionsService = new SessionsService(sessionsRepository, userRepository, cryptoService);
+    this.validateSessionMiddleware = new ValidateSessionMiddleware(sessionsService);
     this.courseRoutes = new CourseRoutes(this.db);
     this.lessonRoutes = new LessonRoutes(this.db);
     this.authRoutes = new AuthRoutes(this.db);
+
     this.initRoutes();
   }
 
   private initRoutes() {
-    this.router.use("/courses", this.courseRoutes.getRouter);
-    this.router.use("/lessons/:courseSlug", this.lessonRoutes.getRouter);
     this.router.use("/auth", this.authRoutes.getRouter);
+    this.router.use(
+      "/courses",
+      this.validateSessionMiddleware.validateSession,
+      this.courseRoutes.getRouter
+    );
+    this.router.use(
+      "/lessons/:courseSlug",
+      this.validateSessionMiddleware.validateSession,
+      this.lessonRoutes.getRouter
+    );
   }
 
   get getRouter() {
