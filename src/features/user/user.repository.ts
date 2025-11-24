@@ -20,6 +20,7 @@ export class UserRepository {
     try {
       const result = this.db.connection
         .select({
+          id: users.id,
           name: users.name,
           email: users.email,
           role: users.role,

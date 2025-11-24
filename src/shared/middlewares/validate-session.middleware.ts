@@ -11,6 +11,7 @@ export class ValidateSessionMiddleware {
     try {
       const session = await this.sessionsService.validateSession(sid);
       req.session = {
+        userId: session.user.id,
         role: session.user.role,
         name: session.user.name,
         email: session.user.email,

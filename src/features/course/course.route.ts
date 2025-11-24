@@ -37,7 +37,7 @@ export class CourseRoutes {
     this.router.post(
       "/",
       validateMiddleware({ body: createCourseSchema }),
-      this.guardRoleMiddleware.guard(["ADMIN"]),
+      this.guardRoleMiddleware.adminGuard,
       this.controller.createCourse
     );
     this.router.get("/", this.controller.findAll);

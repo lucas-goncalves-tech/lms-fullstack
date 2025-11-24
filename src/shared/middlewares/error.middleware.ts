@@ -4,12 +4,7 @@ import { SessionError } from "../errors/session.error";
 
 export function errorHandler(err: Error, _req: Request, res: Response, _next: NextFunction) {
   if (err instanceof SessionError) {
-    res.clearCookie("__Secure-sid", {
-      httpOnly: true,
-      secure: true,
-      sameSite: "lax",
-      path: "/",
-    });
+    res.clearCookie("__Secure-sid");
     return res.status(err.status).json({
       message: err.message,
     });

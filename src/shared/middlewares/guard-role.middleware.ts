@@ -1,15 +1,13 @@
 import { NextFunction, Request, Response } from "express";
-import { UnauthorizedError } from "../errors/unauthorized.error";
-
-type RoleProps = "ADMIN" | "USER";
+import { ForbiddenError } from "../errors/forbidden.error";
 
 export class GuardRoleMiddleware {
   constructor() {}
 
-  guard = (role: RoleProps[]) => (req: Request, res: Response, next: NextFunction) => {
+  adminGuard = (req: Request, res: Response, next: NextFunction) => {
     const userRole = req.session?.role;
-    if (!userRole || !role.includes(userRole)) {
-      throw new UnauthorizedError("Usuário sem permissão");
+    if (!userRole || userRole !== "ADMIN") {
+      throw new ForbiddenError();
     }
     next();
   };

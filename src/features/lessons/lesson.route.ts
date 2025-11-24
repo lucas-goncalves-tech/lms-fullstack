@@ -53,7 +53,7 @@ export class LessonRoutes {
     this.router.post(
       "/",
       validateMiddleware({ params: createLessonParamsSchema, body: createLessonSchema }),
-      this.guardRoleMiddleware.guard(["ADMIN"]),
+      this.guardRoleMiddleware.adminGuard,
       this.controller.createLesson
     );
   }

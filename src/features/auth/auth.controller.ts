@@ -36,19 +36,15 @@ export class AuthController {
 
   logoutUser = async (req: Request, res: Response) => {
     const sid = req.cookies["__Secure-sid"]!;
+    res.clearCookie("__Secure-sid");
 
     await this.sessionsService.revokeSession(sid);
 
-    res.clearCookie("__Secure-sid", {
-      httpOnly: true,
-      secure: true,
-      sameSite: "lax",
-      path: "/",
-    });
     res.status(204).end();
   };
 
   me = async (req: Request, res: Response) => {
-    res.status(200).json(req.session);
+    const { name, email, role } = req.session!;
+    res.status(200).json({ name, email, role });
   };
 }

@@ -10,6 +10,7 @@ import { SessionsRepository } from "../sessions/sessions.repository";
 import { CryptoService } from "../../shared/security/crypto-service.security";
 import { SessionsService } from "../sessions/sessions.service";
 import { ValidateSessionMiddleware } from "../../shared/middlewares/validate-session.middleware";
+import { noCacheMiddleware } from "../../shared/middlewares/no-cache.middleware";
 
 export class AuthRoutes {
   private readonly controller: AuthController;
@@ -29,12 +30,18 @@ export class AuthRoutes {
   }
 
   private initRoutes() {
-    this.router.get(
+    this.router.delete(
       "/logout",
       this.validateSessionMiddleware.validateSession,
+      noCacheMiddleware,
       this.controller.logoutUser
     );
-    this.router.get("/me", this.validateSessionMiddleware.validateSession, this.controller.me);
+    this.router.get(
+      "/me",
+      this.validateSessionMiddleware.validateSession,
+      noCacheMiddleware,
+      this.controller.me
+    );
     this.router.post(
       "/register",
       validateMiddleware({ body: createUserSchema }),
