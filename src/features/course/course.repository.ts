@@ -1,6 +1,6 @@
 import { asc, eq } from "drizzle-orm";
 import { DataBase } from "../../db";
-import { certificates, courses } from "../../db/schema";
+import { courses } from "../../db/schema";
 import { ICreateCourseInput } from "./interface/course.interface";
 
 export class CourseRepository {
@@ -39,20 +39,6 @@ export class CourseRepository {
         .get();
     } catch (error) {
       console.error("Não foi possivel inserir um novo curso", error);
-      throw error;
-    }
-  }
-
-  async completeCourse(userId: string, courseId: string) {
-    try {
-      return this.db.connection
-        .insert(certificates)
-        .values({ userId, courseId })
-        .onConflictDoNothing()
-        .returning({ id: certificates.id })
-        .get();
-    } catch (error) {
-      console.error("Error ao completar curso", error);
       throw error;
     }
   }

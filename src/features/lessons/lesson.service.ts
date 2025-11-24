@@ -2,13 +2,15 @@ import { BadRequestError } from "../../shared/errors/bad-request.error";
 import { ConflictError } from "../../shared/errors/conflict.error";
 import { NotfoundError } from "../../shared/errors/not-found.error";
 import { CourseRepository } from "../course/course.repository";
-import { CreateLessonDTO } from "./dto/create-lesson.dto";
+import { CertificateRepository } from "../certificates/certificate.repository";
 import { LessonRepository } from "./lesson.repository";
+import { CreateLessonDTO } from "./dto/create-lesson.dto";
 
 export class LessonService {
   constructor(
     private readonly lessonRepository: LessonRepository,
-    private readonly courseRepository: CourseRepository
+    private readonly courseRepository: CourseRepository,
+    private readonly certificateRepository: CertificateRepository
   ) {}
 
   async createLesson(courseSlug: string, lessonData: CreateLessonDTO) {
@@ -67,7 +69,7 @@ export class LessonService {
     const incompleteLessons = progress.filter((l) => !l.completed);
     let hasCertificate = "";
     if (progress.length > 0 && incompleteLessons.length === 0) {
-      const certificate = await this.courseRepository.completeCourse(userId, lesson.courseId);
+      const certificate = await this.certificateRepository.create(userId, lesson.courseId);
       if (!certificate) {
         throw new BadRequestError("Não foi possível emitir o certificado");
       }

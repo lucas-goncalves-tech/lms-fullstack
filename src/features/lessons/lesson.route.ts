@@ -3,6 +3,7 @@ import { LessonRepository } from "./lesson.repository";
 import { LessonService } from "./lesson.service";
 import { LessonController } from "./lesson.controller";
 import { CourseRepository } from "../course/course.repository";
+import { CertificateRepository } from "../certificates/certificate.repository";
 import { Router } from "express";
 import { validateMiddleware } from "../../shared/middlewares/validate.middleware";
 import { createLessonSchema } from "./dto/create-lesson.dto";
@@ -24,11 +25,12 @@ export class LessonRoutes {
   constructor(private readonly db: DataBase) {
     const repository = new LessonRepository(this.db);
     const courseRepository = new CourseRepository(this.db);
+    const certificateRepository = new CertificateRepository(this.db);
     const sessionsRepository = new SessionsRepository(this.db);
     const userRepository = new UserRepository(this.db);
     const cryptoService = new CryptoService();
     const sessionsService = new SessionsService(sessionsRepository, userRepository, cryptoService);
-    const service = new LessonService(repository, courseRepository);
+    const service = new LessonService(repository, courseRepository, certificateRepository);
     this.validateSessionMiddleware = new ValidateSessionMiddleware(sessionsService);
     this.guardRoleMiddleware = new GuardRoleMiddleware();
     this.controller = new LessonController(service);
