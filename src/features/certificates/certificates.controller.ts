@@ -9,4 +9,10 @@ export class CertificatesController {
     const certificates = await this.certificatesService.findManyCertificatesByUserId(userId);
     res.json(certificates);
   };
+
+  findCertificateById = async (req: Request, res: Response) => {
+    const certificateId = req.params.certificateId;
+    const certificate = await this.certificatesService.findCertificateById(certificateId);
+    res.json(certificate);
+  };
 }

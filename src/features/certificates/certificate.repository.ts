@@ -31,4 +31,17 @@ export class CertificateRepository {
       throw error;
     }
   }
+
+  async findCertificateById(certificateId: string) {
+    try {
+      return this.db.connection
+        .select()
+        .from(certificatesFull)
+        .where(eq(certificatesFull.id, certificateId))
+        .get();
+    } catch (error) {
+      console.error("Error ao buscar certificado", error);
+      throw error;
+    }
+  }
 }
