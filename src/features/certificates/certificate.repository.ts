@@ -25,7 +25,8 @@ export class CertificateRepository {
       return this.db.connection
         .select()
         .from(certificatesFull)
-        .where(eq(certificatesFull.userId, userId));
+        .where(eq(certificatesFull.userId, userId))
+        .all();
     } catch (error) {
       console.error("Error ao buscar certificados", error);
       throw error;

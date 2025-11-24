@@ -12,7 +12,8 @@ export class CertificatesController {
 
   findCertificateById = async (req: Request, res: Response) => {
     const certificateId = req.params.certificateId;
-    const certificate = await this.certificatesService.findCertificateById(certificateId);
+    const userId = req.session!.userId;
+    const certificate = await this.certificatesService.findCertificateById(userId, certificateId);
     res.json(certificate);
   };
 }
