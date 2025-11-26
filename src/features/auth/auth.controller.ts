@@ -4,6 +4,8 @@ import { CreateUserDto } from "./dto/create-user.dto";
 import { LoginUserDto } from "./dto/login-user.dto";
 import { SessionsService } from "../sessions/sessions.service";
 import { UpdatePasswordDto } from "./dto/update-password.dto";
+import { sidCookieOptions } from "../../shared/helper/sid-cookie-options.helper";
+import { SID_IDENTIFIER } from "../../shared/constants/sid-identifier.constants";
 
 export class AuthController {
   private readonly ttl: number;
@@ -28,19 +30,13 @@ export class AuthController {
       userAgent: req.headers["user-agent"] || "",
       ip: req.ip || "127.0.0.1",
     });
-    res.cookie("__Secure-sid", sid, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "lax",
-      path: "/",
-      maxAge: this.ttl,
-    });
+    res.cookie(SID_IDENTIFIER, sid, sidCookieOptions(this.ttl));
     res.status(204).end();
   };
 
   logoutUser = async (req: Request, res: Response) => {
-    const sid = req.cookies["__Secure-sid"]!;
-    res.clearCookie("__Secure-sid");
+    const sid = req.cookies[SID_IDENTIFIER]!;
+    res.clearCookie(SID_IDENTIFIER);
 
     await this.sessionsService.revokeSession(sid);
 
@@ -62,13 +58,7 @@ export class AuthController {
       userAgent: req.headers["user-agent"] || "",
       ip: req.ip || "127.0.0.1",
     });
-    res.cookie("__Secure-sid", sid, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "lax",
-      path: "/",
-      maxAge: this.ttl,
-    });
+    res.cookie(SID_IDENTIFIER, sid, sidCookieOptions(this.ttl));
     res.status(204).end();
   };
 }
