@@ -32,7 +32,7 @@ export class AuthRoutes {
 
   private initRoutes() {
     this.router.put(
-      "/update/password",
+      "/password/update",
       this.validateSessionMiddleware.validateSession,
       validateMiddleware({ body: updatePasswordSchema }),
       this.controller.updatePassword
