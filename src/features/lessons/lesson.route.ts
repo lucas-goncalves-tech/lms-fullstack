@@ -8,20 +8,18 @@ import { Router } from "express";
 import { validateMiddleware } from "../../shared/middlewares/validate.middleware";
 import { createLessonSchema } from "./dto/create-lesson.dto";
 import { LessonParamsSchema, findLessonParamsSchema } from "./dto/lesson-params.dto";
-import { GuardRoleMiddleware } from "../../shared/middlewares/guard-role.middleware";
 import { completeLessonParamsSchema } from "./dto/complete-lesson.dto";
+import { adminGuardMiddleware } from "../../shared/middlewares/guard-role.middleware";
 
 export class LessonRoutes {
   private readonly controller: LessonController;
   private readonly router: Router;
-  private readonly guardRoleMiddleware: GuardRoleMiddleware;
 
   constructor(private readonly db: DataBase) {
     const repository = new LessonRepository(this.db);
     const courseRepository = new CourseRepository(this.db);
     const certificateRepository = new CertificateRepository(this.db);
     const service = new LessonService(repository, courseRepository, certificateRepository);
-    this.guardRoleMiddleware = new GuardRoleMiddleware();
     this.controller = new LessonController(service);
     this.router = Router({ mergeParams: true });
     this.initRoutes();
@@ -47,8 +45,8 @@ export class LessonRoutes {
     );
     this.router.post(
       "/",
+      adminGuardMiddleware,
       validateMiddleware({ params: LessonParamsSchema, body: createLessonSchema }),
-      this.guardRoleMiddleware.adminGuard,
       this.controller.createLesson
     );
     this.router.delete(
