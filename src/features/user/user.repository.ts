@@ -53,4 +53,13 @@ export class UserRepository {
       throw err;
     }
   }
+
+  async updateUserPassword(userId: string, password_hash: string) {
+    try {
+      this.db.connection.update(users).set({ password_hash }).where(eq(users.id, userId)).run();
+    } catch (err) {
+      console.error(`Erro ao atualizar senha do usuário:`, err);
+      throw err;
+    }
+  }
 }

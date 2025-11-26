@@ -63,4 +63,8 @@ export class SessionsService {
     const sidHash = this.cryptoService.sha256(sid);
     await this.sessionsRepository.revokeSessionByKey("sidHash", sidHash);
   }
+
+  async revokeAllUserSessions(userId: string) {
+    await this.sessionsRepository.revokeSessionByKey("userId", userId);
+  }
 }

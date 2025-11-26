@@ -5,6 +5,7 @@ import { CreateUserInput } from "../user/interface/user.interface";
 import { UserRepository } from "../user/user.repository";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { LoginUserDto } from "./dto/login-user.dto";
+import { UpdatePasswordDto } from "./dto/update-password.dto";
 
 export class AuthService {
   private readonly cryptoService = new CryptoService();
@@ -35,5 +36,19 @@ export class AuthService {
     if (!isPasswordValid) throw new UnauthorizedError("Email ou senha inválidos");
 
     return userExist.id;
+  }
+
+  async updatePassword(userId: string, updatePasswordData: UpdatePasswordDto) {
+    const userExist = await this.userRepository.findUserByKey("id", userId);
+    if (!userExist) throw new UnauthorizedError("Sessão inválida");
+
+    const isPasswordValid = await this.cryptoService.compareHash(
+      updatePasswordData.currentPassword,
+      userExist.password_hash
+    );
+    if (!isPasswordValid) throw new UnauthorizedError("Senha atual inválida");
+    const newHashedPassword = await this.cryptoService.hash(updatePasswordData.newPassword);
+
+    await this.userRepository.updateUserPassword(userId, newHashedPassword);
   }
 }
