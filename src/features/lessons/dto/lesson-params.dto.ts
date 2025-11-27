@@ -3,7 +3,6 @@ import { zodSlugValidator } from "../../../shared/validators/common-fields.valid
 
 export const LessonParamsSchema = z.object({
   courseSlug: zodSlugValidator("courseSlug"),
-  lessonSlug: zodSlugValidator("lessonSlug"),
 });
 
 export const findLessonParamsSchema = z.object({
