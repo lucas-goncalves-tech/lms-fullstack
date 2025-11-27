@@ -1,14 +1,12 @@
 import { z } from "zod";
+import { zodPasswordValidator } from "../../../shared/validators/common-fields.validator";
 
 export const updatePasswordSchema = z
-  .strictObject(
-    {
-      currentPassword: z.string("Senha inválida").min(8).max(20).trim(),
-      newPassword: z.string("Confirmação de senha inválida").min(8).max(20).trim(),
-      confirmPassword: z.string("Confirmação de senha inválida").min(8).max(20).trim(),
-    },
-    "Formato inválido, necessario um JSON"
-  )
+  .strictObject({
+    currentPassword: zodPasswordValidator("Senha atual"),
+    newPassword: zodPasswordValidator("Nova senha"),
+    confirmPassword: zodPasswordValidator("Confirmação de nova senha"),
+  })
   .refine((data) => data.currentPassword !== data.newPassword, {
     message: "A nova senha deve ser diferente da senha atual",
     path: ["newPassword"],

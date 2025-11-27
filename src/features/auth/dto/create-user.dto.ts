@@ -1,11 +1,16 @@
 import { z } from "zod";
+import { zodSafeString } from "../../../shared/validators/string.validator copy";
+import { zodSafeEmail } from "../../../shared/validators/email.validator";
+import { zodPasswordValidator } from "../../../shared/validators/common-fields.validator";
 
 export const createUserSchema = z
   .strictObject({
-    name: z.string("Nome inválido").nonempty().min(3).max(30).trim(),
-    email: z.email("Email inválido").trim().toLowerCase(),
-    password: z.string("Senha inválida").min(8).max(20).trim(),
-    confirmPassword: z.string("Confirmação de senha inválida").min(8).max(20).trim(),
+    name: zodSafeString()
+      .min(3, "Nome deve ter no mínimo 3 caracteres")
+      .max(30, "Nome deve ter no máximo 30 caracteres"),
+    email: zodSafeEmail().trim().toLowerCase(),
+    password: zodPasswordValidator("Senha"),
+    confirmPassword: zodPasswordValidator("Confirmação de senha"),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "As senhas não coincidem",

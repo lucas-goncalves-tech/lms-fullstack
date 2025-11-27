@@ -1,12 +1,10 @@
 import z from "zod";
+import { zodSafeEmail } from "../../../shared/validators/email.validator";
+import { zodPasswordValidator } from "../../../shared/validators/common-fields.validator";
 
 export const loginUserSchema = z.strictObject({
-  email: z.email("Email inválido").trim().toLowerCase(),
-  password: z
-    .string("Senha inválida")
-    .min(8, "Senha deve ter pelo menos 8 caracteres")
-    .max(20, "Senha deve ter no máximo 20 caracteres")
-    .trim(),
+  email: zodSafeEmail().trim().toLowerCase(),
+  password: zodPasswordValidator("Senha").trim(),
 });
 
 export type LoginUserDto = z.infer<typeof loginUserSchema>;
