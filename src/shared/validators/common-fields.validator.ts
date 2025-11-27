@@ -1,3 +1,4 @@
+import z from "zod";
 import { zodSafeString } from "./string.validator copy";
 
 export const zodSlugValidator = (slugName = "Slug") =>
@@ -17,6 +18,14 @@ export const zodDescriptionValidator = () =>
     .max(300, "Descrição deve ter no máximo 300 caracteres");
 
 export const zodPasswordValidator = (lengthMessage = "Senha") =>
-  zodSafeString()
+  z
+    .string()
+    .normalize("NFC")
     .min(8, `${lengthMessage} deve ter no mínimo 8 caracteres`)
     .max(20, `${lengthMessage} deve ter no máximo 20 caracteres`);
+
+export const zodIntegerValidator = (numberMessage = "Número") =>
+  z.coerce
+    .number(`${numberMessage} deve ser um número`)
+    .int(`${numberMessage} deve ser um número inteiro`)
+    .nonnegative(`${numberMessage} não pode ser negativa`);

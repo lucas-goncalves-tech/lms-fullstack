@@ -3,14 +3,15 @@ import {
   zodSlugValidator,
   zodTitleValidator,
   zodDescriptionValidator,
+  zodIntegerValidator,
 } from "../../../shared/validators/common-fields.validator";
 
 export const createCourseSchema = z.strictObject({
   slug: zodSlugValidator(),
   title: zodTitleValidator(),
   description: zodDescriptionValidator(),
-  lessons: z.int().nonnegative(),
-  hours: z.int().nonnegative(),
+  lessons: zodIntegerValidator("Aulas"),
+  hours: zodIntegerValidator("Horas"),
 });
 
 export type CreateCourseDTO = z.infer<typeof createCourseSchema>;
