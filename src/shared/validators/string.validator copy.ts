@@ -4,6 +4,7 @@ export const zodSafeString = (typeMessage = "Campo deve ser uma string") =>
   z
     .string(typeMessage)
     .trim()
+    .normalize("NFC")
     .refine((val) => /\S/.test(val), {
       message: "Campo não pode conter apenas espaços",
     })
