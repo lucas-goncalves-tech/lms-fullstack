@@ -18,7 +18,7 @@ class App {
   private middlewares() {
     this.app.use(helmet());
     this.app.use(cors());
-    this.app.use(express.json());
+    this.app.use(express.json({ limit: "1mb" }));
     this.app.use(cookieParser());
   }
 
