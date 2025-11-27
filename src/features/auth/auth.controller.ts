@@ -36,7 +36,7 @@ export class AuthController {
 
   logoutUser = async (req: Request, res: Response) => {
     const sid = req.cookies[SID_IDENTIFIER]!;
-    res.clearCookie(SID_IDENTIFIER);
+    res.clearCookie(SID_IDENTIFIER, sidCookieOptions());
 
     await this.sessionsService.revokeSession(sid);
 

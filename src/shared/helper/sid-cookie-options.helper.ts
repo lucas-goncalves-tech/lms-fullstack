@@ -1,11 +1,10 @@
 import { CookieOptions } from "express";
 
-export function sidCookieOptions(maxAge: number): CookieOptions {
+export function sidCookieOptions(maxAge = 0): CookieOptions {
   return {
     httpOnly: true,
     secure: true,
     sameSite: "lax",
-    path: "/",
     maxAge: maxAge,
   };
 }
