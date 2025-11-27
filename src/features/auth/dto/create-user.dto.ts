@@ -8,7 +8,7 @@ export const createUserSchema = z
     name: zodSafeString()
       .min(3, "Nome deve ter no mínimo 3 caracteres")
       .max(30, "Nome deve ter no máximo 30 caracteres"),
-    email: zodSafeEmail().trim().toLowerCase(),
+    email: zodSafeEmail(),
     password: zodPasswordValidator("Senha"),
     confirmPassword: zodPasswordValidator("Confirmação de senha"),
   })
