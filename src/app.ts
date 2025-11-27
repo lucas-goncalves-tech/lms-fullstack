@@ -8,10 +8,12 @@ import { NotfoundError } from "./shared/errors/not-found.error";
 import cookieParser from "cookie-parser";
 class App {
   public app: express.Express;
+  private readonly mainRoutes: MainRoutes;
   private db: DataBase;
   constructor() {
     this.app = express();
     this.db = new DataBase();
+    this.mainRoutes = new MainRoutes(this.db);
     this.init();
   }
 
@@ -23,7 +25,7 @@ class App {
   }
 
   private routes() {
-    this.app.use("/api/v1", new MainRoutes(this.db).getRouter);
+    this.app.use("/api/v1", this.mainRoutes.getRouter);
     this.app.use((_req, _res, next) => {
       next(new NotfoundError("Endpoint não encontrado"));
     });
