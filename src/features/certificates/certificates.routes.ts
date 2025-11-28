@@ -11,7 +11,7 @@ export class CertificatesRoutes {
   private readonly controller: CertificatesController;
 
   constructor(private readonly db: DataBase) {
-    const repository = new CertificateRepository(db);
+    const repository = new CertificateRepository(this.db);
     const service = new CertificatesService(repository);
     this.controller = new CertificatesController(service);
     this.initRoutes();
