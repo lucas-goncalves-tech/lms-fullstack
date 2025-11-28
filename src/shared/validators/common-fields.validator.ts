@@ -21,7 +21,7 @@ export const zodPasswordValidator = (lengthMessage = "Senha") =>
   z
     .string()
     .min(8, `${lengthMessage} deve ter no mínimo 8 caracteres`)
-    .max(72, `${lengthMessage} deve ter no máximo 20 caracteres`);
+    .max(72, `${lengthMessage} deve ter no máximo 72 caracteres`);
 
 export const zodIntegerValidator = (numberMessage = "Número") =>
   z.coerce
