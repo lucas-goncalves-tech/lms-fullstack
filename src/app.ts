@@ -6,20 +6,24 @@ import { DataBase } from "./db";
 import { MainRoutes } from "./route";
 import { NotfoundError } from "./shared/errors/not-found.error";
 import cookieParser from "cookie-parser";
+import { rateLimitMiddleware } from "./shared/middlewares/rate-limit.middleware";
 class App {
   public app: express.Express;
   private readonly mainRoutes: MainRoutes;
   private db: DataBase;
+  private readonly ttl: number;
   constructor() {
     this.app = express();
     this.db = new DataBase();
     this.mainRoutes = new MainRoutes(this.db);
+    this.ttl = 5 * 60 * 1000;
     this.init();
   }
 
   private middlewares() {
     this.app.use(helmet());
     this.app.use(cors());
+    this.app.use(rateLimitMiddleware(this.ttl, 30, false));
     this.app.use(express.json({ limit: "1mb" }));
     this.app.use(cookieParser());
   }
