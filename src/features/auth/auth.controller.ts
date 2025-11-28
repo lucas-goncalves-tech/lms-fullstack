@@ -18,8 +18,10 @@ export class AuthController {
 
   createUser = async (req: Request, res: Response) => {
     const userData = req.body as CreateUserDto;
-    const newUser = await this.authService.createUser(userData);
-    res.status(201).json(newUser);
+    await this.authService.createUser(userData);
+    res.status(201).json({
+      message: "usuário criado com sucesso!",
+    });
   };
 
   loginUser = async (req: Request, res: Response) => {
