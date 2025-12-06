@@ -13,7 +13,7 @@ export class SessionsService {
   ) {}
 
   async createSession(sessionData: ISessionData) {
-    const sid = (await this.cryptoService.randomBytesAsync(32)).toString("base64url");
+    const sid = await this.cryptoService.randomBytesAsync(32);
     const sidHash = this.cryptoService.sha256(sid);
     const expires_ms = Date.now() + this.ttl15d;
 
@@ -23,7 +23,7 @@ export class SessionsService {
       ...sessionData,
     });
 
-    return sid;
+    return sid.toString("base64url");
   }
 
   async validateSession(sid: string) {
