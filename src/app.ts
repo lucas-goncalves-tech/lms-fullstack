@@ -7,6 +7,7 @@ import { MainRoutes } from "./route";
 import { NotfoundError } from "./shared/errors/not-found.error";
 import cookieParser from "cookie-parser";
 import { rateLimitMiddleware } from "./shared/middlewares/rate-limit.middleware";
+import { logMiddleware } from "./shared/middlewares/log.middleware";
 class App {
   public app: express.Express;
   private readonly mainRoutes: MainRoutes;
@@ -21,11 +22,17 @@ class App {
   }
 
   private middlewares() {
+    this.app.use(
+      cors({
+        origin: "http://localhost:3000",
+        credentials: true,
+      })
+    );
     this.app.use(helmet());
-    this.app.use(cors());
-    this.app.use(rateLimitMiddleware(this.ttl, 30, false));
+    this.app.use(rateLimitMiddleware(this.ttl, 100, false));
     this.app.use(express.json({ limit: "1mb" }));
     this.app.use(cookieParser());
+    this.app.use(logMiddleware);
   }
 
   private routes() {
