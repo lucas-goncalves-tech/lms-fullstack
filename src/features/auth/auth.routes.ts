@@ -30,7 +30,7 @@ export class AuthRoutes {
     this.controller = new AuthController(authService, sessionsService);
     this.router = Router();
     this.initRoutes();
-    this.ttl = 5 * 60 * 1000;
+    this.ttl = 3 * 60 * 1000;
   }
 
   private initRoutes() {
@@ -61,7 +61,7 @@ export class AuthRoutes {
     );
     this.router.post(
       "/",
-      rateLimitMiddleware(this.ttl, 3),
+      rateLimitMiddleware(this.ttl, 10),
       noCacheMiddleware,
       validateMiddleware({ body: loginUserSchema }),
       this.controller.loginUser
