@@ -9,7 +9,6 @@ export class CourseRepository {
 
   async findManyWithProgress(userId: string) {
     try {
-      // Usa a view courses_user_progress que já tem tudo calculado
       return this.db.connection
         .select()
         .from(coursesUserProgress)

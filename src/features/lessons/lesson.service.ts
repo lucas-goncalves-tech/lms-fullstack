@@ -29,8 +29,8 @@ export class LessonService {
     return result;
   }
 
-  async findManyByCourseSlug(courseSlug: string) {
-    return await this.lessonRepository.findManyByCourseSlug(courseSlug);
+  async findManyByCourseSlug(userId: string, courseSlug: string) {
+    return await this.lessonRepository.findManyByCourseSlug(userId, courseSlug);
   }
 
   async findBySlug(userId: string, courseSlug: string, lessonSlug: string) {

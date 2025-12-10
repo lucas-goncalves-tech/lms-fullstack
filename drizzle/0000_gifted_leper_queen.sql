@@ -128,3 +128,22 @@ FROM "lessons" AS "cl"
 JOIN "lessons" AS "l" ON "l"."course_id" = "cl"."course_id" AND "l"."order"
 BETWEEN "cl"."order" - 1 AND "cl"."order" + 1
 ORDER BY "l"."order";
+--> statement-breakpoint
+CREATE VIEW IF NOT EXISTS "lessons_user_progress" AS
+SELECT 
+    l."id",
+    l."course_id",
+    l."slug",
+    l."title",
+    l."seconds",
+    l."video",
+    l."description",
+    l."order",           -- ← Com aspas
+    l."free",
+    l."created",
+    u."id" as "user_id",
+    lc."completed"
+FROM "lessons" l
+CROSS JOIN "users" u
+LEFT JOIN "lessons_completed" lc 
+    ON lc."lesson_id" = l."id" AND lc."user_id" = u."id";

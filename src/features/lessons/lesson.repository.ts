@@ -2,7 +2,7 @@ import { and, asc, eq, getTableColumns } from "drizzle-orm";
 import { DataBase } from "../../db";
 import { courses, lessons, lessonsCompleted } from "../../db/schema";
 import { ICreateLessonInput } from "./interface/lesson.interface";
-import { lessonNav } from "../../db/schema/views.schema";
+import { lessonNav, lessonsUserProgress } from "../../db/schema/views.schema";
 
 export class LessonRepository {
   constructor(private readonly db: DataBase) {}
@@ -22,14 +22,22 @@ export class LessonRepository {
     }
   }
 
-  async findManyByCourseSlug(courseSlug: string) {
+  async findManyByCourseSlug(userId: string, courseSlug: string) {
     try {
+      const courseIdSubquery = this.db.connection
+        .select({ id: courses.id })
+        .from(courses)
+        .where(eq(courses.slug, courseSlug));
       const result = this.db.connection
-        .select({ ...getTableColumns(lessons) })
-        .from(lessons)
-        .innerJoin(courses, eq(lessons.courseId, courses.id))
-        .where(eq(courses.slug, courseSlug))
-        .orderBy(asc(lessons.order))
+        .select()
+        .from(lessonsUserProgress)
+        .where(
+          and(
+            eq(lessonsUserProgress.courseId, courseIdSubquery),
+            eq(lessonsUserProgress.userId, userId)
+          )
+        )
+        .orderBy(asc(lessonsUserProgress.order))
         .all();
       return result;
     } catch (error) {

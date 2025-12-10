@@ -1,7 +1,7 @@
 import { drizzle } from "drizzle-orm/better-sqlite3";
 import DatabaseDriver from "better-sqlite3";
-import * as schema from "./src/db/schema";
-import { envCheck } from "./src/shared/helper/env-check.helper";
+import * as schema from "./schema";
+import { envCheck } from "../shared/helper/env-check.helper";
 
 const sqlite = new DatabaseDriver(envCheck().DB_FILE_NAME);
 sqlite.pragma("foreign_keys = ON");

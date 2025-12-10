@@ -14,8 +14,9 @@ export class LessonController {
   };
 
   findManyByCourseSlug = async (req: Request, res: Response) => {
+    const userId = req.session!.userId;
     const { courseSlug } = req.params;
-    const result = await this.lessonService.findManyByCourseSlug(courseSlug);
+    const result = await this.lessonService.findManyByCourseSlug(userId, courseSlug);
 
     res.json(result);
   };
