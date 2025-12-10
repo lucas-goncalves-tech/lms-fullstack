@@ -12,10 +12,10 @@ export const lessonsCompleted = sqliteTable(
       .references(() => users.id, { onDelete: "cascade" }),
     courseId: text("course_id")
       .notNull()
-      .references(() => courses.id),
+      .references(() => courses.id, { onDelete: "cascade" }),
     lessonId: text("lesson_id")
       .notNull()
-      .references(() => lessons.id),
+      .references(() => lessons.id, { onDelete: "cascade" }),
     completed: text("completed")
       .notNull()
       .default(sql`CURRENT_TIMESTAMP`),

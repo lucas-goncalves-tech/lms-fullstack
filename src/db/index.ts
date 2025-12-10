@@ -7,6 +7,8 @@ export class DataBase {
   public connection: BetterSQLite3Database<typeof schema>;
   constructor() {
     const sqlite = new DatabaseDriver(envCheck().DB_FILE_NAME);
+    // Enable foreign key constraints (disabled by default in SQLite)
+    sqlite.pragma("foreign_keys = ON");
     this.connection = drizzle(sqlite, { schema });
   }
 }

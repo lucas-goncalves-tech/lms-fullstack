@@ -12,7 +12,7 @@ export const lessons = sqliteTable(
       .$defaultFn(() => crypto.randomUUID()),
     courseId: text("course_id")
       .notNull()
-      .references(() => courses.id),
+      .references(() => courses.id, { onDelete: "cascade" }),
     slug: textCaseInsensitive("slug").notNull(),
     title: text("title").notNull(),
     seconds: integer("seconds").notNull(),

@@ -2,9 +2,9 @@ CREATE TABLE `users` (
 	`id` text PRIMARY KEY NOT NULL,
 	`name` text NOT NULL,
 	`email` TEXT COLLATE NOCASE NOT NULL,
-	`password_hash` TEXT NOT NULL,
-	`role` TEXT DEFAULT 'USER' NOT NULL,
-	`created` TEXT DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	`password_hash` text NOT NULL,
+	`role` text DEFAULT 'USER' NOT NULL,
+	`created` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	CONSTRAINT "role_check" CHECK("users"."role" IN ('USER', 'ADMIN'))
 ) STRICT;
 --> statement-breakpoint
@@ -31,7 +31,7 @@ CREATE TABLE `lessons` (
 	`order` integer NOT NULL,
 	`free` integer DEFAULT 0 NOT NULL,
 	`created` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	FOREIGN KEY (`course_id`) REFERENCES `courses`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`course_id`) REFERENCES `courses`(`id`) ON UPDATE no action ON DELETE cascade,
 	CONSTRAINT "free_check" CHECK("lessons"."free" IN (0, 1))
 ) STRICT;
 --> statement-breakpoint
@@ -44,8 +44,8 @@ CREATE TABLE `lessons_completed` (
 	`completed` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	PRIMARY KEY(`user_id`, `course_id`, `lesson_id`),
 	FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade,
-	FOREIGN KEY (`course_id`) REFERENCES `courses`(`id`) ON UPDATE no action ON DELETE no action,
-	FOREIGN KEY (`lesson_id`) REFERENCES `lessons`(`id`) ON UPDATE no action ON DELETE no action
+	FOREIGN KEY (`course_id`) REFERENCES `courses`(`id`) ON UPDATE no action ON DELETE cascade,
+	FOREIGN KEY (`lesson_id`) REFERENCES `lessons`(`id`) ON UPDATE no action ON DELETE cascade
 ) STRICT;
 --> statement-breakpoint
 CREATE TABLE `certificates` (
@@ -54,12 +54,23 @@ CREATE TABLE `certificates` (
 	`course_id` text NOT NULL,
 	`completed` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade,
-	FOREIGN KEY (`course_id`) REFERENCES `courses`(`id`) ON UPDATE no action ON DELETE no action
+	FOREIGN KEY (`course_id`) REFERENCES `courses`(`id`) ON UPDATE no action ON DELETE cascade
 ) STRICT;
 --> statement-breakpoint
-CREATE UNIQUE INDEX `unique_user_course` ON `certificates` (`user_id`,`course_id`);
+CREATE UNIQUE INDEX `unique_user_course` ON `certificates` (`user_id`,`course_id`);--> statement-breakpoint
+CREATE TABLE `sessions` (
+	`sid_hash` blob PRIMARY KEY NOT NULL,
+	`user_id` text NOT NULL,
+	`expires` integer NOT NULL,
+	`ip` text NOT NULL,
+	`user_agent` text NOT NULL,
+	`revoked` integer DEFAULT 0 NOT NULL,
+	`created` integer DEFAULT (STRFTIME('%s', 'NOW')) NOT NULL,
+	FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade,
+	CONSTRAINT "revoked_check" CHECK("sessions"."revoked" IN (0, 1))
+) STRICT;
 --> statement-breakpoint
--- lessons_completed with all information
+-- Views SQL para o sistema LMS
 CREATE VIEW IF NOT EXISTS "lessons_completed_full" AS
 SELECT "u"."id", "u"."email", "c"."title" AS "course", "l"."title" AS "lesson", "lc"."completed"
 FROM "lessons_completed" AS "lc"
@@ -67,7 +78,6 @@ JOIN "users" AS "u" ON "u"."id" = "lc"."user_id"
 JOIN "lessons" AS "l" ON "l"."id" = "lc"."lesson_id"
 JOIN "courses" AS "c" ON "c"."id" = "lc"."course_id";
 --> statement-breakpoint
--- certificates with all information
 CREATE VIEW IF NOT EXISTS "certificates_full" AS
 SELECT "cert"."id", "cert"."user_id", "u"."name",
        "cert"."course_id", "c"."title", "c"."hours",
@@ -76,7 +86,6 @@ FROM "certificates" as "cert"
 JOIN "users" AS "u" ON "u"."id" = "cert"."user_id"
 JOIN "courses" AS "c" on "c"."id" = "cert"."course_id";
 --> statement-breakpoint
--- lessons prev/next
 CREATE VIEW IF NOT EXISTS "lesson_nav" AS
 SELECT "cl"."slug" AS "current_slug", "l".*
 FROM "lessons" AS "cl"
