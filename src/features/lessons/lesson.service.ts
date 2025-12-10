@@ -30,7 +30,9 @@ export class LessonService {
   }
 
   async findManyByCourseSlug(userId: string, courseSlug: string) {
-    return await this.lessonRepository.findManyByCourseSlug(userId, courseSlug);
+    const lessons = await this.lessonRepository.findManyByCourseSlug(userId, courseSlug);
+    //eslint-disable-next-line
+    return lessons.map(({ userId, ...lesson }) => lesson);
   }
 
   async findBySlug(userId: string, courseSlug: string, lessonSlug: string) {

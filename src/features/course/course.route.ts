@@ -5,7 +5,6 @@ import { CourseRepository } from "./course.repository";
 import { CourseService } from "./course.service";
 import { validateMiddleware } from "../../shared/middlewares/validate.middleware";
 import { createCourseSchema } from "./dto/create-course.dto";
-import { LessonRepository } from "../lessons/lesson.repository";
 import { adminGuardMiddleware } from "../../shared/middlewares/guard-role.middleware";
 
 export class CourseRoutes {
@@ -14,8 +13,7 @@ export class CourseRoutes {
 
   constructor(private readonly db: DataBase) {
     const repository = new CourseRepository(this.db);
-    const lessonRepository = new LessonRepository(this.db);
-    const service = new CourseService(repository, lessonRepository);
+    const service = new CourseService(repository);
     this.controller = new CourseController(service);
     this.router = Router();
     this.initRoutes();
@@ -29,7 +27,6 @@ export class CourseRoutes {
       this.controller.createCourse
     );
     this.router.get("/", this.controller.findManyWithProgress);
-    this.router.get("/:courseSlug", this.controller.findBySlug);
   }
 
   get getRouter() {

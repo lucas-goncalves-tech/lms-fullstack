@@ -17,11 +17,4 @@ export class CourseController {
     const result = await this.courseService.findManyWithProgress(userId);
     res.json(result);
   };
-
-  findBySlug = async (req: Request, res: Response) => {
-    const userId = req.session!.userId;
-    const { courseSlug } = req.params;
-    const result = await this.courseService.findBySlug(userId, courseSlug);
-    res.json(result);
-  };
 }

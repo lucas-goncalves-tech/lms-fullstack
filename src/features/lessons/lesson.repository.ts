@@ -61,20 +61,6 @@ export class LessonRepository {
     }
   }
 
-  async findManyLessonsCompleted(userId: string, courseId: string) {
-    try {
-      const result = this.db.connection
-        .select({ lessonId: lessonsCompleted.lessonId, completed: lessonsCompleted.completed })
-        .from(lessonsCompleted)
-        .where(and(eq(lessonsCompleted.userId, userId), eq(lessonsCompleted.courseId, courseId)))
-        .all();
-      return result;
-    } catch (error) {
-      console.error("Error ao buscar aulas completadas", error);
-      throw error;
-    }
-  }
-
   async findWhenLessonCompleted(userId: string, courseId: string, lessonId: string) {
     try {
       const result = this.db.connection
