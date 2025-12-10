@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "ce22c0ae-003c-4a47-808b-8d9927865f14",
+  "id": "8e200fda-e30b-4d6e-8b8b-eb288b1546f6",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "users": {
@@ -98,20 +98,6 @@
         "description": {
           "name": "description",
           "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "lessons": {
-          "name": "lessons",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "hours": {
-          "name": "hours",
-          "type": "integer",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false

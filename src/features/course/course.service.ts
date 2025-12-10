@@ -10,8 +10,10 @@ export class CourseService {
     private readonly lessonRepository: LessonRepository
   ) {}
 
-  async findAll() {
-    return this.courseRepository.findAll();
+  async findManyWithProgress(userId: string) {
+    const courses = await this.courseRepository.findManyWithProgress(userId);
+    //eslint-disable-next-line
+    return courses.map(({ userId, ...course }) => course);
   }
 
   async createCourse(courseData: ICreateCourseInput) {

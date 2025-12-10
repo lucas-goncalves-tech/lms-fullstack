@@ -1,18 +1,21 @@
 import { asc, eq } from "drizzle-orm";
 import { DataBase } from "../../db";
 import { courses } from "../../db/schema";
+import { coursesUserProgress } from "../../db/schema/views.schema";
 import { ICreateCourseInput } from "./interface/course.interface";
 
 export class CourseRepository {
   constructor(private readonly db: DataBase) {}
 
-  async findAll() {
+  async findManyWithProgress(userId: string) {
     try {
+      // Usa a view courses_user_progress que já tem tudo calculado
       return this.db.connection
         .select()
-        .from(courses)
+        .from(coursesUserProgress)
+        .where(eq(coursesUserProgress.userId, userId))
         .limit(100)
-        .orderBy(asc(courses.created))
+        .orderBy(asc(coursesUserProgress.created))
         .all();
     } catch (error) {
       console.error("Error ao encontrar cursos", error);

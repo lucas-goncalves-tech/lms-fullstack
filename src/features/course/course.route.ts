@@ -28,7 +28,7 @@ export class CourseRoutes {
       validateMiddleware({ body: createCourseSchema }),
       this.controller.createCourse
     );
-    this.router.get("/", this.controller.findAll);
+    this.router.get("/", this.controller.findManyWithProgress);
     this.router.get("/:courseSlug", this.controller.findBySlug);
   }
 

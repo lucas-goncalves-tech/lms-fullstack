@@ -12,15 +12,11 @@ const coursesData = [
     slug: "html-e-css",
     title: "HTML e CSS",
     description: "Curso de HTML e CSS para Iniciantes",
-    lessons: 40,
-    hours: 10,
   },
   {
     slug: "javascript-completo",
     title: "JavaScript Completo",
     description: "Curso completo de JavaScript",
-    lessons: 80,
-    hours: 20,
   },
 ];
 
