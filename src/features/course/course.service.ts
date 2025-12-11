@@ -16,6 +16,5 @@ export class CourseService {
     if (!result) {
       throw new ConflictError("Este curso já existe");
     }
-    return result;
   }
 }

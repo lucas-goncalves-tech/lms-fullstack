@@ -7,9 +7,11 @@ export class CourseController {
 
   createCourse = async (req: Request, res: Response) => {
     const courseData = req.body as CreateCourseDTO;
-    const result = await this.courseService.createCourse(courseData);
+    await this.courseService.createCourse(courseData);
 
-    res.status(201).json(result);
+    res.status(201).json({
+      message: "Curso criado com sucesso!",
+    });
   };
 
   findManyWithProgress = async (_req: Request, res: Response) => {
