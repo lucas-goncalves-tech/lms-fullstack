@@ -71,7 +71,7 @@ export class CourseRepository {
 
   async deleteCourse(courseSlug: string) {
     try {
-      this.db.connection.delete(courses).where(eq(courses.slug, courseSlug));
+      this.db.connection.delete(courses).where(eq(courses.slug, courseSlug)).run();
     } catch (error) {
       console.error("Não foi possivel deletar o curso", error);
       throw error;
