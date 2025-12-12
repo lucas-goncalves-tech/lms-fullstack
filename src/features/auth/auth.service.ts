@@ -1,4 +1,5 @@
 import { ConflictError } from "../../shared/errors/conflict.error";
+import { ForbiddenError } from "../../shared/errors/forbidden.error";
 import { UnauthorizedError } from "../../shared/errors/unauthorized.error";
 import { CryptoService } from "../../shared/security/crypto-service.security";
 import { ICreateUserInput } from "../user/interface/user.interface";
@@ -29,6 +30,8 @@ export class AuthService {
   async loginUser(userData: LoginUserDto) {
     const userExist = await this.userRepository.findUserByKey("email", userData.email);
     if (!userExist) throw new UnauthorizedError("Email ou senha inválidos");
+    if (userExist.isActive === 0)
+      throw new ForbiddenError("Conta desativada, entre em contato com o suporte");
     const isPasswordValid = await this.cryptoService.compareHash(
       userData.password,
       userExist.password_hash

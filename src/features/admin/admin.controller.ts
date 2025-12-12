@@ -72,4 +72,17 @@ export class AdminController {
       message: "Usuário criado com sucesso!",
     });
   };
+
+  toggleUserStatus = async (req: Request, res: Response) => {
+    const { userId } = req.params;
+    const adminId = req.session!.userId;
+
+    const result = await this.adminService.toggleUserStatus(adminId, userId);
+
+    res.status(200).json({
+      message: result.isActive
+        ? `Usuário ${result.name} ativado com sucesso!`
+        : `Usuário ${result.name} desativado com sucesso!`,
+    });
+  };
 }

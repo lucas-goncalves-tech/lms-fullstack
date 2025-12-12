@@ -38,7 +38,7 @@ class App {
 
     if (this.env === "development") {
       this.app.use((req, res, next) => {
-        setTimeout(next, 1500); // 1.5s delay
+        setTimeout(next, 1000); // 1s delay
       });
     }
   }

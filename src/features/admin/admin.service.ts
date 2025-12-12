@@ -92,4 +92,19 @@ export class AdminService {
     };
     await this.userRepository.createUser(newUser);
   }
+
+  async toggleUserStatus(adminId: string, userId: string) {
+    const user = await this.userRepository.findUserByKey("id", userId);
+    if (!user) {
+      throw new NotfoundError("Usuário não encontrado");
+    }
+    if (adminId === user.id) {
+      throw new ForbiddenError("Você não pode alterar o seu próprio status");
+    }
+    const result = await this.userRepository.toggleUserStatus(userId);
+    if (!result) {
+      throw new Error("Problemas em atualizar status do usuário");
+    }
+    return result;
+  }
 }

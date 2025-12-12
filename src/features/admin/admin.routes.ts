@@ -65,6 +65,11 @@ export class AdminRoutes {
       validateMiddleware({ body: adminCreateUserSchema }),
       this.controller.createUser
     );
+    this.router.patch(
+      "/users/:userId/toggle-status",
+      validateMiddleware({ params: userIdParamsSchema }),
+      this.controller.toggleUserStatus
+    );
   }
 
   get getRouter() {

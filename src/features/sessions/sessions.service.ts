@@ -47,7 +47,7 @@ export class SessionsService {
       renewed = true;
     }
     const user = await this.userRepository.findUserSessionInfo(session.userId);
-    if (!user) {
+    if (!user || user.isActive === 0) {
       await this.sessionsRepository.revokeSessionByKey("userId", session.userId);
       throw new SessionError();
     }

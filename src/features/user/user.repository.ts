@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { DataBase } from "../../db";
 import { users } from "../../db/schema";
 import {
@@ -18,6 +18,7 @@ export class UserRepository {
           name: users.name,
           email: users.email,
           role: users.role,
+          isActive: users.isActive,
         })
         .from(users)
         .all();
@@ -45,6 +46,7 @@ export class UserRepository {
           name: users.name,
           email: users.email,
           role: users.role,
+          isActive: users.isActive,
         })
         .from(users)
         .where(eq(users.id, userId))
@@ -93,6 +95,23 @@ export class UserRepository {
       await this.db.connection.update(users).set(userData).where(eq(users.id, userId)).execute();
     } catch (err) {
       console.error(`Erro ao atualizar usuário:`, err);
+      throw err;
+    }
+  }
+
+  async toggleUserStatus(userId: string) {
+    try {
+      return this.db.connection
+        .update(users)
+        .set({ isActive: sql`NOT ${users.isActive}` })
+        .where(eq(users.id, userId))
+        .returning({
+          name: users.name,
+          isActive: users.isActive,
+        })
+        .get();
+    } catch (err) {
+      console.error(`Erro ao alterar status do usuário:`, err);
       throw err;
     }
   }
