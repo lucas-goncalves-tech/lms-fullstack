@@ -7,6 +7,22 @@ import { ICreateCourseInput } from "./interface/course.interface";
 export class CourseRepository {
   constructor(private readonly db: DataBase) {}
 
+  async findMany() {
+    try {
+      return this.db.connection
+        .select({
+          slug: courses.slug,
+          title: courses.title,
+          description: courses.description,
+        })
+        .from(courses)
+        .all();
+    } catch (error) {
+      console.error("Error ao encontrar cursos", error);
+      throw error;
+    }
+  }
+
   async findManyWithProgress(userId: string) {
     try {
       return this.db.connection
@@ -41,6 +57,15 @@ export class CourseRepository {
         .get();
     } catch (error) {
       console.error("Não foi possivel inserir um novo curso", error);
+      throw error;
+    }
+  }
+
+  async deleteCourse(courseSlug: string) {
+    try {
+      this.db.connection.delete(courses).where(eq(courses.slug, courseSlug));
+    } catch (error) {
+      console.error("Não foi possivel deletar o curso", error);
       throw error;
     }
   }

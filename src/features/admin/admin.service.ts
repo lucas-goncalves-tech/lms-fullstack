@@ -18,6 +18,11 @@ export class AdminService {
     }
   }
 
+  async findMany() {
+    const result = await this.courseRepository.findMany();
+    return result;
+  }
+
   async createLesson(courseSlug: string, lessonData: CreateLessonDTO) {
     const course = await this.courseRepository.findBySlug(courseSlug);
     if (!course) {
@@ -32,5 +37,13 @@ export class AdminService {
       throw new ConflictError("Esta aula já existe");
     }
     return result;
+  }
+
+  async deleteCourse(courseSlug: string) {
+    const course = await this.courseRepository.findBySlug(courseSlug);
+    if (!course) {
+      throw new NotfoundError("Curso não encontrado");
+    }
+    await this.courseRepository.deleteCourse(courseSlug);
   }
 }

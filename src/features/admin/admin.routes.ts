@@ -6,9 +6,9 @@ import { createCourseSchema } from "./dto/create-course.dto";
 import { AdminController } from "./admin.controller";
 import { AdminService } from "./admin.service";
 import { CourseRepository } from "../course/course.repository";
-import { LessonParamsSchema } from "../lessons/dto/lesson-params.dto";
 import { createLessonSchema } from "./dto/create-lesson.dto";
 import { LessonRepository } from "../lessons/lesson.repository";
+import { CourseSlugParamsSchema } from "../course/dto/course-params";
 
 export class AdminRoutes {
   private readonly controller: AdminController;
@@ -25,6 +25,7 @@ export class AdminRoutes {
 
   private initRoutes() {
     this.router.use(adminGuardMiddleware);
+    this.router.get("/courses", this.controller.findMany);
     this.router.post(
       "/courses/new",
       validateMiddleware({ body: createCourseSchema }),
@@ -32,8 +33,13 @@ export class AdminRoutes {
     );
     this.router.post(
       "/lessons/:courseSlug/new",
-      validateMiddleware({ params: LessonParamsSchema, body: createLessonSchema }),
+      validateMiddleware({ params: CourseSlugParamsSchema, body: createLessonSchema }),
       this.controller.createLesson
+    );
+    this.router.delete(
+      "/courses/:courseSlug/delete",
+      validateMiddleware({ params: CourseSlugParamsSchema }),
+      this.controller.deleteCourse
     );
   }
 
