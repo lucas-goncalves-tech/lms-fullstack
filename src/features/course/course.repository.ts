@@ -49,14 +49,22 @@ export class CourseRepository {
 
   async createCourse(courseData: ICreateCourseInput) {
     try {
-      return this.db.connection
-        .insert(courses)
-        .values(courseData)
-        .onConflictDoNothing()
-        .returning()
-        .get();
+      return this.db.connection.insert(courses).values(courseData).onConflictDoNothing().run();
     } catch (error) {
       console.error("Não foi possivel inserir um novo curso", error);
+      throw error;
+    }
+  }
+
+  async updateCourse(courseSlug: string, courseData: { title: string; description: string }) {
+    try {
+      return this.db.connection
+        .update(courses)
+        .set(courseData)
+        .where(eq(courses.slug, courseSlug))
+        .run();
+    } catch (error) {
+      console.error("Não foi possivel atualizar o curso", error);
       throw error;
     }
   }

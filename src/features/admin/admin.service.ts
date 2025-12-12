@@ -4,6 +4,7 @@ import { CourseRepository } from "../course/course.repository";
 import { ICreateCourseInput } from "../course/interface/course.interface";
 import { CreateLessonDTO } from "./dto/create-lesson.dto";
 import { LessonRepository } from "../lessons/lesson.repository";
+import { UpdateCourseDTO } from "./dto/update-course.dto";
 
 export class AdminService {
   constructor(
@@ -37,6 +38,14 @@ export class AdminService {
       throw new ConflictError("Esta aula já existe");
     }
     return result;
+  }
+
+  async updateCourse(courseSlug: string, courseData: UpdateCourseDTO) {
+    const course = await this.courseRepository.findBySlug(courseSlug);
+    if (!course) {
+      throw new NotfoundError("Curso não encontrado");
+    }
+    await this.courseRepository.updateCourse(courseSlug, courseData);
   }
 
   async deleteCourse(courseSlug: string) {

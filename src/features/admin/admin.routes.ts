@@ -3,6 +3,7 @@ import { DataBase } from "../../db";
 import { validateMiddleware } from "../../shared/middlewares/validate.middleware";
 import { adminGuardMiddleware } from "../../shared/middlewares/guard-role.middleware";
 import { createCourseSchema } from "./dto/create-course.dto";
+import { updateCourseSchema } from "./dto/update-course.dto";
 import { AdminController } from "./admin.controller";
 import { AdminService } from "./admin.service";
 import { CourseRepository } from "../course/course.repository";
@@ -30,6 +31,11 @@ export class AdminRoutes {
       "/courses/new",
       validateMiddleware({ body: createCourseSchema }),
       this.controller.createCourse
+    );
+    this.router.put(
+      "/courses/:courseSlug",
+      validateMiddleware({ params: CourseSlugParamsSchema, body: updateCourseSchema }),
+      this.controller.updateCourse
     );
     this.router.post(
       "/lessons/:courseSlug/new",

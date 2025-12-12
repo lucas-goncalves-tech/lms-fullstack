@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { AdminService } from "./admin.service";
 import { CreateCourseDTO } from "./dto/create-course.dto";
 import { CreateLessonDTO } from "./dto/create-lesson.dto";
+import { UpdateCourseDTO } from "./dto/update-course.dto";
 
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
@@ -26,6 +27,16 @@ export class AdminController {
     const result = await this.adminService.createLesson(courseSlug, lessonData);
 
     res.status(201).json(result);
+  };
+
+  updateCourse = async (req: Request, res: Response) => {
+    const { courseSlug } = req.params;
+    const courseData = req.body as UpdateCourseDTO;
+    await this.adminService.updateCourse(courseSlug, courseData);
+
+    res.status(200).json({
+      message: "Curso atualizado com sucesso!",
+    });
   };
 
   deleteCourse = async (req: Request, res: Response) => {
