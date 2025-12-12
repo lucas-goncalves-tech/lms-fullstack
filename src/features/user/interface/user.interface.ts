@@ -1,4 +1,6 @@
 import { users } from "../../../db/schema";
 
 export type IUser = typeof users.$inferSelect;
-export type CreateUserInput = Pick<IUser, "name" | "email" | "password_hash">;
+export type ICreateUserInput = Pick<IUser, "name" | "email" | "password_hash">;
+export type IAdminCreateUserInput = Pick<IUser, "name" | "email" | "password_hash" | "role">;
+export type IUpdateUserInput = Pick<IUser, "name" | "role">;

@@ -4,8 +4,10 @@ CREATE TABLE `users` (
 	`email` TEXT COLLATE NOCASE NOT NULL,
 	`password_hash` text NOT NULL,
 	`role` text DEFAULT 'USER' NOT NULL,
+	`is_active` integer DEFAULT 1 NOT NULL,
 	`created` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	CONSTRAINT "role_check" CHECK("users"."role" IN ('USER', 'ADMIN'))
+	CONSTRAINT "role_check" CHECK("users"."role" IN ('USER', 'ADMIN')),
+	CONSTRAINT "is_active_check" CHECK("users"."is_active" IN (0, 1))
 ) STRICT;
 --> statement-breakpoint
 CREATE UNIQUE INDEX `users_email_unique` ON `users` (`email`);--> statement-breakpoint
@@ -68,7 +70,6 @@ CREATE TABLE `sessions` (
 	CONSTRAINT "revoked_check" CHECK("sessions"."revoked" IN (0, 1))
 ) STRICT;
 --> statement-breakpoint
--- VIEWS
 CREATE VIEW IF NOT EXISTS "lessons_completed_full" AS
 SELECT "u"."id", "u"."email", "c"."title" AS "course", "l"."title" AS "lesson", "lc"."completed"
 FROM "lessons_completed" AS "lc"
@@ -78,49 +79,49 @@ JOIN "courses" AS "c" ON "c"."id" = "lc"."course_id";
 --> statement-breakpoint
 CREATE VIEW IF NOT EXISTS "courses_stats" AS
 SELECT 
-    c.id,
-    c.slug,
-    c.title,
-    c.description,
-    c.created,
-    COALESCE(SUM(l.seconds), 0) as total_seconds,
-    COUNT(l.id) as total_lessons
-FROM courses c
-LEFT JOIN lessons l ON l.course_id = c.id
-GROUP BY c.id;
+    "c"."id",
+    "c"."slug",
+    "c"."title",
+    "c"."description",
+    "c"."created",
+    COALESCE(SUM("l"."seconds"), 0) AS "total_seconds",
+    COUNT("l"."id") AS "total_lessons"
+FROM "courses" AS "c"
+LEFT JOIN "lessons" AS "l" ON "l"."course_id" = "c"."id"
+GROUP BY "c"."id";
 --> statement-breakpoint
 CREATE VIEW IF NOT EXISTS "courses_user_progress" AS
 SELECT 
-    cs.id,
-    cs.slug,
-    cs.title,
-    cs.description,
-    cs.created,
-    cs.total_seconds,
-    cs.total_lessons,
-    u.id as user_id,
-    COALESCE(lc.completed_count, 0) as completed_lessons
-FROM courses_stats cs
-CROSS JOIN users u
+    "cs"."id",
+    "cs"."slug",
+    "cs"."title",
+    "cs"."description",
+    "cs"."created",
+    "cs"."total_seconds",
+    "cs"."total_lessons",
+    "u"."id" AS "user_id",
+    COALESCE("lc"."completed_count", 0) AS "completed_lessons"
+FROM "courses_stats" AS "cs"
+CROSS JOIN "users" AS "u"
 LEFT JOIN (
-    SELECT course_id, user_id, COUNT(*) as completed_count
-    FROM lessons_completed
-    GROUP BY course_id, user_id
-) lc ON lc.course_id = cs.id AND lc.user_id = u.id;
+    SELECT "course_id", "user_id", COUNT(*) AS "completed_count"
+    FROM "lessons_completed"
+    GROUP BY "course_id", "user_id"
+) AS "lc" ON "lc"."course_id" = "cs"."id" AND "lc"."user_id" = "u"."id";
 --> statement-breakpoint
 CREATE VIEW IF NOT EXISTS "certificates_full" AS
 SELECT 
-    cert.id, 
-    cert.user_id, 
-    u.name,
-    cert.course_id, 
-    cs.title, 
-    cs.total_seconds,
-    cs.total_lessons,
-    cert.completed
-FROM certificates cert
-JOIN users u ON u.id = cert.user_id
-JOIN courses_stats cs ON cs.id = cert.course_id;
+    "cert"."id", 
+    "cert"."user_id", 
+    "u"."name",
+    "cert"."course_id", 
+    "cs"."title", 
+    "cs"."total_seconds",
+    "cs"."total_lessons",
+    "cert"."completed"
+FROM "certificates" AS "cert"
+JOIN "users" AS "u" ON "u"."id" = "cert"."user_id"
+JOIN "courses_stats" AS "cs" ON "cs"."id" = "cert"."course_id";
 --> statement-breakpoint
 CREATE VIEW IF NOT EXISTS "lesson_nav" AS
 SELECT "cl"."slug" AS "current_slug", "l".*
@@ -131,19 +132,20 @@ ORDER BY "l"."order";
 --> statement-breakpoint
 CREATE VIEW IF NOT EXISTS "lessons_user_progress" AS
 SELECT 
-    l."id",
-    l."course_id",
-    l."slug",
-    l."title",
-    l."seconds",
-    l."video",
-    l."description",
-    l."order",           -- ← Com aspas
-    l."free",
-    l."created",
-    u."id" as "user_id",
-    lc."completed"
-FROM "lessons" l
-CROSS JOIN "users" u
-LEFT JOIN "lessons_completed" lc 
-    ON lc."lesson_id" = l."id" AND lc."user_id" = u."id";
+    "l"."id",
+    "l"."course_id",
+    "l"."slug",
+    "l"."title",
+    "l"."seconds",
+    "l"."video",
+    "l"."description",
+    "l"."order",
+    "l"."free",
+    "l"."created",
+    "u"."id" AS "user_id",
+    "lc"."completed"
+FROM "lessons" AS "l"
+CROSS JOIN "users" AS "u"
+LEFT JOIN "lessons_completed" AS "lc" 
+    ON "lc"."lesson_id" = "l"."id" AND "lc"."user_id" = "u"."id";
+

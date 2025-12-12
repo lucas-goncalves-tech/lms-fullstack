@@ -1,13 +1,11 @@
 import { z } from "zod";
-import { zodSafeString } from "../../../shared/validators/string.validator copy";
 import { zodSafeEmail } from "../../../shared/validators/email.validator";
 import { zodPasswordValidator } from "../../../shared/validators/common-fields.validator";
+import { zodNameValdiator } from "../../../shared/validators/common-fields.validator";
 
 export const createUserSchema = z
   .strictObject({
-    name: zodSafeString()
-      .min(3, "Nome deve ter no mínimo 3 caracteres")
-      .max(30, "Nome deve ter no máximo 30 caracteres"),
+    name: zodNameValdiator(),
     email: zodSafeEmail(),
     password: zodPasswordValidator("Senha"),
     confirmPassword: zodPasswordValidator("Confirmação de senha"),

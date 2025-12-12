@@ -19,7 +19,7 @@ class App {
     this.app = express();
     this.db = new DataBase();
     this.mainRoutes = new MainRoutes(this.db);
-    this.ttl = 5 * 60 * 1000;
+    this.ttl = 15 * 60 * 1000;
     this.init();
   }
 

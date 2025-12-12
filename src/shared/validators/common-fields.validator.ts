@@ -28,3 +28,9 @@ export const zodIntegerValidator = (numberMessage = "Número") =>
     .number(`${numberMessage} deve ser um número`)
     .int(`${numberMessage} deve ser um número inteiro`)
     .nonnegative(`${numberMessage} não pode ser negativa`);
+
+export const zodRoleValidator = () => z.enum(["ADMIN", "USER"]);
+export const zodNameValdiator = () =>
+  zodSafeString()
+    .min(3, "Nome deve ter no mínimo 3 caracteres")
+    .max(30, "Nome deve ter no máximo 30 caracteres");

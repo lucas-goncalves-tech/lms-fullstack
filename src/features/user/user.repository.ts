@@ -1,10 +1,31 @@
 import { eq } from "drizzle-orm";
 import { DataBase } from "../../db";
 import { users } from "../../db/schema";
-import { CreateUserInput } from "./interface/user.interface";
+import {
+  IAdminCreateUserInput,
+  ICreateUserInput,
+  IUpdateUserInput,
+} from "./interface/user.interface";
 
 export class UserRepository {
   constructor(private readonly db: DataBase) {}
+
+  async findMany() {
+    try {
+      return this.db.connection
+        .select({
+          id: users.id,
+          name: users.name,
+          email: users.email,
+          role: users.role,
+        })
+        .from(users)
+        .all();
+    } catch (err) {
+      console.error("Erro ao buscar usuários:", err);
+      throw err;
+    }
+  }
 
   async findUserByKey(key: "email" | "id", value: string) {
     try {
@@ -35,7 +56,7 @@ export class UserRepository {
     }
   }
 
-  async createUser(user: CreateUserInput) {
+  async createUser(user: ICreateUserInput | IAdminCreateUserInput) {
     try {
       const result = this.db.connection
         .insert(users)
@@ -63,6 +84,15 @@ export class UserRepository {
         .execute();
     } catch (err) {
       console.error(`Erro ao atualizar senha do usuário:`, err);
+      throw err;
+    }
+  }
+
+  async updateUser(userId: string, userData: Partial<IUpdateUserInput>) {
+    try {
+      await this.db.connection.update(users).set(userData).where(eq(users.id, userId)).execute();
+    } catch (err) {
+      console.error(`Erro ao atualizar usuário:`, err);
       throw err;
     }
   }

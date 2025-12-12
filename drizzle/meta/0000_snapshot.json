@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "8e200fda-e30b-4d6e-8b8b-eb288b1546f6",
+  "id": "8d39ffba-867b-4d76-895e-5f0bb6ff714b",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "users": {
@@ -43,6 +43,14 @@
           "autoincrement": false,
           "default": "'USER'"
         },
+        "is_active": {
+          "name": "is_active",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 1
+        },
         "created": {
           "name": "created",
           "type": "text",
@@ -68,6 +76,10 @@
         "role_check": {
           "name": "role_check",
           "value": "\"users\".\"role\" IN ('USER', 'ADMIN')"
+        },
+        "is_active_check": {
+          "name": "is_active_check",
+          "value": "\"users\".\"is_active\" IN (0, 1)"
         }
       }
     },

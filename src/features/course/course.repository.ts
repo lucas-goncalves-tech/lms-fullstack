@@ -2,7 +2,8 @@ import { asc, eq } from "drizzle-orm";
 import { DataBase } from "../../db";
 import { courses } from "../../db/schema";
 import { coursesUserProgress } from "../../db/schema/views.schema";
-import { ICreateCourseInput } from "./interface/course.interface";
+import { ICreateCourseInput, IUpdateCourseInput } from "./interface/course.interface";
+import { UpdateCourseDTO } from "../admin/dto/update-course.dto";
 
 export class CourseRepository {
   constructor(private readonly db: DataBase) {}
@@ -56,13 +57,9 @@ export class CourseRepository {
     }
   }
 
-  async updateCourse(courseSlug: string, courseData: { title: string; description: string }) {
+  async updateCourse(courseSlug: string, courseData: IUpdateCourseInput) {
     try {
-      return this.db.connection
-        .update(courses)
-        .set(courseData)
-        .where(eq(courses.slug, courseSlug))
-        .run();
+      this.db.connection.update(courses).set(courseData).where(eq(courses.slug, courseSlug)).run();
     } catch (error) {
       console.error("Não foi possivel atualizar o curso", error);
       throw error;
