@@ -9,6 +9,7 @@ import { SessionsRepository } from "./features/sessions/sessions.repository";
 import { UserRepository } from "./features/user/user.repository";
 import { CryptoService } from "./shared/security/crypto-service.security";
 import { CertificatesRoutes } from "./features/certificates/certificates.routes";
+import { AdminRoutes } from "./features/admin/admin.routes";
 
 export class MainRoutes {
   private readonly router: Router;
@@ -17,6 +18,7 @@ export class MainRoutes {
   private readonly authRoutes: AuthRoutes;
   private readonly validateSessionMiddleware: ValidateSessionMiddleware;
   private readonly certificatesRoutes: CertificatesRoutes;
+  private readonly adminRoutes: AdminRoutes;
 
   constructor(private readonly db: DataBase) {
     this.router = Router();
@@ -29,6 +31,7 @@ export class MainRoutes {
     this.certificatesRoutes = new CertificatesRoutes(this.db);
     this.courseRoutes = new CourseRoutes(this.db);
     this.lessonRoutes = new LessonRoutes(this.db);
+    this.adminRoutes = new AdminRoutes(this.db);
     this.authRoutes = new AuthRoutes(this.db);
 
     this.initRoutes();
@@ -36,6 +39,11 @@ export class MainRoutes {
 
   private initRoutes() {
     this.router.use("/auth", this.authRoutes.getRouter);
+    this.router.use(
+      "/admin",
+      this.validateSessionMiddleware.validateSession,
+      this.adminRoutes.getRouter
+    );
     this.router.use(
       "/courses",
       this.validateSessionMiddleware.validateSession,

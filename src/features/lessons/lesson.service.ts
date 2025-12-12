@@ -1,10 +1,8 @@
 import { BadRequestError } from "../../shared/errors/bad-request.error";
-import { ConflictError } from "../../shared/errors/conflict.error";
 import { NotfoundError } from "../../shared/errors/not-found.error";
 import { CourseRepository } from "../course/course.repository";
 import { CertificateRepository } from "../certificates/certificate.repository";
 import { LessonRepository } from "./lesson.repository";
-import { CreateLessonDTO } from "./dto/create-lesson.dto";
 
 export class LessonService {
   constructor(
@@ -12,22 +10,6 @@ export class LessonService {
     private readonly courseRepository: CourseRepository,
     private readonly certificateRepository: CertificateRepository
   ) {}
-
-  async createLesson(courseSlug: string, lessonData: CreateLessonDTO) {
-    const course = await this.courseRepository.findBySlug(courseSlug);
-    if (!course) {
-      throw new NotfoundError("Curso não encontrado");
-    }
-
-    const result = await this.lessonRepository.createLesson({
-      ...lessonData,
-      courseId: course.id,
-    });
-    if (!result) {
-      throw new ConflictError("Esta aula já existe");
-    }
-    return result;
-  }
 
   async findManyByCourseSlug(userId: string, courseSlug: string) {
     const lessons = await this.lessonRepository.findManyByCourseSlug(userId, courseSlug);

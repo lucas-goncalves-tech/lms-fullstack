@@ -3,9 +3,6 @@ import { DataBase } from "../../db";
 import { CourseController } from "./course.controller";
 import { CourseRepository } from "./course.repository";
 import { CourseService } from "./course.service";
-import { validateMiddleware } from "../../shared/middlewares/validate.middleware";
-import { createCourseSchema } from "./dto/create-course.dto";
-import { adminGuardMiddleware } from "../../shared/middlewares/guard-role.middleware";
 
 export class CourseRoutes {
   private readonly controller: CourseController;
@@ -20,12 +17,6 @@ export class CourseRoutes {
   }
 
   private initRoutes() {
-    this.router.post(
-      "/",
-      adminGuardMiddleware,
-      validateMiddleware({ body: createCourseSchema }),
-      this.controller.createCourse
-    );
     this.router.get("/", this.controller.findManyWithProgress);
   }
 

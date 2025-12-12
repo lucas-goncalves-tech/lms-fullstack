@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { CreateLessonDTO } from "./dto/create-lesson.dto";
+import { CreateLessonDTO } from "../admin/dto/create-lesson.dto";
 import { LessonService } from "./lesson.service";
 
 export class LessonController {
