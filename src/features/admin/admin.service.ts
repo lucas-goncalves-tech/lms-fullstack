@@ -10,6 +10,7 @@ import { ForbiddenError } from "../../shared/errors/forbidden.error";
 import { IAdminCreateUserInput, IUpdateUserInput } from "../user/interface/user.interface";
 import { AdminCreateUserDTO } from "./dto/admin-create-user.dto";
 import { CryptoService } from "../../shared/security/crypto-service.security";
+import { UnprocessableEntityError } from "../../shared/errors/unprocessable-entity.error";
 
 export class AdminService {
   constructor(
@@ -75,7 +76,7 @@ export class AdminService {
     }
 
     if (userData.role && adminId === user.id) {
-      throw new ForbiddenError("Você não pode alterar o seu próprio role");
+      throw new UnprocessableEntityError("Você não pode alterar o seu próprio role");
     }
     await this.userRepository.updateUser(userId, userData);
   }
@@ -99,7 +100,7 @@ export class AdminService {
       throw new NotfoundError("Usuário não encontrado");
     }
     if (adminId === user.id) {
-      throw new ForbiddenError("Você não pode alterar o seu próprio status");
+      throw new UnprocessableEntityError("Você não pode alterar o seu próprio status");
     }
     const result = await this.userRepository.toggleUserStatus(userId);
     if (!result) {
