@@ -6,10 +6,8 @@ import { CourseRepository } from "../course/course.repository";
 import { CertificateRepository } from "../certificates/certificate.repository";
 import { Router } from "express";
 import { validateMiddleware } from "../../shared/middlewares/validate.middleware";
-import { createLessonSchema } from "../admin/dto/create-lesson.dto";
 import { LessonParamsSchema, findLessonParamsSchema } from "./dto/lesson-params.dto";
 import { completeLessonParamsSchema } from "./dto/complete-lesson.dto";
-import { adminGuardMiddleware } from "../../shared/middlewares/guard-role.middleware";
 
 export class LessonRoutes {
   private readonly controller: LessonController;
