@@ -12,7 +12,10 @@ export class LessonService {
   ) {}
 
   async findManyByCourseSlug(userId: string, courseSlug: string) {
-    const lessons = await this.lessonRepository.findManyByCourseSlug(userId, courseSlug);
+    const lessons = await this.lessonRepository.findManyByCourseSlugWithProgress(
+      userId,
+      courseSlug
+    );
     //eslint-disable-next-line
     return lessons.map(({ userId, ...lesson }) => lesson);
   }

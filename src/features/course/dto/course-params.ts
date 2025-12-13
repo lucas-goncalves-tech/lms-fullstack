@@ -1,6 +1,6 @@
 import z from "zod";
 import { zodSlugValidator } from "../../../shared/validators/common-fields.validator";
 
-export const CourseSlugParamsSchema = z.object({
+export const courseSlugParamsSchema = z.object({
   courseSlug: zodSlugValidator("courseSlug"),
 });

@@ -31,6 +31,22 @@ export class AdminService {
     return result;
   }
 
+  async updateCourse(courseSlug: string, courseData: UpdateCourseDTO) {
+    const course = await this.courseRepository.findBySlug(courseSlug);
+    if (!course) {
+      throw new NotfoundError("Curso não encontrado");
+    }
+    await this.courseRepository.updateCourse(courseSlug, courseData);
+  }
+
+  async deleteCourse(courseSlug: string) {
+    const course = await this.courseRepository.findBySlug(courseSlug);
+    if (!course) {
+      throw new NotfoundError("Curso não encontrado");
+    }
+    await this.courseRepository.deleteCourse(courseSlug);
+  }
+
   async createLesson(courseSlug: string, lessonData: CreateLessonDTO) {
     const course = await this.courseRepository.findBySlug(courseSlug);
     if (!course) {
@@ -47,20 +63,12 @@ export class AdminService {
     return result;
   }
 
-  async updateCourse(courseSlug: string, courseData: UpdateCourseDTO) {
-    const course = await this.courseRepository.findBySlug(courseSlug);
-    if (!course) {
-      throw new NotfoundError("Curso não encontrado");
+  async findManyLessons(courseSlug: string) {
+    const result = await this.lessonRepository.findManyByCourseSlug(courseSlug);
+    if (!result) {
+      throw new NotfoundError("Nenhuma aula encontrada");
     }
-    await this.courseRepository.updateCourse(courseSlug, courseData);
-  }
-
-  async deleteCourse(courseSlug: string) {
-    const course = await this.courseRepository.findBySlug(courseSlug);
-    if (!course) {
-      throw new NotfoundError("Curso não encontrado");
-    }
-    await this.courseRepository.deleteCourse(courseSlug);
+    return result;
   }
 
   async findManyUsers() {

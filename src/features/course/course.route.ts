@@ -4,7 +4,7 @@ import { CourseController } from "./course.controller";
 import { CourseRepository } from "./course.repository";
 import { CourseService } from "./course.service";
 import { validateMiddleware } from "../../shared/middlewares/validate.middleware";
-import { CourseSlugParamsSchema } from "./dto/course-params";
+import { courseSlugParamsSchema } from "./dto/course-params";
 
 export class CourseRoutes {
   private readonly controller: CourseController;
@@ -22,7 +22,7 @@ export class CourseRoutes {
     this.router.get("/", this.controller.findManyWithProgress);
     this.router.get(
       "/:courseSlug",
-      validateMiddleware({ params: CourseSlugParamsSchema }),
+      validateMiddleware({ params: courseSlugParamsSchema }),
       this.controller.findOneBySlug
     );
   }

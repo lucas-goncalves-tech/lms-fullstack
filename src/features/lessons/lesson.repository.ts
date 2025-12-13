@@ -22,7 +22,25 @@ export class LessonRepository {
     }
   }
 
-  async findManyByCourseSlug(userId: string, courseSlug: string) {
+  async findManyByCourseSlug(courseSlug: string) {
+    try {
+      const courseIdSubquery = this.db.connection
+        .select({ id: courses.id })
+        .from(courses)
+        .where(eq(courses.slug, courseSlug));
+      return this.db.connection
+        .select()
+        .from(lessons)
+        .where(eq(lessons.courseId, courseIdSubquery))
+        .orderBy(asc(lessons.order))
+        .all();
+    } catch (error) {
+      console.error("Error ao buscar aulas por curso", error);
+      throw error;
+    }
+  }
+
+  async findManyByCourseSlugWithProgress(userId: string, courseSlug: string) {
     try {
       const courseIdSubquery = this.db.connection
         .select({ id: courses.id })

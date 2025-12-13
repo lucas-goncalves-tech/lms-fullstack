@@ -9,6 +9,7 @@ import { AdminCreateUserDTO } from "./dto/admin-create-user.dto";
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
+  // Courses
   findManyCourses = async (_req: Request, res: Response) => {
     const result = await this.adminService.findManyCourses();
     res.status(200).json(result);
@@ -21,14 +22,6 @@ export class AdminController {
     res.status(201).json({
       message: "Curso criado com sucesso!",
     });
-  };
-
-  createLesson = async (req: Request, res: Response) => {
-    const lessonData = req.body as CreateLessonDTO;
-    const { courseSlug } = req.params;
-    const result = await this.adminService.createLesson(courseSlug, lessonData);
-
-    res.status(201).json(result);
   };
 
   updateCourse = async (req: Request, res: Response) => {
@@ -48,6 +41,22 @@ export class AdminController {
     res.status(204).json();
   };
 
+  // Lessons
+  createLesson = async (req: Request, res: Response) => {
+    const lessonData = req.body as CreateLessonDTO;
+    const { courseSlug } = req.params;
+    const result = await this.adminService.createLesson(courseSlug, lessonData);
+
+    res.status(201).json(result);
+  };
+
+  findManyLessons = async (req: Request, res: Response) => {
+    const { courseSlug } = req.params;
+    const result = await this.adminService.findManyLessons(courseSlug);
+    res.status(200).json(result);
+  };
+
+  // Users
   findManyUsers = async (_req: Request, res: Response) => {
     const result = await this.adminService.findManyUsers();
     res.status(200).json(result);

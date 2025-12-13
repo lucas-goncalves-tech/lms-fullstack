@@ -8,7 +8,7 @@ import { Router } from "express";
 import { validateMiddleware } from "../../shared/middlewares/validate.middleware";
 import { findLessonParamsSchema } from "./dto/lesson-params.dto";
 import { completeLessonParamsSchema } from "./dto/complete-lesson.dto";
-import { CourseSlugParamsSchema } from "../course/dto/course-params";
+import { courseSlugParamsSchema } from "../course/dto/course-params";
 
 export class LessonRoutes {
   private readonly controller: LessonController;
@@ -27,7 +27,7 @@ export class LessonRoutes {
   private initRoutes() {
     this.router.get(
       "/",
-      validateMiddleware({ params: CourseSlugParamsSchema }),
+      validateMiddleware({ params: courseSlugParamsSchema }),
       this.controller.findManyByCourseSlug
     );
 
@@ -44,7 +44,7 @@ export class LessonRoutes {
     );
     this.router.delete(
       "/",
-      validateMiddleware({ params: CourseSlugParamsSchema }),
+      validateMiddleware({ params: courseSlugParamsSchema }),
       this.controller.resetCourseCompleted
     );
   }

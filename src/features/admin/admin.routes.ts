@@ -9,7 +9,7 @@ import { AdminService } from "./admin.service";
 import { CourseRepository } from "../course/course.repository";
 import { createLessonSchema } from "./dto/create-lesson.dto";
 import { LessonRepository } from "../lessons/lesson.repository";
-import { CourseSlugParamsSchema } from "../course/dto/course-params";
+import { courseSlugParamsSchema } from "../course/dto/course-params";
 import { UserRepository } from "../user/user.repository";
 import { userIdParamsSchema } from "./dto/admin-params";
 import { updateUserSchema } from "./dto/update-user.dto";
@@ -35,6 +35,8 @@ export class AdminRoutes {
   private initRoutes() {
     this.router.use(adminGuardMiddleware);
     this.router.use(noCacheMiddleware);
+
+    // Courses
     this.router.get("/courses", this.controller.findManyCourses);
     this.router.post(
       "/courses/new",
@@ -43,19 +45,22 @@ export class AdminRoutes {
     );
     this.router.put(
       "/courses/:courseSlug/update",
-      validateMiddleware({ params: CourseSlugParamsSchema, body: updateCourseSchema }),
+      validateMiddleware({ params: courseSlugParamsSchema, body: updateCourseSchema }),
       this.controller.updateCourse
     );
     this.router.delete(
       "/courses/:courseSlug/delete",
-      validateMiddleware({ params: CourseSlugParamsSchema }),
+      validateMiddleware({ params: courseSlugParamsSchema }),
       this.controller.deleteCourse
     );
     this.router.post(
       "/lessons/:courseSlug/new",
-      validateMiddleware({ params: CourseSlugParamsSchema, body: createLessonSchema }),
+      validateMiddleware({ params: courseSlugParamsSchema, body: createLessonSchema }),
       this.controller.createLesson
     );
+    this.router.get("/lessons/:courseSlug", this.controller.findManyLessons);
+
+    // Users
     this.router.get("/users", this.controller.findManyUsers);
     this.router.put(
       "/users/:userId/update",
