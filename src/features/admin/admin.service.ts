@@ -6,7 +6,6 @@ import { CreateLessonDTO } from "./dto/create-lesson.dto";
 import { LessonRepository } from "../lessons/lesson.repository";
 import { UpdateCourseDTO } from "./dto/update-course.dto";
 import { UserRepository } from "../user/user.repository";
-import { ForbiddenError } from "../../shared/errors/forbidden.error";
 import { IAdminCreateUserInput, IUpdateUserInput } from "../user/interface/user.interface";
 import { AdminCreateUserDTO } from "./dto/admin-create-user.dto";
 import { CryptoService } from "../../shared/security/crypto-service.security";
@@ -107,5 +106,16 @@ export class AdminService {
       throw new Error("Problemas em atualizar status do usuário");
     }
     return result;
+  }
+
+  async deleteUser(adminId: string, userId: string) {
+    const user = await this.userRepository.findUserByKey("id", userId);
+    if (!user) {
+      throw new NotfoundError("Usuário não encontrado");
+    }
+    if (adminId === user.id) {
+      throw new UnprocessableEntityError("Não é possível deletar você mesmo");
+    }
+    await this.userRepository.deleteUser(userId);
   }
 }

@@ -85,4 +85,12 @@ export class AdminController {
         : `Usuário ${result.name} desativado com sucesso!`,
     });
   };
+
+  deleteUser = async (req: Request, res: Response) => {
+    const { userId } = req.params;
+    const adminId = req.session!.userId;
+    await this.adminService.deleteUser(adminId, userId);
+
+    res.status(204).json();
+  };
 }

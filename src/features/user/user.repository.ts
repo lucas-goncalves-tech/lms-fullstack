@@ -115,4 +115,13 @@ export class UserRepository {
       throw err;
     }
   }
+
+  async deleteUser(userId: string) {
+    try {
+      await this.db.connection.delete(users).where(eq(users.id, userId)).execute();
+    } catch (err) {
+      console.error(`Erro ao deletar usuário:`, err);
+      throw err;
+    }
+  }
 }

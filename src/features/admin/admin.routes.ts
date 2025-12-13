@@ -66,9 +66,14 @@ export class AdminRoutes {
       this.controller.createUser
     );
     this.router.patch(
-      "/users/:userId/toggle-status",
+      "/users/:userId/toggle-active",
       validateMiddleware({ params: userIdParamsSchema }),
       this.controller.toggleUserStatus
+    );
+    this.router.delete(
+      "/users/:userId/delete",
+      validateMiddleware({ params: userIdParamsSchema }),
+      this.controller.deleteUser
     );
   }
 
