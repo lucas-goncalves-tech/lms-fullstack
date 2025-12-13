@@ -70,9 +70,17 @@ export class LessonService {
     if (!course) {
       throw new NotfoundError("Curso não encontrado");
     }
-    const result = await this.lessonRepository.resetCourseCompleted(userId, course.id);
-    if (!result) {
+    const resetLessonResult = await this.lessonRepository.resetCourseCompleted(userId, course.id);
+    if (!resetLessonResult) {
       throw new BadRequestError("Aulas do curso já foram resetadas");
+    }
+
+    const deleteCertificateResult = await this.certificateRepository.deleteByUserIdAndCourseId(
+      userId,
+      course.id
+    );
+    if (!deleteCertificateResult) {
+      throw new BadRequestError("Certificado do curso não encontrado");
     }
   }
 }

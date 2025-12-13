@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { DataBase } from "../../db";
 import { certificates } from "../../db/schema";
 import { certificatesFull } from "../../db/schema/views.schema";
@@ -42,6 +42,19 @@ export class CertificateRepository {
         .get();
     } catch (error) {
       console.error("Error ao buscar certificado", error);
+      throw error;
+    }
+  }
+
+  async deleteByUserIdAndCourseId(userId: string, courseId: string) {
+    try {
+      return this.db.connection
+        .delete(certificates)
+        .where(and(eq(certificates.userId, userId), eq(certificates.courseId, courseId)))
+        .returning({ id: certificates.id })
+        .get();
+    } catch (error) {
+      console.error("Error ao deletar certificado", error);
       throw error;
     }
   }
