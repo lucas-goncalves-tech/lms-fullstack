@@ -2,6 +2,7 @@ import { drizzle } from "drizzle-orm/better-sqlite3";
 import DatabaseDriver from "better-sqlite3";
 import * as schema from "./schema";
 import { envCheck } from "../shared/helper/env-check.helper";
+import { CryptoService } from "../shared/security/crypto-service.security";
 
 const sqlite = new DatabaseDriver(envCheck().DB_FILE_NAME);
 sqlite.pragma("foreign_keys = ON");
@@ -146,7 +147,10 @@ const lessonsData = [
 ];
 
 async function seed() {
-  console.log("🌱 Iniciando seed do banco de dados...\n");
+  const ENV = envCheck().ENV;
+  if (ENV === "production") {
+    throw new Error("Seed não pode ser executado em ambiente de produção!");
+  }
 
   // Insert courses
   console.log("📚 Inserindo cursos...");
@@ -156,7 +160,9 @@ async function seed() {
     const [inserted] = await db
       .insert(schema.courses)
       .values(course)
-      .returning({ id: schema.courses.id, slug: schema.courses.slug });
+      .onConflictDoNothing()
+      .returning({ id: schema.courses.id, slug: schema.courses.slug })
+      .execute();
 
     insertedCourses[inserted.slug] = inserted.id;
     console.log(`  ✅ ${course.title} (${inserted.id})`);
@@ -173,17 +179,35 @@ async function seed() {
     }
     //eslint-disable-next-line
     const { courseSlug, ...lessonData } = lesson;
-    await db.insert(schema.lessons).values({
-      ...lessonData,
-      courseId,
-    });
+    await db
+      .insert(schema.lessons)
+      .values({
+        ...lessonData,
+        courseId,
+      })
+      .execute();
 
     console.log(`  ✅ ${lesson.title} (${lesson.courseSlug})`);
   }
 
+  console.log("\n📚 Inserindo usuário admin...");
+  const cryptoService = new CryptoService();
+  const hashedPassword = await cryptoService.hash("12345678");
+  await db
+    .insert(schema.users)
+    .values({
+      name: "Tom Banana",
+      email: "admin@admin.com",
+      password_hash: hashedPassword,
+      role: "ADMIN",
+    })
+    .execute();
+  console.log(`  ✅ Tom Banana (admin@admin.com)`);
+
   console.log("\n🎉 Seed concluído com sucesso!");
   console.log(`   - ${coursesData.length} cursos inseridos`);
   console.log(`   - ${lessonsData.length} lições inseridas`);
+  console.log(`   - 1 usuário admin inserido`);
 
   sqlite.close();
 }
