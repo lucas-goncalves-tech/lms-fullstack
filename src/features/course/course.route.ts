@@ -3,6 +3,8 @@ import { DataBase } from "../../db";
 import { CourseController } from "./course.controller";
 import { CourseRepository } from "./course.repository";
 import { CourseService } from "./course.service";
+import { validateMiddleware } from "../../shared/middlewares/validate.middleware";
+import { CourseSlugParamsSchema } from "./dto/course-params";
 
 export class CourseRoutes {
   private readonly controller: CourseController;
@@ -18,6 +20,11 @@ export class CourseRoutes {
 
   private initRoutes() {
     this.router.get("/", this.controller.findManyWithProgress);
+    this.router.get(
+      "/:courseSlug",
+      validateMiddleware({ params: CourseSlugParamsSchema }),
+      this.controller.findOneBySlug
+    );
   }
 
   get getRouter() {

@@ -9,4 +9,10 @@ export class CourseController {
     const result = await this.courseService.findManyWithProgress(userId);
     res.json(result);
   };
+
+  findOneBySlug = async (req: Request, res: Response) => {
+    const { courseSlug } = req.params;
+    const result = await this.courseService.findOneBySlug(courseSlug);
+    res.json(result);
+  };
 }

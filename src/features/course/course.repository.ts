@@ -1,9 +1,8 @@
 import { asc, eq } from "drizzle-orm";
 import { DataBase } from "../../db";
 import { courses } from "../../db/schema";
-import { coursesUserProgress } from "../../db/schema/views.schema";
+import { coursesStats, coursesUserProgress } from "../../db/schema/views.schema";
 import { ICreateCourseInput, IUpdateCourseInput } from "./interface/course.interface";
-import { UpdateCourseDTO } from "../admin/dto/update-course.dto";
 
 export class CourseRepository {
   constructor(private readonly db: DataBase) {}
@@ -35,6 +34,19 @@ export class CourseRepository {
         .all();
     } catch (error) {
       console.error("Error ao encontrar cursos", error);
+      throw error;
+    }
+  }
+
+  async findOneBySlug(courseSlug: string) {
+    try {
+      return this.db.connection
+        .select()
+        .from(coursesStats)
+        .where(eq(coursesStats.slug, courseSlug))
+        .get();
+    } catch (error) {
+      console.error("Error ao encontrar curso pelo slug", error);
       throw error;
     }
   }

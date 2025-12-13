@@ -31,7 +31,6 @@ const lessonsData = [
     video: "/html/tags-basicas.mp4",
     description: "Aula sobre as Tags Básicas",
     order: 1,
-    free: 1,
   },
   {
     courseSlug: "html-e-css",
@@ -41,7 +40,6 @@ const lessonsData = [
     video: "/html/estrutura-do-documento.mp4",
     description: "Estrutura básica: <!DOCTYPE>, <html>, <head> e <body>.",
     order: 2,
-    free: 1,
   },
   {
     courseSlug: "html-e-css",
@@ -51,7 +49,6 @@ const lessonsData = [
     video: "/html/links-e-imagens.mp4",
     description: "Como usar <a> e <img>, caminhos relativos e absolutos.",
     order: 3,
-    free: 0,
   },
   {
     courseSlug: "html-e-css",
@@ -61,7 +58,6 @@ const lessonsData = [
     video: "/html/listas-e-tabelas.mp4",
     description: "Listas ordenadas/não ordenadas e estrutura básica de tabelas.",
     order: 4,
-    free: 0,
   },
   {
     courseSlug: "html-e-css",
@@ -71,7 +67,6 @@ const lessonsData = [
     video: "/html/formularios-basicos.mp4",
     description: "Inputs, labels, selects e boas práticas de acessibilidade.",
     order: 5,
-    free: 0,
   },
   {
     courseSlug: "html-e-css",
@@ -81,7 +76,6 @@ const lessonsData = [
     video: "/html/semantica-e-acessibilidade.mp4",
     description: "Tags semânticas e acessibilidade para iniciantes.",
     order: 6,
-    free: 0,
   },
   // JavaScript
   {
@@ -92,7 +86,6 @@ const lessonsData = [
     video: "/javascript/introducao-e-variaveis.mp4",
     description: "Como o JS funciona, let/const e escopo.",
     order: 1,
-    free: 1,
   },
   {
     courseSlug: "javascript-completo",
@@ -102,7 +95,6 @@ const lessonsData = [
     video: "/javascript/tipos-e-operadores.mp4",
     description: "Tipos primitivos, objetos e operadores comuns.",
     order: 2,
-    free: 1,
   },
   {
     courseSlug: "javascript-completo",
@@ -112,7 +104,6 @@ const lessonsData = [
     video: "/javascript/funcoes-basico.mp4",
     description: "Declaração, expressão, parâmetros e retorno.",
     order: 3,
-    free: 0,
   },
   {
     courseSlug: "javascript-completo",
@@ -122,7 +113,6 @@ const lessonsData = [
     video: "/javascript/manipulando-o-dom.mp4",
     description: "Selecionar, criar e alterar elementos com JS.",
     order: 4,
-    free: 0,
   },
   {
     courseSlug: "javascript-completo",
@@ -132,7 +122,6 @@ const lessonsData = [
     video: "/javascript/eventos-no-navegador.mp4",
     description: "addEventListener, propagação e preventDefault.",
     order: 5,
-    free: 0,
   },
   {
     courseSlug: "javascript-completo",
@@ -142,7 +131,6 @@ const lessonsData = [
     video: "/javascript/fetch-e-async-await.mp4",
     description: "Requisições HTTP, Promises e fluxo assíncrono.",
     order: 6,
-    free: 0,
   },
 ];
 
