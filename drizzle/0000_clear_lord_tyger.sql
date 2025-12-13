@@ -8,7 +8,7 @@ CREATE TABLE `users` (
 	`created` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	CONSTRAINT "role_check" CHECK("users"."role" IN ('USER', 'ADMIN')),
 	CONSTRAINT "is_active_check" CHECK("users"."is_active" IN (0, 1))
-) STRICT;
+);
 --> statement-breakpoint
 CREATE UNIQUE INDEX `users_email_unique` ON `users` (`email`);--> statement-breakpoint
 CREATE TABLE `courses` (
@@ -17,7 +17,7 @@ CREATE TABLE `courses` (
 	`title` text NOT NULL,
 	`description` text NOT NULL,
 	`created` text DEFAULT CURRENT_TIMESTAMP NOT NULL
-) STRICT;
+);
 --> statement-breakpoint
 CREATE UNIQUE INDEX `courses_slug_unique` ON `courses` (`slug`);--> statement-breakpoint
 CREATE TABLE `lessons` (
@@ -29,11 +29,9 @@ CREATE TABLE `lessons` (
 	`video` text NOT NULL,
 	`description` text NOT NULL,
 	`order` integer NOT NULL,
-	`free` integer DEFAULT 0 NOT NULL,
 	`created` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	FOREIGN KEY (`course_id`) REFERENCES `courses`(`id`) ON UPDATE no action ON DELETE cascade,
-	CONSTRAINT "free_check" CHECK("lessons"."free" IN (0, 1))
-) STRICT;
+	FOREIGN KEY (`course_id`) REFERENCES `courses`(`id`) ON UPDATE no action ON DELETE cascade
+);
 --> statement-breakpoint
 CREATE UNIQUE INDEX `unique_course_slug` ON `lessons` (`course_id`,`slug`);--> statement-breakpoint
 CREATE INDEX `idx_lessons_order` ON `lessons` (`course_id`,`order`);--> statement-breakpoint
@@ -46,7 +44,7 @@ CREATE TABLE `lessons_completed` (
 	FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`course_id`) REFERENCES `courses`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`lesson_id`) REFERENCES `lessons`(`id`) ON UPDATE no action ON DELETE cascade
-) STRICT;
+);
 --> statement-breakpoint
 CREATE TABLE `certificates` (
 	`id` text PRIMARY KEY NOT NULL,
@@ -55,7 +53,7 @@ CREATE TABLE `certificates` (
 	`completed` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`course_id`) REFERENCES `courses`(`id`) ON UPDATE no action ON DELETE cascade
-) STRICT;
+);
 --> statement-breakpoint
 CREATE UNIQUE INDEX `unique_user_course` ON `certificates` (`user_id`,`course_id`);--> statement-breakpoint
 CREATE TABLE `sessions` (
@@ -68,7 +66,7 @@ CREATE TABLE `sessions` (
 	`created` integer DEFAULT (STRFTIME('%s', 'NOW')) NOT NULL,
 	FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade,
 	CONSTRAINT "revoked_check" CHECK("sessions"."revoked" IN (0, 1))
-) STRICT;
+);
 --> statement-breakpoint
 CREATE VIEW IF NOT EXISTS "lessons_completed_full" AS
 SELECT "u"."id", "u"."email", "c"."title" AS "course", "l"."title" AS "lesson", "lc"."completed"
@@ -140,7 +138,6 @@ SELECT
     "l"."video",
     "l"."description",
     "l"."order",
-    "l"."free",
     "l"."created",
     "u"."id" AS "user_id",
     "lc"."completed"

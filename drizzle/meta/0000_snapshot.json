@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "8d39ffba-867b-4d76-895e-5f0bb6ff714b",
+  "id": "64d2dd0b-117c-4467-9af8-1e5796198d60",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "users": {
@@ -196,14 +196,6 @@
           "notNull": true,
           "autoincrement": false
         },
-        "free": {
-          "name": "free",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": 0
-        },
         "created": {
           "name": "created",
           "type": "text",
@@ -248,12 +240,7 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "checkConstraints": {
-        "free_check": {
-          "name": "free_check",
-          "value": "\"lessons\".\"free\" IN (0, 1)"
-        }
-      }
+      "checkConstraints": {}
     },
     "lessons_completed": {
       "name": "lessons_completed",

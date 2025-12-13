@@ -51,7 +51,6 @@ export const lessonNav = sqliteView("lesson_nav", {
   video: text("video"),
   description: text("description"),
   order: integer("order"),
-  free: integer("free"),
   created: text("created"),
 }).existing();
 
@@ -64,7 +63,6 @@ export const lessonsUserProgress = sqliteView("lessons_user_progress", {
   video: text("video"),
   description: text("description"),
   order: integer("order"),
-  free: integer("free"),
   created: text("created"),
   userId: text("user_id"),
   completed: text("completed"),
