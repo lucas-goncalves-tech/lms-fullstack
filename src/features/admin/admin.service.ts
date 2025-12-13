@@ -19,6 +19,7 @@ export class AdminService {
     private readonly cryptoService: CryptoService
   ) {}
 
+  // Courses
   async createCourse(courseData: ICreateCourseInput) {
     const result = await this.courseRepository.createCourse(courseData);
     if (!result) {
@@ -47,6 +48,7 @@ export class AdminService {
     await this.courseRepository.deleteCourse(courseSlug);
   }
 
+  // Lessons
   async createLesson(courseSlug: string, lessonData: CreateLessonDTO) {
     const course = await this.courseRepository.findBySlug(courseSlug);
     if (!course) {
@@ -63,6 +65,18 @@ export class AdminService {
     return result;
   }
 
+  async deleteLesson(courseSlug: string, lessonSlug: string) {
+    const course = await this.courseRepository.findBySlug(courseSlug);
+    if (!course) {
+      throw new NotfoundError("Curso não encontrado");
+    }
+    const lesson = await this.lessonRepository.findBySlug(courseSlug, lessonSlug);
+    if (!lesson) {
+      throw new NotfoundError("Aula não encontrada");
+    }
+    await this.lessonRepository.deleteLesson(course.id, lesson.id);
+  }
+
   async findManyLessons(courseSlug: string) {
     const result = await this.lessonRepository.findManyByCourseSlug(courseSlug);
     if (!result) {
@@ -71,6 +85,7 @@ export class AdminService {
     return result;
   }
 
+  // Users
   async findManyUsers() {
     const result = await this.userRepository.findMany();
     return result;

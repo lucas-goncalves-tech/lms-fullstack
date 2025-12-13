@@ -50,6 +50,13 @@ export class AdminController {
     res.status(201).json(result);
   };
 
+  deleteLesson = async (req: Request, res: Response) => {
+    const { courseSlug, lessonSlug } = req.params;
+    await this.adminService.deleteLesson(courseSlug, lessonSlug);
+
+    res.status(204).json();
+  };
+
   findManyLessons = async (req: Request, res: Response) => {
     const { courseSlug } = req.params;
     const result = await this.adminService.findManyLessons(courseSlug);

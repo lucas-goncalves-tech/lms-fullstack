@@ -9,13 +9,24 @@ export class LessonRepository {
 
   async createLesson(lessonData: ICreateLessonInput) {
     try {
-      const result = this.db.connection
+      return this.db.connection
         .insert(lessons)
         .values(lessonData)
         .onConflictDoNothing()
         .returning()
         .get();
-      return result;
+    } catch (error) {
+      console.error("Error ao criar nova aula", error);
+      throw error;
+    }
+  }
+
+  async deleteLesson(courseId: string, lessonId: string) {
+    try {
+      return await this.db.connection
+        .delete(lessons)
+        .where(and(eq(lessons.id, lessonId), eq(lessons.courseId, courseId)))
+        .execute();
     } catch (error) {
       console.error("Error ao criar nova aula", error);
       throw error;
@@ -46,7 +57,7 @@ export class LessonRepository {
         .select({ id: courses.id })
         .from(courses)
         .where(eq(courses.slug, courseSlug));
-      const result = this.db.connection
+      return this.db.connection
         .select()
         .from(lessonsUserProgress)
         .where(
@@ -57,7 +68,6 @@ export class LessonRepository {
         )
         .orderBy(asc(lessonsUserProgress.order))
         .all();
-      return result;
     } catch (error) {
       console.error("Error ao buscar aulas por curso", error);
       throw error;
@@ -66,13 +76,12 @@ export class LessonRepository {
 
   async findBySlug(courseSlug: string, lessonSlug: string) {
     try {
-      const result = this.db.connection
+      return this.db.connection
         .select({ ...getTableColumns(lessons) })
         .from(lessons)
         .innerJoin(courses, eq(lessons.courseId, courses.id))
         .where(and(eq(lessons.slug, lessonSlug), eq(courses.slug, courseSlug)))
         .get();
-      return result;
     } catch (error) {
       console.error("Error ao buscar aula por slug", error);
       throw error;
@@ -101,13 +110,12 @@ export class LessonRepository {
 
   async completeLesson(userId: string, courseId: string, lessonId: string) {
     try {
-      const result = this.db.connection
+      return this.db.connection
         .insert(lessonsCompleted)
         .values({ userId, courseId, lessonId })
         .onConflictDoNothing()
         .returning()
         .get();
-      return result;
     } catch (error) {
       console.error("Error ao completar aula", error);
       throw error;

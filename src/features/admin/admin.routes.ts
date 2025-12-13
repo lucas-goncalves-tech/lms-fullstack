@@ -16,6 +16,7 @@ import { updateUserSchema } from "./dto/update-user.dto";
 import { adminCreateUserSchema } from "./dto/admin-create-user.dto";
 import { CryptoService } from "../../shared/security/crypto-service.security";
 import { noCacheMiddleware } from "../../shared/middlewares/no-cache.middleware";
+import { lessonSlugParamsSchema } from "../course/dto/lesson-params";
 
 export class AdminRoutes {
   private readonly controller: AdminController;
@@ -53,12 +54,24 @@ export class AdminRoutes {
       validateMiddleware({ params: courseSlugParamsSchema }),
       this.controller.deleteCourse
     );
+
+    // Lessons
     this.router.post(
       "/lessons/:courseSlug/new",
       validateMiddleware({ params: courseSlugParamsSchema, body: createLessonSchema }),
       this.controller.createLesson
     );
     this.router.get("/lessons/:courseSlug", this.controller.findManyLessons);
+    // this.router.put(
+    //   "/lessons/:courseSlug/:lessonId/update",
+    //   validateMiddleware({ params: courseSlugParamsSchema, body: updateLessonSchema }),
+    //   this.controller.updateLesson
+    // );
+    this.router.delete(
+      "/lessons/:courseSlug/:lessonSlug/delete",
+      validateMiddleware({ params: lessonSlugParamsSchema }),
+      this.controller.deleteLesson
+    );
 
     // Users
     this.router.get("/users", this.controller.findManyUsers);
