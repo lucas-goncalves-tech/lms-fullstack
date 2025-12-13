@@ -15,6 +15,7 @@ import { userIdParamsSchema } from "./dto/admin-params";
 import { updateUserSchema } from "./dto/update-user.dto";
 import { adminCreateUserSchema } from "./dto/admin-create-user.dto";
 import { CryptoService } from "../../shared/security/crypto-service.security";
+import { noCacheMiddleware } from "../../shared/middlewares/no-cache.middleware";
 
 export class AdminRoutes {
   private readonly controller: AdminController;
@@ -33,6 +34,7 @@ export class AdminRoutes {
 
   private initRoutes() {
     this.router.use(adminGuardMiddleware);
+    this.router.use(noCacheMiddleware);
     this.router.get("/courses", this.controller.findManyCourses);
     this.router.post(
       "/courses/new",
