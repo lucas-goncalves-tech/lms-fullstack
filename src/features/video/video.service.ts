@@ -7,6 +7,9 @@ import { BadRequestError } from "../../shared/errors/bad-request.error";
 import { createWriteStream } from "node:fs";
 import { pipeline } from "node:stream/promises";
 import { access, mkdir, rename, rm } from "node:fs/promises";
+import { promisify } from "node:util";
+import ffprobeInstaller from "@ffprobe-installer/ffprobe";
+import { exec } from "node:child_process";
 
 export class VideoService {
   private readonly MAX_BYTES = 500 * 1024 * 1024; // 500 mb
@@ -14,6 +17,18 @@ export class VideoService {
   private readonly UPLOAD_DEST = envCheck().UPLOAD_DEST;
   private readonly TMP_UPLOAD_DEST = envCheck().TMP_UPLOAD_DEST;
   constructor() {}
+
+  private async getDuration(filePath: string): Promise<number> {
+    try {
+      const execAsync = promisify(exec);
+      const { stdout } = await execAsync(
+        `${ffprobeInstaller.path} -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "${filePath}"`
+      );
+      return Math.floor(parseFloat(stdout.trim()));
+    } catch {
+      return 0;
+    }
+  }
 
   async save(stream: NodeJS.ReadableStream, fileName: string) {
     const ext = path.extname(fileName) ?? ".mp4";
@@ -54,7 +69,8 @@ export class VideoService {
     try {
       await pipeline(stream, validator, writeStream);
       await rename(tmpPath, finalPath);
-      return { path: finalPath };
+      const seconds = await this.getDuration(finalPath);
+      return { path: finalPath, seconds };
     } catch (error) {
       await rm(tmpPath, { force: true }).catch(() => {});
       throw error;
