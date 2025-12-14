@@ -17,7 +17,7 @@ export class LessonService {
       courseSlug
     );
     //eslint-disable-next-line
-    return lessons.map(({ userId, ...lesson }) => lesson);
+    return lessons.map(({ userId, video, ...lesson }) => lesson);
   }
 
   async findBySlug(userId: string, courseSlug: string, lessonSlug: string) {
@@ -26,7 +26,6 @@ export class LessonService {
       throw new NotfoundError("Aula não encontrada");
     }
     const lessonNav = await this.lessonRepository.lessonNav(courseSlug, lessonSlug);
-    console.log(lessonNav);
     const i = lessonNav.findIndex((l) => l.slug === lesson.slug);
     const prevLesson = lessonNav[i - 1]?.slug ?? null;
     const nextLesson = lessonNav[i + 1]?.slug ?? null;
@@ -41,7 +40,16 @@ export class LessonService {
       completed = whenComplete;
     }
 
-    return { ...lesson, prevLesson, nextLesson, completed };
+    //eslint-disable-next-line
+    const { video: _, ...lessoData } = lesson;
+
+    return {
+      ...lessoData,
+      videoUrl: `/lessons/${courseSlug}/${lessonSlug}/video`,
+      prevLesson,
+      nextLesson,
+      completed,
+    };
   }
 
   async completeLesson(userId: string, courseSlug: string, lessonSlug: string) {
