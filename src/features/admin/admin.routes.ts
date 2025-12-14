@@ -19,6 +19,7 @@ import { noCacheMiddleware } from "../../shared/middlewares/no-cache.middleware"
 import { lessonSlugParamsSchema } from "../course/dto/lesson-params";
 import { validateFileHeadersMiddleware } from "../../shared/middlewares/validate-file-headers.middleware";
 import { VideoService } from "../video/video.service";
+import { updateLessonSchema } from "./dto/update-lesson.dto";
 
 export class AdminRoutes {
   private readonly controller: AdminController;
@@ -76,11 +77,11 @@ export class AdminRoutes {
       this.controller.uploadVideo
     );
     this.router.get("/lessons/:courseSlug", this.controller.findManyLessons);
-    // this.router.put(
-    //   "/lessons/:courseSlug/:lessonId/update",
-    //   validateMiddleware({ params: courseSlugParamsSchema, body: updateLessonSchema }),
-    //   this.controller.updateLesson
-    // );
+    this.router.put(
+      "/lessons/:courseSlug/:lessonSlug/update",
+      validateMiddleware({ params: lessonSlugParamsSchema, body: updateLessonSchema }),
+      this.controller.updateLesson
+    );
     this.router.delete(
       "/lessons/:courseSlug/:lessonSlug/delete",
       validateMiddleware({ params: lessonSlugParamsSchema }),

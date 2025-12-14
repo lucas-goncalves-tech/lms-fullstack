@@ -1,7 +1,7 @@
 import { and, asc, eq, getTableColumns } from "drizzle-orm";
 import { DataBase } from "../../db";
 import { courses, lessons, lessonsCompleted } from "../../db/schema";
-import { ICreateLessonInput } from "./interface/lesson.interface";
+import { ICreateLessonInput, IUpdateLessonInput } from "./interface/lesson.interface";
 import { lessonNav, lessonsUserProgress } from "../../db/schema/views.schema";
 
 export class LessonRepository {
@@ -13,6 +13,22 @@ export class LessonRepository {
         .insert(lessons)
         .values(lessonData)
         .onConflictDoNothing()
+        .returning({
+          title: lessons.title,
+        })
+        .get();
+    } catch (error) {
+      console.error("Error ao criar nova aula", error);
+      throw error;
+    }
+  }
+
+  async updateLesson(lessonId: string, lessonData: IUpdateLessonInput) {
+    try {
+      return this.db.connection
+        .update(lessons)
+        .set(lessonData)
+        .where(eq(lessons.id, lessonId))
         .returning()
         .get();
     } catch (error) {

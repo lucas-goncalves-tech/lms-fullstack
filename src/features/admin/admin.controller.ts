@@ -6,6 +6,7 @@ import { UpdateCourseDTO } from "./dto/update-course.dto";
 import { UpdateUserDTO } from "./dto/update-user.dto";
 import { AdminCreateUserDTO } from "./dto/admin-create-user.dto";
 import { VideoService } from "../video/video.service";
+import { UpdateLessonDTO } from "./dto/update-lesson.dto";
 
 export class AdminController {
   constructor(
@@ -50,6 +51,16 @@ export class AdminController {
     const lessonData = req.body as CreateLessonDTO;
     const { courseSlug } = req.params;
     const { title } = await this.adminService.createLesson(courseSlug, lessonData);
+
+    res.status(201).json({
+      message: `Aula ${title} criada com sucesso!`,
+    });
+  };
+
+  updateLesson = async (req: Request, res: Response) => {
+    const lessonData = req.body as UpdateLessonDTO;
+    const { courseSlug, lessonSlug } = req.params;
+    const { title } = await this.adminService.updateLesson(courseSlug, lessonSlug, lessonData);
 
     res.status(201).json({
       message: `Aula ${title} criada com sucesso!`,

@@ -12,6 +12,7 @@ import { CryptoService } from "../../shared/security/crypto-service.security";
 import { UnprocessableEntityError } from "../../shared/errors/unprocessable-entity.error";
 import { VideoService } from "../video/video.service";
 import { BadRequestError } from "../../shared/errors/bad-request.error";
+import { UpdateLessonDTO } from "./dto/update-lesson.dto";
 
 export class AdminService {
   constructor(
@@ -71,6 +72,32 @@ export class AdminService {
       throw new ConflictError("Esta aula já existe");
     }
     return result;
+  }
+
+  async updateLesson(courseSlug: string, lessonSlug: string, lessonData: UpdateLessonDTO) {
+    const course = await this.courseRepository.findBySlug(courseSlug);
+    if (!course) {
+      throw new NotfoundError("Curso não encontrado");
+    }
+
+    const lesson = await this.lessonRepository.findBySlug(courseSlug, lessonSlug);
+    if (!lesson) {
+      throw new NotfoundError("Aula não encontrado");
+    }
+
+    const result = await this.lessonRepository.updateLesson(lesson.id, {
+      ...lessonData,
+      courseId: course.id,
+    });
+    if (!result) {
+      throw new Error(`Não foi possivel atualizar a aula ${lessonSlug}`);
+    }
+    if (lesson.video !== lessonData.video) {
+      await this.videoService.rm(lesson.video);
+    }
+    return {
+      title: lesson.title,
+    };
   }
 
   async deleteLesson(courseSlug: string, lessonSlug: string) {
