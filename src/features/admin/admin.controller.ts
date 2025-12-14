@@ -7,6 +7,7 @@ import { UpdateUserDTO } from "./dto/update-user.dto";
 import { AdminCreateUserDTO } from "./dto/admin-create-user.dto";
 import { VideoService } from "../video/video.service";
 import { UpdateLessonDTO } from "./dto/update-lesson.dto";
+import { UserQueryDTO } from "./dto/users-query.dto";
 
 export class AdminController {
   constructor(
@@ -81,8 +82,10 @@ export class AdminController {
   };
 
   // Users
-  findManyUsers = async (_req: Request, res: Response) => {
-    const result = await this.adminService.findManyUsers();
+  findManyUsers = async (req: Request, res: Response) => {
+    const { search, limit, page } = req.query as UserQueryDTO;
+    console.log({ search, limit, page });
+    const result = await this.adminService.findManyUsers({ search, limit, page });
     res.status(200).json(result);
   };
 

@@ -13,6 +13,7 @@ import { UnprocessableEntityError } from "../../shared/errors/unprocessable-enti
 import { VideoService } from "../video/video.service";
 import { BadRequestError } from "../../shared/errors/bad-request.error";
 import { UpdateLessonDTO } from "./dto/update-lesson.dto";
+import { UserQueryDTO } from "./dto/users-query.dto";
 
 export class AdminService {
   constructor(
@@ -123,8 +124,8 @@ export class AdminService {
   }
 
   // Users
-  async findManyUsers() {
-    const result = await this.userRepository.findMany();
+  async findManyUsers(query: UserQueryDTO) {
+    const result = await this.userRepository.findMany(query.search, query.limit, query.page);
     return result;
   }
 

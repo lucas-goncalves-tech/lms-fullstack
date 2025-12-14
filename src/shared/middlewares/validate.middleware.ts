@@ -13,14 +13,9 @@ export function validateMiddleware(schema: SchemaObject) {
     const errors: { [key: string]: string }[] = [];
     try {
       if (schema.body) req.body = await schema.body.parseAsync(req.body);
-      if (schema.query)
-        req.query = (await schema.query.parseAsync(
-          req.query,
-        )) as Request["query"];
+      if (schema.query) await schema.query.parseAsync(req.query);
       if (schema.params)
-        req.params = (await schema.params.parseAsync(
-          req.params,
-        )) as Request["params"];
+        req.params = (await schema.params.parseAsync(req.params)) as Request["params"];
       next();
     } catch (err) {
       if (err instanceof ZodError) {

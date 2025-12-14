@@ -1,4 +1,4 @@
-import { eq, sql } from "drizzle-orm";
+import { desc, eq, like, or, sql } from "drizzle-orm";
 import { DataBase } from "../../db";
 import { users } from "../../db/schema";
 import {
@@ -10,7 +10,10 @@ import {
 export class UserRepository {
   constructor(private readonly db: DataBase) {}
 
-  async findMany() {
+  async findMany(search = "", limit = 10, page = 1) {
+    const offset = (+page - 1) * +limit;
+    const safeLimit = +limit > 100 ? 100 : +limit;
+    const s = `%${search.trim()}%`;
     try {
       return this.db.connection
         .select({
@@ -21,6 +24,10 @@ export class UserRepository {
           isActive: users.isActive,
         })
         .from(users)
+        .where(or(like(users.name, s), like(users.email, s)))
+        .limit(safeLimit)
+        .offset(offset)
+        .orderBy(desc(users.created))
         .all();
     } catch (err) {
       console.error("Erro ao buscar usuários:", err);

@@ -8,6 +8,19 @@ const sqlite = new DatabaseDriver(envCheck().DB_FILE_NAME);
 sqlite.pragma("foreign_keys = ON");
 const db = drizzle(sqlite, { schema });
 
+const usersData = [
+  {
+    name: "Tom Banana",
+    email: "admin@admin.com",
+    role: "ADMIN",
+  },
+  ...Array.from({ length: 49 }).map((_, i) => ({
+    name: `User ${i + 1}`,
+    email: `user${i + 1}@example.com`,
+    role: "USER",
+  })),
+];
+
 const coursesData = [
   {
     slug: "html-e-css",
@@ -152,8 +165,10 @@ async function seed() {
       .returning({ id: schema.courses.id, slug: schema.courses.slug })
       .execute();
 
-    insertedCourses[inserted.slug] = inserted.id;
-    console.log(`  ✅ ${course.title} (${inserted.id})`);
+    if (inserted) {
+      insertedCourses[inserted.slug] = inserted.id;
+      console.log(`  ✅ ${course.title} (${inserted.id})`);
+    }
   }
 
   // Insert lessons
@@ -178,24 +193,26 @@ async function seed() {
     console.log(`  ✅ ${lesson.title} (${lesson.courseSlug})`);
   }
 
-  console.log("\n📚 Inserindo usuário admin...");
+  console.log("\n📚 Inserindo usuários...");
   const cryptoService = new CryptoService();
-  const hashedPassword = await cryptoService.hash("12345678");
-  await db
-    .insert(schema.users)
-    .values({
-      name: "Tom Banana",
-      email: "admin@admin.com",
-      password_hash: hashedPassword,
-      role: "ADMIN",
-    })
-    .execute();
-  console.log(`  ✅ Tom Banana (admin@admin.com)`);
+  const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+  for (const user of usersData) {
+    const hashedPassword = await cryptoService.hash("12345678");
+    await delay(2000);
+    await db
+      .insert(schema.users)
+      .values({
+        name: user.name,
+        email: user.email,
+        password_hash: hashedPassword,
+        role: user.role as "ADMIN" | "USER",
+      })
+      .onConflictDoNothing()
+      .execute();
+    console.log(`  ✅ ${user.name} (${user.email})`);
+  }
 
   console.log("\n🎉 Seed concluído com sucesso!");
-  console.log(`   - ${coursesData.length} cursos inseridos`);
-  console.log(`   - ${lessonsData.length} lições inseridas`);
-  console.log(`   - 1 usuário admin inserido`);
 
   sqlite.close();
 }

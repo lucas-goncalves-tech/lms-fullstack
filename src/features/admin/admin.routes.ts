@@ -20,6 +20,7 @@ import { lessonSlugParamsSchema } from "../course/dto/lesson-params";
 import { validateFileHeadersMiddleware } from "../../shared/middlewares/validate-file-headers.middleware";
 import { VideoService } from "../video/video.service";
 import { updateLessonSchema } from "./dto/update-lesson.dto";
+import { userQuerySchema } from "./dto/users-query.dto";
 
 export class AdminRoutes {
   private readonly controller: AdminController;
@@ -89,7 +90,11 @@ export class AdminRoutes {
     );
 
     // Users
-    this.router.get("/users", this.controller.findManyUsers);
+    this.router.get(
+      "/users",
+      validateMiddleware({ query: userQuerySchema }),
+      this.controller.findManyUsers
+    );
     this.router.put(
       "/users/:userId/update",
       validateMiddleware({ params: userIdParamsSchema, body: updateUserSchema }),
