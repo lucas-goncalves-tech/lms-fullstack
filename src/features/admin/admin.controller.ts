@@ -5,9 +5,13 @@ import { CreateLessonDTO } from "./dto/create-lesson.dto";
 import { UpdateCourseDTO } from "./dto/update-course.dto";
 import { UpdateUserDTO } from "./dto/update-user.dto";
 import { AdminCreateUserDTO } from "./dto/admin-create-user.dto";
+import { VideoService } from "../video/video.service";
 
 export class AdminController {
-  constructor(private readonly adminService: AdminService) {}
+  constructor(
+    private readonly adminService: AdminService,
+    private readonly videoService: VideoService
+  ) {}
 
   // Courses
   findManyCourses = async (_req: Request, res: Response) => {
@@ -45,9 +49,11 @@ export class AdminController {
   createLesson = async (req: Request, res: Response) => {
     const lessonData = req.body as CreateLessonDTO;
     const { courseSlug } = req.params;
-    const result = await this.adminService.createLesson(courseSlug, lessonData);
+    const { title } = await this.adminService.createLesson(courseSlug, lessonData);
 
-    res.status(201).json(result);
+    res.status(201).json({
+      message: `Aula ${title} criada com sucesso!`,
+    });
   };
 
   deleteLesson = async (req: Request, res: Response) => {
@@ -108,5 +114,11 @@ export class AdminController {
     await this.adminService.deleteUser(adminId, userId);
 
     res.status(204).json();
+  };
+
+  uploadVideo = async (req: Request, res: Response) => {
+    const fileName = req.headers["x-filename"] as string;
+    const path = await this.videoService.save(req, fileName);
+    res.status(200).json(path);
   };
 }

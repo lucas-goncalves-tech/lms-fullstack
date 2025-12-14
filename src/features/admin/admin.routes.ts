@@ -17,6 +17,8 @@ import { adminCreateUserSchema } from "./dto/admin-create-user.dto";
 import { CryptoService } from "../../shared/security/crypto-service.security";
 import { noCacheMiddleware } from "../../shared/middlewares/no-cache.middleware";
 import { lessonSlugParamsSchema } from "../course/dto/lesson-params";
+import { validateFileHeadersMiddleware } from "../../shared/middlewares/validate-file-headers.middleware";
+import { VideoService } from "../video/video.service";
 
 export class AdminRoutes {
   private readonly controller: AdminController;
@@ -27,8 +29,9 @@ export class AdminRoutes {
     const repository = new CourseRepository(this.db);
     const lessonRepository = new LessonRepository(this.db);
     const userRepository = new UserRepository(this.db);
+    const videoService = new VideoService();
     const service = new AdminService(repository, lessonRepository, userRepository, cryptoService);
-    this.controller = new AdminController(service);
+    this.controller = new AdminController(service, videoService);
     this.router = Router();
     this.initRoutes();
   }
@@ -60,6 +63,11 @@ export class AdminRoutes {
       "/lessons/:courseSlug/new",
       validateMiddleware({ params: courseSlugParamsSchema, body: createLessonSchema }),
       this.controller.createLesson
+    );
+    this.router.post(
+      "/lessons/upload-video",
+      validateFileHeadersMiddleware,
+      this.controller.uploadVideo
     );
     this.router.get("/lessons/:courseSlug", this.controller.findManyLessons);
     // this.router.put(
