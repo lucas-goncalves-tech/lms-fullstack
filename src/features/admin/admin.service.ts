@@ -10,13 +10,16 @@ import { IAdminCreateUserInput, IUpdateUserInput } from "../user/interface/user.
 import { AdminCreateUserDTO } from "./dto/admin-create-user.dto";
 import { CryptoService } from "../../shared/security/crypto-service.security";
 import { UnprocessableEntityError } from "../../shared/errors/unprocessable-entity.error";
+import { VideoService } from "../video/video.service";
+import { BadRequestError } from "../../shared/errors/bad-request.error";
 
 export class AdminService {
   constructor(
     private readonly courseRepository: CourseRepository,
     private readonly lessonRepository: LessonRepository,
     private readonly userRepository: UserRepository,
-    private readonly cryptoService: CryptoService
+    private readonly cryptoService: CryptoService,
+    private readonly videoService: VideoService
   ) {}
 
   // Courses
@@ -55,6 +58,11 @@ export class AdminService {
       throw new NotfoundError("Curso não encontrado");
     }
 
+    const videoExist = await this.videoService.fileExist(lessonData.video);
+    if (!videoExist) {
+      throw new BadRequestError("Caminho do video inválido");
+    }
+
     const result = await this.lessonRepository.createLesson({
       ...lessonData,
       courseId: course.id,
@@ -74,7 +82,9 @@ export class AdminService {
     if (!lesson) {
       throw new NotfoundError("Aula não encontrada");
     }
+
     await this.lessonRepository.deleteLesson(course.id, lesson.id);
+    await this.videoService.rm(lesson.video);
   }
 
   async findManyLessons(courseSlug: string) {

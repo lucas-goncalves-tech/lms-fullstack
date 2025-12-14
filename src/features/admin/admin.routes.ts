@@ -30,7 +30,13 @@ export class AdminRoutes {
     const lessonRepository = new LessonRepository(this.db);
     const userRepository = new UserRepository(this.db);
     const videoService = new VideoService();
-    const service = new AdminService(repository, lessonRepository, userRepository, cryptoService);
+    const service = new AdminService(
+      repository,
+      lessonRepository,
+      userRepository,
+      cryptoService,
+      videoService
+    );
     this.controller = new AdminController(service, videoService);
     this.router = Router();
     this.initRoutes();
