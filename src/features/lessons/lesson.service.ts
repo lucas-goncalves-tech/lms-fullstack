@@ -26,6 +26,7 @@ export class LessonService {
       throw new NotfoundError("Aula não encontrada");
     }
     const lessonNav = await this.lessonRepository.lessonNav(courseSlug, lessonSlug);
+    console.log(lessonNav);
     const i = lessonNav.findIndex((l) => l.slug === lesson.slug);
     const prevLesson = lessonNav[i - 1]?.slug ?? null;
     const nextLesson = lessonNav[i + 1]?.slug ?? null;

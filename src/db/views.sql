@@ -53,10 +53,22 @@ JOIN "users" AS "u" ON "u"."id" = "cert"."user_id"
 JOIN "courses_stats" AS "cs" ON "cs"."id" = "cert"."course_id";
 --> statement-breakpoint
 CREATE VIEW IF NOT EXISTS "lesson_nav" AS
-SELECT "cl"."slug" AS "current_slug", "l".*
+SELECT 
+  "cl"."slug" AS "current_slug",
+  "l".*
 FROM "lessons" AS "cl"
-JOIN "lessons" AS "l" ON "l"."course_id" = "cl"."course_id" AND "l"."order"
-BETWEEN "cl"."order" - 1 AND "cl"."order" + 1
+JOIN "lessons" AS "l" ON "l"."course_id" = "cl"."course_id"
+WHERE "l"."slug" = "cl"."slug"
+   OR "l"."id" = (
+      SELECT "id" FROM "lessons" 
+      WHERE "course_id" = "cl"."course_id" AND "order" < "cl"."order"
+      ORDER BY "order" DESC LIMIT 1
+   )
+   OR "l"."id" = (
+      SELECT "id" FROM "lessons" 
+      WHERE "course_id" = "cl"."course_id" AND "order" > "cl"."order"
+      ORDER BY "order" ASC LIMIT 1
+   )
 ORDER BY "l"."order";
 --> statement-breakpoint
 CREATE VIEW IF NOT EXISTS "lessons_user_progress" AS
@@ -69,7 +81,6 @@ SELECT
     "l"."video",
     "l"."description",
     "l"."order",
-    "l"."free",
     "l"."created",
     "u"."id" AS "user_id",
     "lc"."completed"
