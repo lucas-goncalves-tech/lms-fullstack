@@ -22,6 +22,7 @@ export class UserRepository {
           email: users.email,
           role: users.role,
           isActive: users.isActive,
+          total: sql<number>`COUNT(*) OVER ()`,
         })
         .from(users)
         .where(or(like(users.name, s), like(users.email, s)))
