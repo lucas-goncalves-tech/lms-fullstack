@@ -47,7 +47,10 @@ export class VideoService {
         fileSize += chunk.length;
 
         if (fileSize > maxBytes) {
-          new BadRequestError(`Tamanho de arquivo ultrapassa os ${maxBytes}mb`);
+          next(
+            new BadRequestError(`Tamanho de arquivo ultrapassa os ${maxBytes / (1024 * 1024)}mb`)
+          );
+          return;
         }
 
         if (isFirstChunk) {
