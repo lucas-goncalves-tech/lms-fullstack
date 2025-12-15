@@ -1,6 +1,7 @@
 import { ConflictError } from "../../shared/errors/conflict.error";
 import { ForbiddenError } from "../../shared/errors/forbidden.error";
 import { UnauthorizedError } from "../../shared/errors/unauthorized.error";
+import { UnprocessableEntityError } from "../../shared/errors/unprocessable-entity.error";
 import { CryptoService } from "../../shared/security/crypto-service.security";
 import { ICreateUserInput } from "../user/interface/user.interface";
 import { UserRepository } from "../user/user.repository";
@@ -49,7 +50,7 @@ export class AuthService {
       updatePasswordData.currentPassword,
       userExist.password_hash
     );
-    if (!isPasswordValid) throw new UnauthorizedError("Senha atual inválida");
+    if (!isPasswordValid) throw new UnprocessableEntityError("Senha atual inválida");
     const newHashedPassword = await this.cryptoService.hash(updatePasswordData.newPassword);
 
     await this.userRepository.updateUserPassword(userId, newHashedPassword);
