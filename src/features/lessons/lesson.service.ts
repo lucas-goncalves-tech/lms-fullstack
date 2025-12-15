@@ -95,4 +95,13 @@ export class LessonService {
       throw new BadRequestError("Certificado do curso não encontrado");
     }
   }
+
+  async findVideoPath(courseSlug: string, lessonSlug: string) {
+    const lesson = await this.lessonRepository.findBySlug(courseSlug, lessonSlug);
+
+    if (!lesson) {
+      throw new NotfoundError("Aula não encontrada");
+    }
+    return lesson.video;
+  }
 }

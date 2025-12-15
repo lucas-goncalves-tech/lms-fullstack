@@ -94,7 +94,10 @@ export class AdminService {
       throw new Error(`Não foi possivel atualizar a aula ${lessonSlug}`);
     }
     if (lesson.video !== lessonData.video) {
-      await this.videoService.rm(lesson.video);
+      const fileExist = await this.videoService.fileExist(lesson.video);
+      if (fileExist) {
+        await this.videoService.rm(lesson.video);
+      }
     }
     return {
       title: lesson.title,

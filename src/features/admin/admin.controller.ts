@@ -60,6 +60,7 @@ export class AdminController {
 
   updateLesson = async (req: Request, res: Response) => {
     const lessonData = req.body as UpdateLessonDTO;
+    console.log("lessonData", lessonData);
     const { courseSlug, lessonSlug } = req.params;
     const { title } = await this.adminService.updateLesson(courseSlug, lessonSlug, lessonData);
 

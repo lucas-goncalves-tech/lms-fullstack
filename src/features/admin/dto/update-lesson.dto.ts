@@ -10,7 +10,7 @@ export const updateLessonSchema = z.strictObject({
   slug: zodSlugValidator().optional(),
   title: zodTitleValidator().optional(),
   description: zodDescriptionValidator().optional(),
-  video: z.url("URL do vídeo inválida").or(z.string().min(1).trim()).optional(),
+  video: z.string().min(1).trim().optional(),
   seconds: zodIntegerValidator("Duração").optional(),
   order: zodIntegerValidator("Ordem").optional(),
 });
