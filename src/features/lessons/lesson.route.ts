@@ -9,6 +9,7 @@ import { validateMiddleware } from "../../shared/middlewares/validate.middleware
 import { findLessonParamsSchema } from "./dto/lesson-params.dto";
 import { completeLessonParamsSchema } from "./dto/complete-lesson.dto";
 import { courseSlugParamsSchema } from "../course/dto/course-params";
+import { VideoService } from "../video/video.service";
 
 export class LessonRoutes {
   private readonly controller: LessonController;
@@ -18,8 +19,9 @@ export class LessonRoutes {
     const repository = new LessonRepository(this.db);
     const courseRepository = new CourseRepository(this.db);
     const certificateRepository = new CertificateRepository(this.db);
+    const videoService = new VideoService();
     const service = new LessonService(repository, courseRepository, certificateRepository);
-    this.controller = new LessonController(service);
+    this.controller = new LessonController(service, videoService);
     this.router = Router({ mergeParams: true });
     this.initRoutes();
   }
@@ -41,6 +43,12 @@ export class LessonRoutes {
       "/:lessonSlug",
       validateMiddleware({ params: findLessonParamsSchema }),
       this.controller.findBySlug
+    );
+
+    this.router.get(
+      "/:lessonSlug/video",
+      validateMiddleware({ params: findLessonParamsSchema }),
+      this.controller.videoStreaming
     );
     this.router.delete(
       "/",

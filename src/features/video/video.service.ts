@@ -4,12 +4,13 @@ import { envCheck } from "../../shared/helper/env-check.helper";
 import { randomUUID } from "node:crypto";
 import { Transform } from "node:stream";
 import { BadRequestError } from "../../shared/errors/bad-request.error";
-import { createWriteStream } from "node:fs";
+import { createReadStream, createWriteStream } from "node:fs";
 import { pipeline } from "node:stream/promises";
-import { access, mkdir, rename, rm } from "node:fs/promises";
+import { access, mkdir, rename, rm, stat } from "node:fs/promises";
 import { promisify } from "node:util";
 import ffprobeInstaller from "@ffprobe-installer/ffprobe";
 import { exec } from "node:child_process";
+import { Request, Response } from "express";
 
 export class VideoService {
   private readonly MAX_BYTES = 500 * 1024 * 1024; // 500 mb
@@ -94,6 +95,50 @@ export class VideoService {
       return true;
     } catch {
       return false;
+    }
+  }
+
+  async streamingVideo(filePath: string, req: Request, res: Response, mimeType = "video") {
+    const exists = await this.fileExist(filePath);
+    if (!exists) {
+      throw new BadRequestError("Arquivo de vídeo não encontrado no servidor.");
+    }
+
+    const fileStat = await stat(filePath);
+    const fileSize = fileStat.size;
+    const range = req.headers.range;
+
+    let fileStream;
+
+    if (range) {
+      const parts = range.replace(/bytes=/, "").split("-");
+      const start = parseInt(parts[0], 10);
+      const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+      const chunkSize = end - start + 1;
+
+      fileStream = createReadStream(filePath, { start, end });
+
+      const head = {
+        "Content-Range": `bytes ${start}-${end}/${fileSize}`,
+        "Accept-Ranges": "bytes",
+        "Content-Length": chunkSize,
+        "Content-Type": mimeType,
+      };
+
+      res.writeHead(206, head);
+    } else {
+      const head = {
+        "Content-Length": fileSize,
+        "Content-Type": mimeType,
+      };
+      res.writeHead(200, head);
+      fileStream = createReadStream(filePath);
+    }
+
+    try {
+      await pipeline(fileStream, res);
+    } catch (error) {
+      console.error("Erro no streaming de vídeo:", error);
     }
   }
 }

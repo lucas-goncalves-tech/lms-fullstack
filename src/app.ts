@@ -30,7 +30,11 @@ class App {
         credentials: true,
       })
     );
-    this.app.use(helmet());
+    this.app.use(
+      helmet({
+        crossOriginResourcePolicy: { policy: "cross-origin" },
+      })
+    );
     this.app.use(rateLimitMiddleware(this.ttl, 100, false));
     this.app.use(express.json({ limit: "1mb" }));
     this.app.use(cookieParser());

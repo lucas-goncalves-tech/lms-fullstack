@@ -1,8 +1,12 @@
 import { Request, Response } from "express";
 import { LessonService } from "./lesson.service";
+import { VideoService } from "../video/video.service";
 
 export class LessonController {
-  constructor(private readonly lessonService: LessonService) {}
+  constructor(
+    private readonly lessonService: LessonService,
+    private readonly videoService: VideoService
+  ) {}
 
   findManyByCourseSlug = async (req: Request, res: Response) => {
     const userId = req.session!.userId;
@@ -34,5 +38,11 @@ export class LessonController {
     await this.lessonService.resetCourseCompleted(userId, courseSlug);
 
     res.status(204).end();
+  };
+
+  videoStreaming = async (req: Request, res: Response) => {
+    const { courseSlug, lessonSlug } = req.params;
+    const videoPath = await this.lessonService.findVideoPath(courseSlug, lessonSlug);
+    await this.videoService.streamingVideo(videoPath, req, res);
   };
 }
