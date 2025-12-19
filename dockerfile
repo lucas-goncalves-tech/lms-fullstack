@@ -3,10 +3,10 @@ WORKDIR /app
 COPY package*.json .
 RUN npm ci
 
-FROM base as development
+FROM base AS development
 WORKDIR /app
 ENV NODE_ENV=development
-EXPOSE 3000
+EXPOSE 3333
 CMD ["npm", "run", "dev"]
 
 FROM base AS build

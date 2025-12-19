@@ -14,7 +14,7 @@ const usersData = [
     email: "admin@admin.com",
     role: "ADMIN",
   },
-  ...Array.from({ length: 49 }).map((_, i) => ({
+  ...Array.from({ length: 19 }).map((_, i) => ({
     name: `User ${i + 1}`,
     email: `user${i + 1}@example.com`,
     role: "USER",
@@ -197,7 +197,7 @@ async function seed() {
   const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
   for (const user of usersData) {
     const hashedPassword = await cryptoService.hash("12345678");
-    await delay(2000);
+    await delay(600);
     await db
       .insert(schema.users)
       .values({
