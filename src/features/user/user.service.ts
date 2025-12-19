@@ -1,3 +1,7 @@
+import path from "node:path";
+import { ConflictError } from "../../shared/errors/conflict.error";
+import { ForbiddenError } from "../../shared/errors/forbidden.error";
+import { NotfoundError } from "../../shared/errors/not-found.error";
 import { UnauthorizedError } from "../../shared/errors/unauthorized.error";
 import { UnprocessableEntityError } from "../../shared/errors/unprocessable-entity.error";
 import { CryptoService } from "../../shared/security/crypto-service.security";
@@ -30,7 +34,7 @@ export class UserService {
     const userExist = await this.userRepository.findByKey("id", userId);
     if (!userExist) throw new UnauthorizedError("Sessão inválida");
     const emailExist = await this.userRepository.findByKey("email", newEmail);
-    if (emailExist) throw new UnprocessableEntityError("Email já está em uso");
+    if (emailExist) throw new ConflictError("Email já está em uso");
 
     await this.userRepository.update(userExist.id, { email: newEmail });
   }
@@ -39,8 +43,24 @@ export class UserService {
     const userExist = await this.userRepository.findByKey("id", userId);
     if (!userExist) throw new UnauthorizedError("Sessão inválida");
     const avatarExist = await this.uploadService.fileExist(newAvatarPath);
-    if (!avatarExist) throw new UnprocessableEntityError("Avatar não encontrado");
+    if (!avatarExist) throw new NotfoundError("Avatar não encontrado");
+
+    if (userExist.avatar && userExist.avatar !== newAvatarPath) {
+      await this.uploadService.rm(userExist.avatar);
+    }
 
     await this.userRepository.update(userExist.id, { avatar: newAvatarPath });
+  }
+
+  async findAvatarPath(userId: string) {
+    const userExist = await this.userRepository.findByKey("id", userId);
+    if (!userExist) throw new UnauthorizedError("Sessão inválida");
+    if (!userExist.avatar) {
+      return null;
+    }
+    const fileExist = await this.uploadService.fileExist(userExist.avatar);
+    if (!fileExist) throw new NotfoundError("Avatar não encontrado");
+    const absolutePath = path.resolve(`./${userExist.avatar}`);
+    return absolutePath;
   }
 }

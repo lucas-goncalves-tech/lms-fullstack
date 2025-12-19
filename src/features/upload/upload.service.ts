@@ -13,7 +13,8 @@ import { exec } from "node:child_process";
 import { Request, Response } from "express";
 
 export class UploadService {
-  private readonly MAX_BYTES = 500 * 1024 * 1024; // 500 mb
+  private readonly MAX_BYTES_VIDEO = 500 * 1024 * 1024; // 500 mb
+  private readonly MAX_BYTES_IMAGE = 3 * 1024 * 1024; // 3 mb
   private readonly ALLOWED_TYPES = {
     video: ["video/mp4", "video/webm"],
     image: ["image/jpeg", "image/png", "image/jpg", "image/webp"],
@@ -42,7 +43,7 @@ export class UploadService {
 
     let fileSize = 0;
     let isFirstChunk = true;
-    const maxBytes = this.MAX_BYTES;
+    const maxBytes = type === "video" ? this.MAX_BYTES_VIDEO : this.MAX_BYTES_IMAGE;
     const allowedTypes = this.ALLOWED_TYPES[type];
 
     const validator = new Transform({
@@ -76,8 +77,11 @@ export class UploadService {
     try {
       await pipeline(stream, validator, writeStream);
       await rename(tmpPath, finalPath);
-      const seconds = await this.getDuration(finalPath);
-      return { path: finalPath, seconds };
+      if (type === "video") {
+        const seconds = await this.getDuration(finalPath);
+        return { path: finalPath, seconds };
+      }
+      return { path: finalPath };
     } catch (error) {
       await rm(tmpPath, { force: true }).catch(() => {});
       throw error;

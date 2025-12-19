@@ -20,15 +20,6 @@ export const xFilenameSchema = z
     (name) => !/[<>:"|?*\u0000-\u001f]/.test(name),
     "Nome do arquivo contém caracteres inválidos"
   )
-
-  .refine(
-    (name) => {
-      const ext = path.extname(name).toLowerCase();
-      return ALLOWED_EXTENSIONS.includes(ext);
-    },
-    `Extensão não permitida. Permitidas: ${ALLOWED_EXTENSIONS.join(", ")}`
-  )
-
   .transform((name) => path.basename(name));
 
 export type XFilename = z.infer<typeof xFilenameSchema>;

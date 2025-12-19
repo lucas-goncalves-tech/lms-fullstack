@@ -11,6 +11,9 @@ import { noCacheMiddleware } from "../../shared/middlewares/no-cache.middleware"
 import { validateMiddleware } from "../../shared/middlewares/validate.middleware";
 import { updatePasswordSchema } from "./dto/update-password.dto";
 import { rateLimitMiddleware } from "../../shared/middlewares/rate-limit.middleware";
+import { updateEmailSchema } from "./dto/update-email.dto";
+import { validateFileHeadersMiddleware } from "../../shared/middlewares/validate-file-headers.middleware";
+import { avatarParamsSchema } from "./dto/avatar-params.dto";
 
 export class UserRoutes {
   private readonly controller: UserController;
@@ -24,7 +27,7 @@ export class UserRoutes {
     const sessionsRepository = new SessionsRepository(this.db);
     const sessionsService = new SessionsService(sessionsRepository, userRepository, cryptoService);
     const service = new UserService(userRepository, cryptoService, uploadService);
-    this.controller = new UserController(service, sessionsService);
+    this.controller = new UserController(service, sessionsService, uploadService);
     this.router = Router();
     this.initRoutes();
     this.ttl = 10 * 60 * 1000;
@@ -38,6 +41,13 @@ export class UserRoutes {
       validateMiddleware({ body: updatePasswordSchema }),
       this.controller.updatePassword
     );
+    this.router.put(
+      "/email/update",
+      validateMiddleware({ body: updateEmailSchema }),
+      this.controller.updateEmail
+    );
+    this.router.put("/avatar/update", validateFileHeadersMiddleware, this.controller.updateAvatar);
+    this.router.get("/avatar", this.controller.sendAvatar);
   }
 
   get getRouter() {
