@@ -76,7 +76,15 @@ export const logMiddleware = (req: Request, res: Response, next: NextFunction) =
       if (hasBody) {
         // Ocultar campos sensíveis (password, token, etc)
         const sanitizedBody = { ...req.body };
-        const sensitiveFields = ["password", "token", "secret", "apiKey"];
+        const sensitiveFields = [
+          "password",
+          "token",
+          "secret",
+          "apiKey",
+          "newPassword",
+          "confirmPassword",
+          "currentPassword",
+        ];
         sensitiveFields.forEach((field) => {
           if (sanitizedBody[field]) {
             sanitizedBody[field] = "***HIDDEN***";
