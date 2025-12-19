@@ -6,11 +6,11 @@ import { CreateLessonDTO } from "./dto/create-lesson.dto";
 import { LessonRepository } from "../lessons/lesson.repository";
 import { UpdateCourseDTO } from "./dto/update-course.dto";
 import { UserRepository } from "../user/user.repository";
-import { IAdminCreateUserInput, IUpdateUserInput } from "../user/interface/user.interface";
+import { IAdminCreateUserInput, IUpdateUserByAdminInput } from "../user/interface/user.interface";
 import { AdminCreateUserDTO } from "./dto/admin-create-user.dto";
 import { CryptoService } from "../../shared/security/crypto-service.security";
 import { UnprocessableEntityError } from "../../shared/errors/unprocessable-entity.error";
-import { VideoService } from "../video/video.service";
+import { UploadService } from "../upload/upload.service";
 import { BadRequestError } from "../../shared/errors/bad-request.error";
 import { UpdateLessonDTO } from "./dto/update-lesson.dto";
 import { UserQueryDTO } from "./dto/users-query.dto";
@@ -21,7 +21,7 @@ export class AdminService {
     private readonly lessonRepository: LessonRepository,
     private readonly userRepository: UserRepository,
     private readonly cryptoService: CryptoService,
-    private readonly videoService: VideoService
+    private readonly uploadService: UploadService
   ) {}
 
   // Courses
@@ -60,7 +60,7 @@ export class AdminService {
       throw new NotfoundError("Curso não encontrado");
     }
 
-    const videoExist = await this.videoService.fileExist(lessonData.video);
+    const videoExist = await this.uploadService.fileExist(lessonData.video);
     if (!videoExist) {
       throw new BadRequestError("Caminho do video inválido");
     }
@@ -94,9 +94,9 @@ export class AdminService {
       throw new Error(`Não foi possivel atualizar a aula ${lessonSlug}`);
     }
     if (lesson.video !== lessonData.video) {
-      const fileExist = await this.videoService.fileExist(lesson.video);
+      const fileExist = await this.uploadService.fileExist(lesson.video);
       if (fileExist) {
-        await this.videoService.rm(lesson.video);
+        await this.uploadService.rm(lesson.video);
       }
     }
     return {
@@ -115,7 +115,7 @@ export class AdminService {
     }
 
     await this.lessonRepository.deleteLesson(course.id, lesson.id);
-    await this.videoService.rm(lesson.video);
+    await this.uploadService.rm(lesson.video);
   }
 
   async findManyLessons(courseSlug: string) {
@@ -132,8 +132,8 @@ export class AdminService {
     return result;
   }
 
-  async updateUser(adminId: string, userId: string, userData: Partial<IUpdateUserInput>) {
-    const user = await this.userRepository.findUserByKey("id", userId);
+  async updateUser(adminId: string, userId: string, userData: Partial<IUpdateUserByAdminInput>) {
+    const user = await this.userRepository.findByKey("id", userId);
     if (!user) {
       throw new NotfoundError("Usuário não encontrado");
     }
@@ -141,11 +141,11 @@ export class AdminService {
     if (userData.role && adminId === user.id) {
       throw new UnprocessableEntityError("Você não pode alterar o seu próprio role");
     }
-    await this.userRepository.updateUser(userId, userData);
+    await this.userRepository.updateByAdmin(userId, userData);
   }
 
   async createUser(userData: AdminCreateUserDTO) {
-    const userExist = await this.userRepository.findUserByKey("email", userData.email);
+    const userExist = await this.userRepository.findByKey("email", userData.email);
     if (userExist) throw new ConflictError("Email já cadastrado");
     const passwordhase = await this.cryptoService.hash(userData.password);
     const newUser: IAdminCreateUserInput = {
@@ -154,18 +154,18 @@ export class AdminService {
       password_hash: passwordhase,
       role: userData.role,
     };
-    await this.userRepository.createUser(newUser);
+    await this.userRepository.create(newUser);
   }
 
   async toggleUserStatus(adminId: string, userId: string) {
-    const user = await this.userRepository.findUserByKey("id", userId);
+    const user = await this.userRepository.findByKey("id", userId);
     if (!user) {
       throw new NotfoundError("Usuário não encontrado");
     }
     if (adminId === user.id) {
       throw new UnprocessableEntityError("Você não pode alterar o seu próprio status");
     }
-    const result = await this.userRepository.toggleUserStatus(userId);
+    const result = await this.userRepository.toggleStatus(userId);
     if (!result) {
       throw new Error("Problemas em atualizar status do usuário");
     }
@@ -173,13 +173,13 @@ export class AdminService {
   }
 
   async deleteUser(adminId: string, userId: string) {
-    const user = await this.userRepository.findUserByKey("id", userId);
+    const user = await this.userRepository.findByKey("id", userId);
     if (!user) {
       throw new NotfoundError("Usuário não encontrado");
     }
     if (adminId === user.id) {
       throw new UnprocessableEntityError("Não é possível deletar você mesmo");
     }
-    await this.userRepository.deleteUser(userId);
+    await this.userRepository.delete(userId);
   }
 }

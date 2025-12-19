@@ -12,9 +12,12 @@ import ffprobeInstaller from "@ffprobe-installer/ffprobe";
 import { exec } from "node:child_process";
 import { Request, Response } from "express";
 
-export class VideoService {
+export class UploadService {
   private readonly MAX_BYTES = 500 * 1024 * 1024; // 500 mb
-  private readonly ALLOWED_TYPES = ["video/mp4", "video/webm"];
+  private readonly ALLOWED_TYPES = {
+    video: ["video/mp4", "video/webm"],
+    image: ["image/jpeg", "image/png", "image/jpg", "image/webp"],
+  };
   private readonly UPLOAD_DEST = envCheck().UPLOAD_DEST;
   private readonly TMP_UPLOAD_DEST = envCheck().TMP_UPLOAD_DEST;
   constructor() {}
@@ -31,8 +34,8 @@ export class VideoService {
     }
   }
 
-  async save(stream: NodeJS.ReadableStream, fileName: string) {
-    const ext = path.extname(fileName) ?? ".mp4";
+  async save(stream: NodeJS.ReadableStream, fileName: string, type: "video" | "image" = "video") {
+    const ext = path.extname(fileName) || (type === "video" ? ".mp4" : ".jpg");
     const uniqueName = `${randomUUID()}${ext}`;
     const tmpPath = path.join(this.TMP_UPLOAD_DEST, `/${uniqueName}.tmp`);
     const finalPath = path.join(this.UPLOAD_DEST, `/${uniqueName}`);
@@ -40,7 +43,7 @@ export class VideoService {
     let fileSize = 0;
     let isFirstChunk = true;
     const maxBytes = this.MAX_BYTES;
-    const allowedTypes = this.ALLOWED_TYPES;
+    const allowedTypes = this.ALLOWED_TYPES[type];
 
     const validator = new Transform({
       async transform(chunk, _enc, next) {

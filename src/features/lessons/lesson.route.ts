@@ -9,7 +9,7 @@ import { validateMiddleware } from "../../shared/middlewares/validate.middleware
 import { findLessonParamsSchema } from "./dto/lesson-params.dto";
 import { completeLessonParamsSchema } from "./dto/complete-lesson.dto";
 import { courseSlugParamsSchema } from "../course/dto/course-params";
-import { VideoService } from "../video/video.service";
+import { UploadService } from "../upload/upload.service";
 
 export class LessonRoutes {
   private readonly controller: LessonController;
@@ -19,9 +19,9 @@ export class LessonRoutes {
     const repository = new LessonRepository(this.db);
     const courseRepository = new CourseRepository(this.db);
     const certificateRepository = new CertificateRepository(this.db);
-    const videoService = new VideoService();
+    const uploadService = new UploadService();
     const service = new LessonService(repository, courseRepository, certificateRepository);
-    this.controller = new LessonController(service, videoService);
+    this.controller = new LessonController(service, uploadService);
     this.router = Router({ mergeParams: true });
     this.initRoutes();
   }

@@ -18,7 +18,7 @@ import { CryptoService } from "../../shared/security/crypto-service.security";
 import { noCacheMiddleware } from "../../shared/middlewares/no-cache.middleware";
 import { lessonSlugParamsSchema } from "../course/dto/lesson-params";
 import { validateFileHeadersMiddleware } from "../../shared/middlewares/validate-file-headers.middleware";
-import { VideoService } from "../video/video.service";
+import { UploadService } from "../upload/upload.service";
 import { updateLessonSchema } from "./dto/update-lesson.dto";
 import { userQuerySchema } from "./dto/users-query.dto";
 
@@ -31,15 +31,15 @@ export class AdminRoutes {
     const repository = new CourseRepository(this.db);
     const lessonRepository = new LessonRepository(this.db);
     const userRepository = new UserRepository(this.db);
-    const videoService = new VideoService();
+    const uploadService = new UploadService();
     const service = new AdminService(
       repository,
       lessonRepository,
       userRepository,
       cryptoService,
-      videoService
+      uploadService
     );
-    this.controller = new AdminController(service, videoService);
+    this.controller = new AdminController(service, uploadService);
     this.router = Router();
     this.initRoutes();
   }

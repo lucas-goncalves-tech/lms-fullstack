@@ -11,7 +11,6 @@ import { CryptoService } from "../../shared/security/crypto-service.security";
 import { SessionsService } from "../sessions/sessions.service";
 import { ValidateSessionMiddleware } from "../../shared/middlewares/validate-session.middleware";
 import { noCacheMiddleware } from "../../shared/middlewares/no-cache.middleware";
-import { updatePasswordSchema } from "./dto/update-password.dto";
 import { rateLimitMiddleware } from "../../shared/middlewares/rate-limit.middleware";
 
 export class AuthRoutes {
@@ -34,13 +33,6 @@ export class AuthRoutes {
   }
 
   private initRoutes() {
-    this.router.put(
-      "/password/update",
-      noCacheMiddleware,
-      this.validateSessionMiddleware.validateSession,
-      validateMiddleware({ body: updatePasswordSchema }),
-      this.controller.updatePassword
-    );
     this.router.delete(
       "/logout",
       noCacheMiddleware,

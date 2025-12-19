@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 import { LessonService } from "./lesson.service";
-import { VideoService } from "../video/video.service";
+import { UploadService } from "../upload/upload.service";
 
 export class LessonController {
   constructor(
     private readonly lessonService: LessonService,
-    private readonly videoService: VideoService
+    private readonly uploadService: UploadService
   ) {}
 
   findManyByCourseSlug = async (req: Request, res: Response) => {
@@ -43,6 +43,6 @@ export class LessonController {
   videoStreaming = async (req: Request, res: Response) => {
     const { courseSlug, lessonSlug } = req.params;
     const videoPath = await this.lessonService.findVideoPath(courseSlug, lessonSlug);
-    await this.videoService.streamingVideo(videoPath, req, res);
+    await this.uploadService.streamingVideo(videoPath, req, res);
   };
 }

@@ -5,14 +5,14 @@ import { CreateLessonDTO } from "./dto/create-lesson.dto";
 import { UpdateCourseDTO } from "./dto/update-course.dto";
 import { UpdateUserDTO } from "./dto/update-user.dto";
 import { AdminCreateUserDTO } from "./dto/admin-create-user.dto";
-import { VideoService } from "../video/video.service";
+import { UploadService } from "../upload/upload.service";
 import { UpdateLessonDTO } from "./dto/update-lesson.dto";
 import { UserQueryDTO } from "./dto/users-query.dto";
 
 export class AdminController {
   constructor(
     private readonly adminService: AdminService,
-    private readonly videoService: VideoService
+    private readonly uploadService: UploadService
   ) {}
 
   // Courses
@@ -133,7 +133,7 @@ export class AdminController {
 
   uploadVideo = async (req: Request, res: Response) => {
     const fileName = req.headers["x-filename"] as string;
-    const path = await this.videoService.save(req, fileName);
+    const path = await this.uploadService.save(req, fileName);
     res.status(200).json(path);
   };
 }

@@ -49,18 +49,4 @@ export class AuthController {
     const { name, email, role } = req.session!;
     res.status(200).json({ name, email, role });
   };
-
-  updatePassword = async (req: Request, res: Response) => {
-    const updatePasswordData = req.body as UpdatePasswordDto;
-    const { userId } = req.session!;
-    await this.authService.updatePassword(userId, updatePasswordData);
-    await this.sessionsService.revokeAllUserSessions(userId);
-    const sid = await this.sessionsService.createSession({
-      userId,
-      userAgent: req.headers["user-agent"] || "",
-      ip: req.ip || "127.0.0.1",
-    });
-    res.cookie(SID_IDENTIFIER, sid, sidCookieOptions(this.ttl));
-    res.status(204).end();
-  };
 }

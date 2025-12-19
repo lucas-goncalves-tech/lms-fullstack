@@ -46,7 +46,7 @@ export class SessionsService {
       await this.sessionsRepository.updateExpiresBySidHash(sidHash, expires_ms);
       renewed = true;
     }
-    const user = await this.userRepository.findUserSessionInfo(session.userId);
+    const user = await this.userRepository.findSessionInfo(session.userId);
     if (!user || user.isActive === 0) {
       await this.sessionsRepository.revokeSessionByKey("userId", session.userId);
       throw new SessionError();

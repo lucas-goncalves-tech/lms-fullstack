@@ -4,6 +4,7 @@ import { users } from "../../db/schema";
 import {
   IAdminCreateUserInput,
   ICreateUserInput,
+  IUpdateUserByAdminInput,
   IUpdateUserInput,
 } from "./interface/user.interface";
 
@@ -36,7 +37,7 @@ export class UserRepository {
     }
   }
 
-  async findUserByKey(key: "email" | "id", value: string) {
+  async findByKey(key: "email" | "id", value: string) {
     try {
       const result = this.db.connection.select().from(users).where(eq(users[key], value)).get();
       return result ?? null;
@@ -46,7 +47,7 @@ export class UserRepository {
     }
   }
 
-  async findUserSessionInfo(userId: string) {
+  async findSessionInfo(userId: string) {
     try {
       const result = this.db.connection
         .select({
@@ -66,7 +67,7 @@ export class UserRepository {
     }
   }
 
-  async createUser(user: ICreateUserInput | IAdminCreateUserInput) {
+  async create(user: ICreateUserInput | IAdminCreateUserInput) {
     try {
       const result = this.db.connection
         .insert(users)
@@ -85,20 +86,7 @@ export class UserRepository {
     }
   }
 
-  async updateUserPassword(userId: string, password_hash: string) {
-    try {
-      await this.db.connection
-        .update(users)
-        .set({ password_hash })
-        .where(eq(users.id, userId))
-        .execute();
-    } catch (err) {
-      console.error(`Erro ao atualizar senha do usuário:`, err);
-      throw err;
-    }
-  }
-
-  async updateUser(userId: string, userData: Partial<IUpdateUserInput>) {
+  async update(userId: string, userData: Partial<IUpdateUserInput>) {
     try {
       await this.db.connection.update(users).set(userData).where(eq(users.id, userId)).execute();
     } catch (err) {
@@ -107,7 +95,16 @@ export class UserRepository {
     }
   }
 
-  async toggleUserStatus(userId: string) {
+  async updateByAdmin(userId: string, userData: Partial<IUpdateUserByAdminInput>) {
+    try {
+      await this.db.connection.update(users).set(userData).where(eq(users.id, userId)).execute();
+    } catch (err) {
+      console.error(`Erro ao atualizar usuário:`, err);
+      throw err;
+    }
+  }
+
+  async toggleStatus(userId: string) {
     try {
       return this.db.connection
         .update(users)
@@ -124,7 +121,7 @@ export class UserRepository {
     }
   }
 
-  async deleteUser(userId: string) {
+  async delete(userId: string) {
     try {
       await this.db.connection.delete(users).where(eq(users.id, userId)).execute();
     } catch (err) {
