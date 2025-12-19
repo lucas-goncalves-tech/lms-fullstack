@@ -8,13 +8,11 @@ import { NotfoundError } from "./shared/errors/not-found.error";
 import cookieParser from "cookie-parser";
 import { rateLimitMiddleware } from "./shared/middlewares/rate-limit.middleware";
 import { logMiddleware } from "./shared/middlewares/log.middleware";
-import { envCheck } from "./shared/helper/env-check.helper";
 class App {
   public app: express.Express;
   private readonly mainRoutes: MainRoutes;
   private db: DataBase;
   private readonly ttl: number;
-  private readonly env = envCheck().ENV;
   constructor() {
     this.app = express();
     this.db = new DataBase();
@@ -40,7 +38,7 @@ class App {
     this.app.use(cookieParser());
     this.app.use(logMiddleware);
 
-    if (this.env === "development") {
+    if (process.env.NODE_ENV === "development") {
       this.app.use((req, res, next) => {
         setTimeout(next, 1000); // 1s delay
       });

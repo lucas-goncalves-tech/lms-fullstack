@@ -2,7 +2,6 @@ export function envCheck() {
   const PORT = process.env.PORT;
   const DB_FILE_NAME = process.env.DB_FILE_NAME;
   const PEPPER = process.env.PEPPER;
-  const ENV = process.env.NODE_ENV;
   const UPLOAD_DEST = process.env.UPLOAD_DEST;
   const TMP_UPLOAD_DEST = process.env.TMP_UPLOAD_DEST;
 
@@ -18,10 +17,6 @@ export function envCheck() {
     throw new Error("Env PEPPER não foi definido");
   }
 
-  if (!ENV) {
-    throw new Error("Env NODE_ENV não foi definido");
-  }
-
   if (!TMP_UPLOAD_DEST) {
     throw new Error("Env TMP_UPLOAD_DEST não foi definido");
   }
@@ -34,7 +29,6 @@ export function envCheck() {
     PORT,
     DB_FILE_NAME,
     PEPPER,
-    ENV,
     UPLOAD_DEST,
     TMP_UPLOAD_DEST,
   };

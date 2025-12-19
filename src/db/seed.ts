@@ -148,8 +148,7 @@ const lessonsData = [
 ];
 
 async function seed() {
-  const ENV = envCheck().ENV;
-  if (ENV === "production") {
+  if (process.env.NODE_ENV === "production") {
     throw new Error("Seed não pode ser executado em ambiente de produção!");
   }
 
