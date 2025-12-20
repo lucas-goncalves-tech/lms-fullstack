@@ -67,6 +67,7 @@ export class AdminRoutes {
     );
 
     // Lessons
+    this.router.get("/lessons/:courseSlug", this.controller.findManyLessons);
     this.router.post(
       "/lessons/:courseSlug/new",
       validateMiddleware({ params: courseSlugParamsSchema, body: createLessonSchema }),
@@ -77,7 +78,6 @@ export class AdminRoutes {
       validateFileHeadersMiddleware,
       this.controller.uploadVideo
     );
-    this.router.get("/lessons/:courseSlug", this.controller.findManyLessons);
     this.router.put(
       "/lessons/:courseSlug/:lessonSlug/update",
       validateMiddleware({ params: lessonSlugParamsSchema, body: updateLessonSchema }),
