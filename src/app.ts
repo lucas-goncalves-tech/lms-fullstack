@@ -37,12 +37,6 @@ class App {
     this.app.use(express.json({ limit: "1mb" }));
     this.app.use(cookieParser());
     this.app.use(logMiddleware);
-
-    if (process.env.NODE_ENV === "development") {
-      this.app.use((req, res, next) => {
-        setTimeout(next, 1000); // 1s delay
-      });
-    }
   }
 
   private routes() {
