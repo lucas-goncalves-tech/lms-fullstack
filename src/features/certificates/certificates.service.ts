@@ -7,7 +7,10 @@ export class CertificatesService {
 
   async findManyCertificatesByUserId(userId: string) {
     const result = await this.certificateRepository.findManyCertificatesByUserId(userId);
-    return result.map(({ userId: _, ...certificate }) => certificate);
+    return result.map(({ userId: _, totalSeconds, ...certificate }) => ({
+      ...certificate,
+      totalSeconds: (totalSeconds ?? 0) * 2,
+    }));
   }
 
   async findCertificateById(userId: string, certificateId: string) {
@@ -20,7 +23,10 @@ export class CertificatesService {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { userId: _, ...certificate } = result;
-    return certificate;
+    const { userId: _, totalSeconds, ...certificate } = result;
+    return {
+      ...certificate,
+      totalSeconds: (totalSeconds ?? 0) * 2,
+    };
   }
 }
