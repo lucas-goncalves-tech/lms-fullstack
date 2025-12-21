@@ -1,6 +1,5 @@
 import path from "node:path";
 import { ConflictError } from "../../shared/errors/conflict.error";
-import { ForbiddenError } from "../../shared/errors/forbidden.error";
 import { NotfoundError } from "../../shared/errors/not-found.error";
 import { UnauthorizedError } from "../../shared/errors/unauthorized.error";
 import { UnprocessableEntityError } from "../../shared/errors/unprocessable-entity.error";
