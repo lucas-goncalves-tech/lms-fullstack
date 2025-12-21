@@ -18,7 +18,7 @@ export class SessionsRepository {
 
       return result ?? null;
     } catch (error) {
-      console.log("Error ao criar sessão ", error);
+      console.error("Error ao criar sessão ", error);
       throw error;
     }
   }
@@ -33,7 +33,7 @@ export class SessionsRepository {
 
       return result ? { ...result, expires_ms: result.expires * 1000 } : null;
     } catch (error) {
-      console.log("Error ao buscar sessão ", error);
+      console.error("Error ao buscar sessão ", error);
       throw error;
     }
   }
@@ -46,7 +46,7 @@ export class SessionsRepository {
         .where(eq(sessions[key], value))
         .execute();
     } catch (error) {
-      console.log("Error ao revogar sessão ", error);
+      console.error("Error ao revogar sessão ", error);
       throw error;
     }
   }
@@ -59,7 +59,7 @@ export class SessionsRepository {
         .where(eq(sessions.sidHash, sidHash))
         .execute();
     } catch (error) {
-      console.log("Error ao atualizar sessão ", error);
+      console.error("Error ao atualizar sessão ", error);
       throw error;
     }
   }

@@ -60,7 +60,6 @@ export class AdminController {
 
   updateLesson = async (req: Request, res: Response) => {
     const lessonData = req.body as UpdateLessonDTO;
-    console.log("lessonData", lessonData);
     const { courseSlug, lessonSlug } = req.params;
     const { title } = await this.adminService.updateLesson(courseSlug, lessonSlug, lessonData);
 
@@ -85,7 +84,6 @@ export class AdminController {
   // Users
   findManyUsers = async (req: Request, res: Response) => {
     const { search, limit, page } = req.query as UserQueryDTO;
-    console.log({ search, limit, page });
     const result = await this.adminService.findManyUsers({ search, limit, page });
     res.status(200).json(result);
   };
