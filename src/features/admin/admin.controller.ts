@@ -88,6 +88,15 @@ export class AdminController {
     res.status(200).json(result);
   };
 
+  findAvatarByUserId = async (req: Request, res: Response) => {
+    const { userId } = req.params;
+    const avatarPath = await this.adminService.findAvatarByUserId(userId);
+    if (!avatarPath) {
+      return res.status(204).end();
+    }
+    res.sendFile(avatarPath);
+  };
+
   updateUser = async (req: Request, res: Response) => {
     const { userId } = req.params;
     const adminId = req.session!.userId;

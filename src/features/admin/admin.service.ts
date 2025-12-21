@@ -14,6 +14,7 @@ import { UploadService } from "../upload/upload.service";
 import { BadRequestError } from "../../shared/errors/bad-request.error";
 import { UpdateLessonDTO } from "./dto/update-lesson.dto";
 import { UserQueryDTO } from "./dto/users-query.dto";
+import path from "node:path";
 
 export class AdminService {
   constructor(
@@ -130,6 +131,18 @@ export class AdminService {
   async findManyUsers(query: UserQueryDTO) {
     const result = await this.userRepository.findMany(query.search, query.limit, query.page);
     return result;
+  }
+
+  async findAvatarByUserId(userId: string) {
+    const user = await this.userRepository.findByKey("id", userId);
+    if (!user) {
+      throw new NotfoundError("Usuário não encontrado");
+    }
+    if (!user.avatar) {
+      return null;
+    }
+    const absolutePath = path.resolve(`./${user.avatar}`);
+    return absolutePath;
   }
 
   async updateUser(adminId: string, userId: string, userData: Partial<IUpdateUserByAdminInput>) {

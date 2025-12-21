@@ -57,8 +57,6 @@ export class UserService {
     if (!userExist.avatar) {
       return null;
     }
-    const fileExist = await this.uploadService.fileExist(userExist.avatar);
-    if (!fileExist) throw new NotfoundError("Avatar não encontrado");
     const absolutePath = path.resolve(`./${userExist.avatar}`);
     return absolutePath;
   }

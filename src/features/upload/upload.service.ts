@@ -99,7 +99,8 @@ export class UploadService {
     await rm(absolutePath, { force: true });
   }
 
-  async fileExist(filePath: string) {
+  async fileExist(filePath: string | null) {
+    if (!filePath) return false;
     try {
       await access(filePath);
       return true;

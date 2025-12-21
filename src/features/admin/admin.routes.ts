@@ -95,6 +95,11 @@ export class AdminRoutes {
       validateMiddleware({ query: userQuerySchema }),
       this.controller.findManyUsers
     );
+    this.router.get(
+      "/users/:userId/avatar",
+      validateMiddleware({ params: userIdParamsSchema }),
+      this.controller.findAvatarByUserId
+    );
     this.router.put(
       "/users/:userId/update",
       validateMiddleware({ params: userIdParamsSchema, body: updateUserSchema }),
