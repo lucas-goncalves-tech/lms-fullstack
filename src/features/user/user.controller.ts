@@ -50,6 +50,9 @@ export class UserController {
   sendAvatar = async (req: Request, res: Response) => {
     const { userId } = req.session!;
     const avatarPath = await this.userService.findAvatarPath(userId);
-    avatarPath ? res.sendFile(avatarPath) : res.status(204).end();
+    if (avatarPath) {
+      return res.sendFile(avatarPath);
+    }
+    res.status(204).end();
   };
 }
