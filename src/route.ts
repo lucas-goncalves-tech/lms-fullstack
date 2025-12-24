@@ -64,7 +64,6 @@ export class MainRoutes {
     );
     this.router.use(
       "/certificates",
-      this.validateSessionMiddleware.validateSession,
       this.certificatesRoutes.getRouter
     );
   }

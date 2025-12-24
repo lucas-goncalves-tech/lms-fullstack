@@ -1,3 +1,4 @@
+import { generateCertificatePdf } from "../../shared/utils/generateCertificatePdf";
 import { CertificatesService } from "./certificates.service";
 import { Request, Response } from "express";
 
@@ -12,8 +13,11 @@ export class CertificatesController {
 
   findCertificateById = async (req: Request, res: Response) => {
     const certificateId = req.params.certificateId;
-    const userId = req.session!.userId;
-    const certificate = await this.certificatesService.findCertificateById(userId, certificateId);
-    res.json(certificate);
+    const certificate = await this.certificatesService.findCertificateById(certificateId);
+    const pdf = generateCertificatePdf(certificate);
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename=certificado-${certificate.title}.pdf`);
+    res.send(pdf)
   };
 }

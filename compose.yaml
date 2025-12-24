@@ -10,3 +10,10 @@ services:
       - "3333:3333"
     env_file:
       - ./.env.local
+    logging:
+      driver: local
+      options:
+        max-size: '20m'
+        max-file: '5'
+    restart: unless-stopped    
+    stop_grace_period: 10s
