@@ -3,16 +3,30 @@ import { envCheck } from "./shared/helper/env-check.helper.ts";
 
 class Server {
   private readonly PORT = envCheck().PORT;
-  private readonly app = new App().app;
+  private readonly express = new App();
+  private server: ReturnType<typeof this.express.app.listen> | null = null
   constructor() {
     this.init();
   }
 
+  public readonly shutdown = (signal: "SIGINT" | "SIGTERM") => {
+    this.server?.on(signal, () => {
+      this.express.db.close()
+      process.exit(0)
+    })
+    this.server?.closeAllConnections()
+    setTimeout(()=> {
+      process.exit(0);
+    }, 5_000).unref();
+  };
+
   private init() {
-    this.app.listen(this.PORT, () => {
+    this.server = this.express.app.listen(this.PORT, () => {
       console.log(`Server is running on http://localhost:${this.PORT}`);
     });
   }
 }
 
-new Server();
+const server = new Server();
+process.once("SIGINT", server.shutdown)
+process.once("SIGTERM", server.shutdown)

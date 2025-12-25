@@ -9,9 +9,9 @@ import cookieParser from "cookie-parser";
 import { rateLimitMiddleware } from "./shared/middlewares/rate-limit.middleware";
 import { logMiddleware } from "./shared/middlewares/log.middleware";
 class App {
-  public app: express.Express;
+  public readonly app: express.Express;
   private readonly mainRoutes: MainRoutes;
-  private db: DataBase;
+  public readonly db: DataBase;
   private readonly ttl: number;
   constructor() {
     this.app = express();
