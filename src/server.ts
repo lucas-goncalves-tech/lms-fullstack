@@ -10,13 +10,14 @@ class Server {
   }
 
   public readonly shutdown = (signal: "SIGINT" | "SIGTERM") => {
-    this.server?.on(signal, () => {
+    console.log(`\nReceived ${signal}, shutting down gracefully...`);
+    this.server?.close(() => {
       this.express.db.close()
       process.exit(0)
     })
     this.server?.closeAllConnections()
     setTimeout(()=> {
-      process.exit(0);
+      process.exit(1);
     }, 5_000).unref();
   };
 
