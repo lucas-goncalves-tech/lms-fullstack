@@ -8,17 +8,24 @@ import { NotfoundError } from "./shared/errors/not-found.error";
 import cookieParser from "cookie-parser";
 import { rateLimitMiddleware } from "./shared/middlewares/rate-limit.middleware";
 import { logMiddleware } from "./shared/middlewares/log.middleware";
+import { CleanUpSessionsExpiresJob } from "./shared/jobs/cleanup-sessions-expires.job";
 class App {
   public readonly app: express.Express;
   private readonly mainRoutes: MainRoutes;
   public readonly db: DataBase;
+  public readonly cleanupSessionsExpires: CleanUpSessionsExpiresJob;
   private readonly ttl: number;
   constructor() {
     this.app = express();
     this.db = new DataBase();
+    this.cleanupSessionsExpires = new CleanUpSessionsExpiresJob(this.db)
     this.mainRoutes = new MainRoutes(this.db);
     this.ttl = 15 * 60 * 1000;
     this.init();
+  }
+
+  private jobs() {
+    this.cleanupSessionsExpires.start()
   }
 
   private middlewares() {
@@ -51,6 +58,7 @@ class App {
   }
 
   private init() {
+    this.jobs()
     this.middlewares();
     this.routes();
     this.handlers();
