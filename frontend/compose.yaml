@@ -1,0 +1,19 @@
+services:
+  web:
+    build:
+      context: .
+      target: development
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:3333/api/v1
+    ports:
+      - "3000:3000"
+    logging:
+      driver: local
+      options:
+        max-size: '20m'
+        max-file: '5'
+    restart: unless-stopped
+    stop_grace_period: 10s
