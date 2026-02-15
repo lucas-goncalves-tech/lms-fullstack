@@ -44,15 +44,15 @@
 
 #### `PUT /api/user/password/update`
 
-- [ ] **1.3.1** Documentar schema de request (`updatePasswordSchema`)
-- [ ] **1.3.2** Documentar schema de response (200, 400, 401)
-- [ ] **1.3.3** Adicionar exemplos de request/response
+- [x] **1.3.1** Documentar schema de request (`updatePasswordSchema`)
+- [x] **1.3.2** Documentar schema de response (200, 400, 401)
+- [x] **1.3.3** Adicionar exemplos de request/response
 
 #### `PUT /api/user/email/update`
 
-- [ ] **1.3.4** Documentar schema de request (`updateEmailSchema`)
-- [ ] **1.3.5** Documentar schema de response (200, 400, 401, 409)
-- [ ] **1.3.6** Adicionar exemplos de request/response
+- [x] **1.3.4** Documentar schema de request (`updateEmailSchema`)
+- [x] **1.3.5** Documentar schema de response (200, 400, 401, 409)
+- [x] **1.3.6** Adicionar exemplos de request/response
 
 ---
 

@@ -6,8 +6,8 @@ import { envCheck } from "../shared/helper/env-check.helper";
 export class DataBase {
   public connection: BetterSQLite3Database<typeof schema>;
   private readonly sqlite: Database
-  constructor() {
-    this.sqlite = new DatabaseDriver(envCheck().DB_FILE_NAME);
+  constructor(dbPath?: string) {
+    this.sqlite = new DatabaseDriver(dbPath ?? envCheck().DB_FILE_NAME);
     // Enable foreign key constraints (disabled by default in SQLite)
     this.sqlite.pragma("foreign_keys = ON");
     this.connection = drizzle(this.sqlite, { schema });

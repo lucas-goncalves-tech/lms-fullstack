@@ -1,11 +1,11 @@
 import { lt, sql } from "drizzle-orm";
-import { DataBase } from "../../db";
-import { sessions } from "../../db/schema";
+import { DataBase } from "../db";
+import { sessions } from "../db/schema";
 
 export class CleanUpSessionsExpiresJob {
-    constructor(private readonly db: DataBase){}
+  constructor(private readonly db: DataBase) {}
 
-    private async cleanExpiredSessions() {
+  private async cleanExpiredSessions() {
     try {
       await this.db.connection
         .delete(sessions)
@@ -19,9 +19,9 @@ export class CleanUpSessionsExpiresJob {
 
   async start(expiresHour: number = 6) {
     this.cleanExpiredSessions();
-    const expiresMs =  1000 * 60 * 60 * expiresHour
-    setInterval(()=> {
-        this.cleanExpiredSessions()
-    }, expiresMs).unref()
+    const expiresMs = 1000 * 60 * 60 * expiresHour;
+    setInterval(() => {
+      this.cleanExpiredSessions();
+    }, expiresMs).unref();
   }
 }

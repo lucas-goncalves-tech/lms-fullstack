@@ -13,7 +13,7 @@ export function errorHandler(err: Error, _req: Request, res: Response, _next: Ne
   if (err instanceof ErrorBase) {
     return res.status(err.status).json({
       message: err.message,
-      ...(err.details ? { details: err.details } : {}),
+      ...(err.details ? { errors: err.details } : {}),
     });
   }
   console.error(err);

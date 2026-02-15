@@ -1,0 +1,21 @@
+{
+  "name": "lms-fullstack",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/lucas-goncalves-tech/lms-fullstack#readme",
+  "bugs": {
+    "url": "https://github.com/lucas-goncalves-tech/lms-fullstack/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lucas-goncalves-tech/lms-fullstack.git"
+  },
+  "license": "ISC",
+  "author": "Drummonds",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "docker compose exec api npx vitest",
+    "logs:api": "docker compose logs api -f"
+  }
+}

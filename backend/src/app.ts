@@ -8,18 +8,19 @@ import { NotfoundError } from "./shared/errors/not-found.error";
 import cookieParser from "cookie-parser";
 import { rateLimitMiddleware } from "./shared/middlewares/rate-limit.middleware";
 import { logMiddleware } from "./shared/middlewares/log.middleware";
-import { CleanUpSessionsExpiresJob } from "./shared/jobs/cleanup-sessions-expires.job";
 import { apiReference } from "@scalar/express-api-reference";
 import { generateOpenAPISpec } from "./doc/openapi.generator";
+import { CleanUpSessionsExpiresJob } from "./jobs/cleanup-sessions-expires.job";
+import { envCheck } from "./shared/helper/env-check.helper";
 class App {
   public readonly app: express.Express;
   private readonly mainRoutes: MainRoutes;
   public readonly db: DataBase;
   public readonly cleanupSessionsExpires: CleanUpSessionsExpiresJob;
   private readonly ttl: number;
-  constructor() {
+  constructor(dbPath?: string) {
     this.app = express();
-    this.db = new DataBase();
+    this.db = new DataBase(dbPath);
     this.cleanupSessionsExpires = new CleanUpSessionsExpiresJob(this.db);
     this.mainRoutes = new MainRoutes(this.db);
     this.ttl = 15 * 60 * 1000;
@@ -27,6 +28,7 @@ class App {
   }
 
   private jobs() {
+    if (envCheck().NODE_ENV === "test") return;
     this.cleanupSessionsExpires.start();
   }
 
