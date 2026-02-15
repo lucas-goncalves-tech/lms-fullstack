@@ -10,6 +10,7 @@ import { loginUserDto } from "./dto/login-user.dto";
 
 registry.registerPath({
   method: "post",
+  tags: ["Auth"],
   path: "/auth/register",
   summary: "Cria um novo usuário",
   request: {
@@ -43,6 +44,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "post",
+  tags: ["Auth"],
   path: "/auth/login",
   summary: "Realiza login de um usuário",
   request: {
@@ -69,6 +71,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "get",
+  tags: ["Auth"],
   path: "/auth/me",
   summary: "Retorna as informações do usuário autenticado",
   security: [{ cookieAuth: [] }],
@@ -87,6 +90,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "delete",
+  tags: ["Auth"],
   path: "/auth/logout",
   summary: "Realiza logout de um usuário",
   security: [{ cookieAuth: [] }],
