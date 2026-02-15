@@ -6,14 +6,11 @@ import { UserRepository } from "./user.repository";
 import { CryptoService } from "../../shared/security/crypto-service.security";
 import { SessionsService } from "../sessions/sessions.service";
 import { UserService } from "./user.service";
-import { UploadService } from "../upload/upload.service";
 import { noCacheMiddleware } from "../../shared/middlewares/no-cache.middleware";
 import { validateMiddleware } from "../../shared/middlewares/validate.middleware";
 import { updatePasswordSchema } from "./dto/update-password.dto";
 import { rateLimitMiddleware } from "../../shared/middlewares/rate-limit.middleware";
 import { updateEmailSchema } from "./dto/update-email.dto";
-import { validateFileHeadersMiddleware } from "../../shared/middlewares/validate-file-headers.middleware";
-import { avatarParamsSchema } from "./dto/avatar-params.dto";
 
 export class UserRoutes {
   private readonly controller: UserController;
@@ -21,13 +18,12 @@ export class UserRoutes {
   private readonly ttl: number;
 
   constructor(private readonly db: DataBase) {
-    const uploadService = new UploadService();
     const userRepository = new UserRepository(this.db);
     const cryptoService = new CryptoService();
     const sessionsRepository = new SessionsRepository(this.db);
     const sessionsService = new SessionsService(sessionsRepository, userRepository, cryptoService);
-    const service = new UserService(userRepository, cryptoService, uploadService);
-    this.controller = new UserController(service, sessionsService, uploadService);
+    const service = new UserService(userRepository, cryptoService);
+    this.controller = new UserController(service, sessionsService);
     this.router = Router();
     this.initRoutes();
     this.ttl = 10 * 60 * 1000;
@@ -46,8 +42,6 @@ export class UserRoutes {
       validateMiddleware({ body: updateEmailSchema }),
       this.controller.updateEmail
     );
-    this.router.put("/avatar/update", validateFileHeadersMiddleware, this.controller.updateAvatar);
-    this.router.get("/avatar", this.controller.sendAvatar);
   }
 
   get getRouter() {

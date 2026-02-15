@@ -15,6 +15,13 @@
       "when": 1766145034106,
       "tag": "0001_blue_puff_adder",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1771121231343,
+      "tag": "0002_curved_chimera",
+      "breakpoints": true
     }
   ]
 }

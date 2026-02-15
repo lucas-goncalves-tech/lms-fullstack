@@ -1,5 +1,4 @@
 // components
-export * from "./components/update-avatar-form";
 export * from "./components/update-email-form";
 export * from "./components/update-password-form";
 

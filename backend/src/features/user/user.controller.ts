@@ -5,14 +5,12 @@ import { SessionsService } from "../sessions/sessions.service";
 import { SID_IDENTIFIER } from "../../shared/constants/sid-identifier.constants";
 import { sidCookieOptions } from "../../shared/helper/sid-cookie-options.helper";
 import { UpdateEmailDTO } from "./dto/update-email.dto";
-import { UploadService } from "../upload/upload.service";
 
 export class UserController {
   private readonly ttl: number;
   constructor(
     private readonly userService: UserService,
-    private readonly sessionsService: SessionsService,
-    private readonly uploadService: UploadService
+    private readonly sessionsService: SessionsService
   ) {
     this.ttl = 60 * 60 * 24 * 15 * 1000;
   }
@@ -35,24 +33,6 @@ export class UserController {
     const { email } = req.body as UpdateEmailDTO;
     const { userId } = req.session!;
     await this.userService.updateEmail(userId, email);
-    res.status(204).end();
-  };
-
-  updateAvatar = async (req: Request, res: Response) => {
-    const { userId } = req.session!;
-    const fileName = req.headers["x-filename"] as string;
-    const { path } = await this.uploadService.save(req, fileName, "image");
-    await this.userService.updateAvatar(userId, path);
-
-    res.json({ path });
-  };
-
-  sendAvatar = async (req: Request, res: Response) => {
-    const { userId } = req.session!;
-    const avatarPath = await this.userService.findAvatarPath(userId);
-    if (avatarPath) {
-      return res.sendFile(avatarPath);
-    }
     res.status(204).end();
   };
 }
