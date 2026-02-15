@@ -3,8 +3,7 @@ import { Request, Response } from "express";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { LoginUserDto } from "./dto/login-user.dto";
 import { SessionsService } from "../sessions/sessions.service";
-import { sidCookieOptions } from "../../shared/helper/sid-cookie-options.helper";
-import { SID_IDENTIFIER } from "../../shared/constants/sid-identifier.constants";
+import { SID_IDENTIFIER, sidCookieOptions } from "../../shared/constants/sid-identifier.constants";
 
 export class AuthController {
   private readonly ttl: number;
