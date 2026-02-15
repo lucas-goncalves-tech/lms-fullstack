@@ -1,5 +1,5 @@
 import { OpenApiGeneratorV3 } from "@asteasolutions/zod-to-openapi";
-import { registry } from "./openapi.registry";
+import registry from "./openapi.registry";
 import { envCheck } from "../shared/helper/env-check.helper";
 
 export function generateOpenAPISpec() {
@@ -9,8 +9,8 @@ export function generateOpenAPISpec() {
     openapi: "3.0.0",
     info: {
       version: "1.0.0",
-      title: "Bookstore API",
-      description: "API Bookstore documentada com Zod e Scalar",
+      title: "LMS API",
+      description: "API LMS documentada com Zod e Scalar",
     },
     servers: [
       {

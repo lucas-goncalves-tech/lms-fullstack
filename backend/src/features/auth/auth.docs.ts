@@ -3,7 +3,7 @@ import {
   conflictResponse,
   unauthorizedResponse,
 } from "../../doc/errors/errors";
-import { registry } from "../../doc/openapi.registry";
+import registry from "../../doc/openapi.registry";
 import { createUserResponseSchema } from "./dto/auth.dto";
 import { createUserDto } from "./dto/create-user.dto";
 import { loginUserDto } from "./dto/login-user.dto";
