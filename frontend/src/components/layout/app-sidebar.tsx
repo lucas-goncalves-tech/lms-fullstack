@@ -16,18 +16,13 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "../ui/button";
 import { SidebarSkeleton } from "./sidebar-loading";
 import { useAuth } from "@/shared/context/auth";
-import { useAvatar } from "@/lib/hooks/use-avatar";
 import { useLogout } from "@/modules/auth";
 import { adminNavItems, navItems } from "@/lib/constants/nav-items";
-import { Skeleton } from "../ui/skeleton";
-import { transformNameToInitials } from "@/lib/utils/transform-name-to-initials";
 
 export function AppSidebar() {
-  const { data: avatarUrl, isLoading } = useAvatar();
   const pathname = usePathname();
   const { user, setIsLoading } = useAuth();
   const { mutate: logout } = useLogout();
@@ -44,36 +39,22 @@ export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarHeader className="p-4">
-        <div className="flex items-center gap-3">
-          <Avatar className="h-10 w-10">
-            {isLoading ? (
-              <Skeleton className="size-full rounded-full" />
-            ) : (
-              <>
-                <AvatarImage src={avatarUrl} alt="Avatar" />
-                <AvatarFallback>
-                  {transformNameToInitials(user.name)}
-                </AvatarFallback>
-              </>
-            )}
-          </Avatar>
-          <div className="flex flex-col gap-1 flex-1 min-w-0">
-            <span className="text-sm font-medium text-sidebar-foreground truncate">
-              {user.name}
-            </span>
-            <span className="text-xs text-muted-foreground truncate">
-              {user.email}
-            </span>
-            {user.role === "ADMIN" && (
-              <div className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-linear-to-r from-primary/20 to-primary/10 border border-primary/30 w-fit">
-                <Shield className="size-2.5 text-primary" />
-                <span className="text-[10px] font-semibold text-primary uppercase tracking-wider">
-                  Admin
-                </span>
-              </div>
-            )}
-          </div>
-        </div>
+        <div className="flex flex-col gap-1 min-w-0">
+          <span className="text-sm font-medium text-sidebar-foreground truncate">
+            {user.name}
+          </span>
+          <span className="text-xs text-muted-foreground truncate">
+            {user.email}
+          </span>
+             {user.role === "ADMIN" && (
+               <div className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-linear-to-r from-primary/20 to-primary/10 border border-primary/30 w-fit">
+                 <Shield className="size-2.5 text-primary" />
+                 <span className="text-[10px] font-semibold text-primary uppercase tracking-wider">
+                   Admin
+                 </span>
+               </div>
+             )}
+           </div>
       </SidebarHeader>
 
       <SidebarContent>

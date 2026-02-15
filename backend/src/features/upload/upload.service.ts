@@ -14,11 +14,7 @@ import { Request, Response } from "express";
 
 export class UploadService {
   private readonly MAX_BYTES_VIDEO = 500 * 1024 * 1024; // 500 mb
-  private readonly MAX_BYTES_IMAGE = 3 * 1024 * 1024; // 3 mb
-  private readonly ALLOWED_TYPES = {
-    video: ["video/mp4", "video/webm"],
-    image: ["image/jpeg", "image/png", "image/jpg", "image/webp"],
-  };
+  private readonly ALLOWED_VIDEO_TYPES = ["video/mp4", "video/webm"];
   private readonly UPLOAD_DEST = envCheck().UPLOAD_DEST;
   private readonly TMP_UPLOAD_DEST = envCheck().TMP_UPLOAD_DEST;
   constructor() {}
@@ -35,16 +31,16 @@ export class UploadService {
     }
   }
 
-  async save(stream: NodeJS.ReadableStream, fileName: string, type: "video" | "image" = "video") {
-    const ext = path.extname(fileName) || (type === "video" ? ".mp4" : ".jpg");
+  async save(stream: NodeJS.ReadableStream, fileName: string) {
+    const ext = path.extname(fileName) || ".mp4";
     const uniqueName = `${randomUUID()}${ext}`;
     const tmpPath = path.join(this.TMP_UPLOAD_DEST, `/${uniqueName}.tmp`);
     const finalPath = path.join(this.UPLOAD_DEST, `/${uniqueName}`);
 
     let fileSize = 0;
     let isFirstChunk = true;
-    const maxBytes = type === "video" ? this.MAX_BYTES_VIDEO : this.MAX_BYTES_IMAGE;
-    const allowedTypes = this.ALLOWED_TYPES[type];
+    const maxBytes = this.MAX_BYTES_VIDEO;
+    const allowedTypes = this.ALLOWED_VIDEO_TYPES;
 
     const validator = new Transform({
       async transform(chunk, _enc, next) {
@@ -77,11 +73,8 @@ export class UploadService {
     try {
       await pipeline(stream, validator, writeStream);
       await rename(tmpPath, finalPath);
-      if (type === "video") {
-        const seconds = await this.getDuration(finalPath);
-        return { path: finalPath, seconds };
-      }
-      return { path: finalPath };
+      const seconds = await this.getDuration(finalPath);
+      return { path: finalPath, seconds };
     } catch (error) {
       await rm(tmpPath, { force: true }).catch(() => {});
       throw error;

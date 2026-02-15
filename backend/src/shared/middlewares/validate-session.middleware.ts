@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { SessionsService } from "../../features/sessions/sessions.service";
 import { UnauthorizedError } from "../errors/unauthorized.error";
-import { sidCookieOptions } from "../helper/sid-cookie-options.helper";
-import { SID_IDENTIFIER } from "../constants/sid-identifier.constants";
+import { SID_IDENTIFIER, sidCookieOptions } from "../constants/sid-identifier.constants";
 
 export class ValidateSessionMiddleware {
   constructor(private readonly sessionsService: SessionsService) {}

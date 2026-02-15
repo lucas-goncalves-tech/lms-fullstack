@@ -2,8 +2,7 @@ import { Request, Response } from "express";
 import { UpdatePasswordDto } from "./dto/update-password.dto";
 import { UserService } from "./user.service";
 import { SessionsService } from "../sessions/sessions.service";
-import { SID_IDENTIFIER } from "../../shared/constants/sid-identifier.constants";
-import { sidCookieOptions } from "../../shared/helper/sid-cookie-options.helper";
+import { SID_IDENTIFIER, sidCookieOptions } from "../../shared/constants/sid-identifier.constants";
 import { UpdateEmailDTO } from "./dto/update-email.dto";
 
 export class UserController {

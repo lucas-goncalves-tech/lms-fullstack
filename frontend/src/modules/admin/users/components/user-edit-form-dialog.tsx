@@ -21,10 +21,6 @@ import { UserForm } from "./user-table";
 import { useState } from "react";
 import { useUpdateUser } from "../hooks/use-update-user";
 import { UserEditForm, userEditSchema } from "../schemas/user-edit";
-import { useGetUserAvatar } from "../hooks/use-get-user-avatar";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Skeleton } from "@/components/ui/skeleton";
-import { transformNameToInitials } from "@/lib/utils/transform-name-to-initials";
 
 type Props = {
   user: UserForm;
@@ -33,7 +29,6 @@ type Props = {
 
 export function UserEditFormDialog({ user, dropdownClose }: Props) {
   const [open, setOpen] = useState(false);
-  const { data: avatar, isLoading } = useGetUserAvatar(user.id);
   const { mutateAsync: editUser, isPending } = useUpdateUser();
   const {
     register,
@@ -75,20 +70,6 @@ export function UserEditFormDialog({ user, dropdownClose }: Props) {
             Atualize as informações do usuário
           </DialogDescription>
         </DialogHeader>
-        <div className="flex items-center justify-center">
-          <Avatar className="size-36 sm:size-42">
-            {isLoading ? (
-              <Skeleton className="size-full rounded-full" />
-            ) : (
-              <>
-                {avatar && <AvatarImage src={avatar} alt="Avatar" />}
-                <AvatarFallback>
-                  {transformNameToInitials(user.name)}
-                </AvatarFallback>
-              </>
-            )}
-          </Avatar>
-        </div>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {/* Name Field */}
           <div>

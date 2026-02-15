@@ -4,5 +4,4 @@ export const adminUsersQueryKeys = {
     params
       ? ([...adminUsersQueryKeys.usersBase(), params] as const)
       : adminUsersQueryKeys.usersBase(),
-  getUserAvatar: (userId: string) => ["user-avatar", userId] as const,
 };
