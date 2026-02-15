@@ -6,6 +6,8 @@ services:
     volumes:
       - ./:/app
       - /app/node_modules
+      - ./uploads:/uploads
+      - ./uploads/tmp:/uploads/tmp
     ports:
       - "3333:3333"
     env_file:

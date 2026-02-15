@@ -15,4 +15,3 @@ coverage
 sqlite.db
 sqlite.db-journal
 .agent
-uploads/
