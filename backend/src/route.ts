@@ -1,3 +1,5 @@
+import "./features/auth/auth.docs";
+
 import { Router } from "express";
 import { DataBase } from "./db";
 import { CourseRoutes } from "./features/course/course.route";
@@ -62,10 +64,7 @@ export class MainRoutes {
       this.validateSessionMiddleware.validateSession,
       this.lessonRoutes.getRouter
     );
-    this.router.use(
-      "/certificates",
-      this.certificatesRoutes.getRouter
-    );
+    this.router.use("/certificates", this.certificatesRoutes.getRouter);
   }
 
   get getRouter() {
