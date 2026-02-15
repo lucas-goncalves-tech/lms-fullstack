@@ -9,6 +9,8 @@ import cookieParser from "cookie-parser";
 import { rateLimitMiddleware } from "./shared/middlewares/rate-limit.middleware";
 import { logMiddleware } from "./shared/middlewares/log.middleware";
 import { CleanUpSessionsExpiresJob } from "./shared/jobs/cleanup-sessions-expires.job";
+import { apiReference } from "@scalar/express-api-reference";
+import { generateOpenAPISpec } from "./doc/openapi.generator";
 class App {
   public readonly app: express.Express;
   private readonly mainRoutes: MainRoutes;
@@ -18,14 +20,24 @@ class App {
   constructor() {
     this.app = express();
     this.db = new DataBase();
-    this.cleanupSessionsExpires = new CleanUpSessionsExpiresJob(this.db)
+    this.cleanupSessionsExpires = new CleanUpSessionsExpiresJob(this.db);
     this.mainRoutes = new MainRoutes(this.db);
     this.ttl = 15 * 60 * 1000;
     this.init();
   }
 
   private jobs() {
-    this.cleanupSessionsExpires.start()
+    this.cleanupSessionsExpires.start();
+  }
+
+  private docs() {
+    this.app.use(
+      "/api-docs",
+      apiReference({
+        theme: "deepSpace",
+        content: generateOpenAPISpec(),
+      })
+    );
   }
 
   private middlewares() {
@@ -48,6 +60,7 @@ class App {
 
   private routes() {
     this.app.use("/api/v1", this.mainRoutes.getRouter);
+
     this.app.use((_req, _res, next) => {
       next(new NotfoundError("Endpoint não encontrado"));
     });
@@ -58,7 +71,8 @@ class App {
   }
 
   private init() {
-    this.jobs()
+    this.jobs();
+    this.docs();
     this.middlewares();
     this.routes();
     this.handlers();

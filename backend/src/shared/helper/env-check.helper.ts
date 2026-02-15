@@ -7,6 +7,7 @@ export function envCheck() {
   const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
   const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
   const NODE_ENV = process.env.NODE_ENV;
+  const OPENAPI_URL = process.env.OPENAPI_URL;
 
   if (!PORT) {
     throw new Error("Env PORT não foi definido");
@@ -40,6 +41,10 @@ export function envCheck() {
     throw new Error("Env NODE_ENV não foi definido");
   }
 
+  if (!OPENAPI_URL) {
+    throw new Error("Env OPENAPI_URL não foi definido");
+  }
+
   return {
     PORT,
     DB_FILE_NAME,
@@ -49,5 +54,6 @@ export function envCheck() {
     ADMIN_EMAIL,
     ADMIN_PASSWORD,
     NODE_ENV,
+    OPENAPI_URL,
   };
 }
