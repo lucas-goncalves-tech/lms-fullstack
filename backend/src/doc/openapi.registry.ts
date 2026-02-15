@@ -10,4 +10,4 @@ registry.registerComponent("securitySchemes", "cookieAuth", {
   description: "JWT access token enviado automaticamente via cookie HTTP-only",
 });
 
-export default registry;
+export { registry };
