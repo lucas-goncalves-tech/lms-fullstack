@@ -62,32 +62,31 @@
 
 #### `POST /api/auth/register`
 
-- [ ] **TEST**: should create user with valid data
-- [ ] **TEST**: should return 400 when email is invalid
-- [ ] **TEST**: should return 400 when password is too short
-- [ ] **TEST**: should return 400 when name is empty
-- [ ] **TEST**: should return 409 when email already exists
-- [ ] **TEST**: should hash password before saving
+- [x] **TEST**: should create user with valid data
+- [x] **TEST**: should return 400 when email is invalid
+- [x] **TEST**: should return 400 when password is too short
+- [x] **TEST**: should return 400 when name is empty
+- [x] **TEST**: should return 409 when email already exists
+- [x] **TEST**: should hash password before saving
 
 #### `POST /api/auth/login`
 
-- [ ] **TEST**: should authenticate with valid credentials
-- [ ] **TEST**: should return 401 when email not found
-- [ ] **TEST**: should return 401 when password is incorrect
-- [ ] **TEST**: should return 400 when email format is invalid
-- [ ] **TEST**: should set session cookie on success
+- [x] **TEST**: should authenticate with valid credentials
+- [x] **TEST**: should return 401 when email not found
+- [x] **TEST**: should return 401 when password is incorrect
+- [x] **TEST**: should return 400 when email format is invalid
+- [x] **TEST**: should set session cookie on success
 
 #### `GET /api/auth/me`
 
-- [ ] **TEST**: should return user data when authenticated
-- [ ] **TEST**: should return 401 when not authenticated
-- [ ] **TEST**: should return 401 when session is expired
+- [x] **TEST**: should return user data when authenticated
+- [x] **TEST**: should return 401 when not authenticated
+- [x] **TEST**: should return 401 when session is expired
 
 #### `DELETE /api/auth/logout`
 
-- [ ] **TEST**: should clear session cookie on logout
-- [ ] **TEST**: should return 401 when not authenticated
-- [ ] **TEST**: should return 204 on success
+- [x] **TEST**: should clear session cookie on logout
+- [x] **TEST**: should return 401 when not authenticated
 
 ---
 
@@ -95,19 +94,19 @@
 
 #### `PUT /api/user/password/update`
 
-- [ ] **TEST**: should update password with valid current password
-- [ ] **TEST**: should return 400 when current password is incorrect
-- [ ] **TEST**: should return 400 when new password is too short
-- [ ] **TEST**: should return 401 when not authenticated
-- [ ] **TEST**: should hash new password before saving
+- [x] **TEST**: should update password with valid current password
+- [x] **TEST**: should return 400 when current password is incorrect
+- [x] **TEST**: should return 400 when new password is too short
+- [x] **TEST**: should return 401 when not authenticated
+- [x] **TEST**: should hash new password before saving
 
 #### `PUT /api/user/email/update`
 
-- [ ] **TEST**: should update email with valid data
-- [ ] **TEST**: should return 400 when email format is invalid
-- [ ] **TEST**: should return 409 when email already exists
-- [ ] **TEST**: should return 401 when not authenticated
-- [ ] **TEST**: should require password confirmation
+- [x] **TEST**: should update email with valid data
+- [x] **TEST**: should return 400 when email format is invalid
+- [x] **TEST**: should return 409 when email already exists
+- [x] **TEST**: should return 401 when not authenticated
+- [x] **TEST**: should require password confirmation
 
 ---
 

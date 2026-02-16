@@ -8,9 +8,9 @@ import { SessionsService } from "../sessions/sessions.service";
 import { UserService } from "./user.service";
 import { noCacheMiddleware } from "../../shared/middlewares/no-cache.middleware";
 import { validateMiddleware } from "../../shared/middlewares/validate.middleware";
-import { updatePasswordSchema } from "./dto/update-password.dto";
+import { updatePasswordDto } from "./dto/update-password.dto";
 import { rateLimitMiddleware } from "../../shared/middlewares/rate-limit.middleware";
-import { updateEmailSchema } from "./dto/update-email.dto";
+import { updateEmailDto } from "./dto/update-email.dto";
 
 export class UserRoutes {
   private readonly controller: UserController;
@@ -34,12 +34,12 @@ export class UserRoutes {
     this.router.use(noCacheMiddleware);
     this.router.put(
       "/password/update",
-      validateMiddleware({ body: updatePasswordSchema }),
+      validateMiddleware({ body: updatePasswordDto }),
       this.controller.updatePassword
     );
     this.router.put(
       "/email/update",
-      validateMiddleware({ body: updateEmailSchema }),
+      validateMiddleware({ body: updateEmailDto }),
       this.controller.updateEmail
     );
   }

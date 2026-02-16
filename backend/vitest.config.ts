@@ -10,7 +10,7 @@ export default defineConfig({
       reporter: ["text", "json", "json-summary"],
       reportOnFailure: true,
     },
-    include: ["src/**/*.spec.ts"],
+    include: ["src/**/specs/*.spec.ts"],
     env: {
       NODE_ENV: "test",
     },

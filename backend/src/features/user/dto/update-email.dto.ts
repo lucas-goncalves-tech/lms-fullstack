@@ -1,8 +1,8 @@
 import { z } from "zod";
 import { zodSafeEmail } from "../../../shared/validators/email.validator";
 
-export const updateEmailSchema = z.strictObject({
+export const updateEmailDto = z.strictObject({
   email: zodSafeEmail(),
 });
 
-export type UpdateEmailDTO = z.infer<typeof updateEmailSchema>;
+export type UpdateEmailDTO = z.infer<typeof updateEmailDto>;

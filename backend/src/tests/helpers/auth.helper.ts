@@ -2,6 +2,7 @@ import { agent } from "supertest";
 import { createUser } from "../factory/user.factory";
 import { app_tests } from "../setup";
 
+// default password is password123
 export const loginWithUser = async (role: "USER" | "ADMIN" = "USER") => {
   const email = role === "USER" ? "user@test.com" : "admin@test.com";
   const user = await createUser({ email, role });

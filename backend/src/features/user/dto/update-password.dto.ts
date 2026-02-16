@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { zodPasswordValidator } from "../../../shared/validators/common-fields.validator";
 
-export const updatePasswordSchema = z
+export const updatePasswordDto = z
   .strictObject({
     currentPassword: zodPasswordValidator("Senha atual"),
     newPassword: zodPasswordValidator("Nova senha"),
@@ -16,4 +16,4 @@ export const updatePasswordSchema = z
     path: ["confirmPassword"],
   });
 
-export type UpdatePasswordDto = z.infer<typeof updatePasswordSchema>;
+export type UpdatePasswordDto = z.infer<typeof updatePasswordDto>;
