@@ -1,5 +1,5 @@
 import z from "zod";
 
-export const createUserResponseSchema = z.object({
+export const createUserResponse = z.object({
   message: z.string(),
 });

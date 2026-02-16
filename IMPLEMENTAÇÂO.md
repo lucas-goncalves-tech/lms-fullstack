@@ -116,15 +116,15 @@
 
 #### `GET /api/courses`
 
-- [ ] **3.1.1** Documentar schema de response (lista de cursos com progresso)
-- [ ] **3.1.2** Documentar schema de Course (campos: id, title, slug, description, thumbnail, totalLessons, completedLessons, progress)
-- [ ] **3.1.3** Adicionar exemplos de response
+- [x] **3.1.1** Documentar schema de response (lista de cursos com progresso)
+- [x] **3.1.2** Documentar schema de Course (campos: id, title, slug, description, thumbnail, totalLessons, completedLessons, progress)
+- [x] **3.1.3** Adicionar exemplos de response
 
 #### `GET /api/courses/:courseSlug`
 
-- [ ] **3.1.4** Documentar parâmetro de path (`courseSlug`)
-- [ ] **3.1.5** Documentar schema de response (200, 404)
-- [ ] **3.1.6** Documentar schema de CourseDetail (com lessons)
+- [x] **3.1.4** Documentar parâmetro de path (`courseSlug`)
+- [x] **3.1.5** Documentar schema de response (200, 404)
+- [x] **3.1.6** Documentar schema de CourseDetail (com lessons)
 
 ---
 

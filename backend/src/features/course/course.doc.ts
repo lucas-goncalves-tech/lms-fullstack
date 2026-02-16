@@ -1,13 +1,13 @@
 import { notFoundResponse, unauthorizedResponse } from "../../doc/errors/errors";
 import { registry } from "../../doc/openapi.registry";
 import { findLessonParamsSchema } from "../lessons/dto/lesson-params.dto";
-import { findCourseSchema } from "./dto/course.dto";
+import { findCourseResponse } from "./dto/course.dto";
 
 registry.registerPath({
   path: "/courses",
+  security: [{ cookieAuth: [] }],
   method: "get",
   summary: "Lista de cursos com progresso",
-  security: [{ cookieAuth: [] }],
   tags: ["Courses"],
   responses: {
     200: {
@@ -24,9 +24,9 @@ registry.registerPath({
 
 registry.registerPath({
   path: "/courses/{courseSlug}",
+  security: [{ cookieAuth: [] }],
   method: "get",
   summary: "Detalhes de um curso pelo slug",
-  security: [{ cookieAuth: [] }],
   tags: ["Courses"],
   parameters: [
     {
@@ -43,7 +43,7 @@ registry.registerPath({
       description: "Lista de cursos",
       content: {
         "application/json": {
-          schema: findCourseSchema,
+          schema: findCourseResponse,
         },
       },
     },

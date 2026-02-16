@@ -1,6 +1,6 @@
 import z from "zod";
 
-export const findCourseSchema = z.object({
+export const findCourseResponse = z.object({
   id: z.string().nullable(),
   slug: z.string().nullable(),
   title: z.string().nullable(),
@@ -10,8 +10,8 @@ export const findCourseSchema = z.object({
   totalLessons: z.number().nullable(),
 });
 
-export const findManyWithProgressDto = z.array(
-  findCourseSchema.extend({
+export const findManyWithProgressResponse = z.array(
+  findCourseResponse.extend({
     completedLessons: z.number().nullable(),
   })
 );

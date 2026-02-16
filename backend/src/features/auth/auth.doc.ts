@@ -5,14 +5,14 @@ import {
   unauthorizedResponse,
 } from "../../doc/errors/errors";
 import { registry } from "../../doc/openapi.registry";
-import { createUserResponseSchema } from "./dto/auth.dto";
+import { createUserResponse } from "./dto/auth.dto";
 import { createUserDto } from "./dto/create-user.dto";
 import { loginUserDto } from "./dto/login-user.dto";
 
 registry.registerPath({
+  path: "/auth/register",
   method: "post",
   tags: ["Auth"],
-  path: "/auth/register",
   summary: "Cria um novo usuário",
   request: {
     body: {
@@ -34,7 +34,7 @@ registry.registerPath({
       description: "Usuário criado com sucesso!",
       content: {
         "application/json": {
-          schema: createUserResponseSchema,
+          schema: createUserResponse,
         },
       },
     },
@@ -45,9 +45,9 @@ registry.registerPath({
 });
 
 registry.registerPath({
+  path: "/auth/login",
   method: "post",
   tags: ["Auth"],
-  path: "/auth/login",
   summary: "Realiza login de um usuário",
   request: {
     body: {
@@ -72,17 +72,17 @@ registry.registerPath({
 });
 
 registry.registerPath({
+  path: "/auth/me",
+  security: [{ cookieAuth: [] }],
   method: "get",
   tags: ["Auth"],
-  path: "/auth/me",
   summary: "Retorna as informações do usuário autenticado",
-  security: [{ cookieAuth: [] }],
   responses: {
     200: {
       description: "Usuário autenticado!",
       content: {
         "application/json": {
-          schema: createUserResponseSchema,
+          schema: createUserResponse,
         },
       },
     },
@@ -91,11 +91,11 @@ registry.registerPath({
 });
 
 registry.registerPath({
+  path: "/auth/logout",
+  security: [{ cookieAuth: [] }],
   method: "delete",
   tags: ["Auth"],
-  path: "/auth/logout",
   summary: "Realiza logout de um usuário",
-  security: [{ cookieAuth: [] }],
   responses: {
     204: {
       description: "Logout realizado com sucesso!",

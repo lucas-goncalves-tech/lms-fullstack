@@ -1,6 +1,7 @@
 import "./features/auth/auth.doc";
 import "./features/user/user.doc";
 import "./features/course/course.doc";
+import "./features/lessons/lesson.doc";
 
 import { Router } from "express";
 import { DataBase } from "./db";

@@ -92,7 +92,7 @@ export class LessonService {
       course.id
     );
     if (!deleteCertificateResult) {
-      throw new BadRequestError("Certificado do curso não encontrado");
+      throw new NotfoundError("Certificado do curso não encontrado");
     }
   }
 
