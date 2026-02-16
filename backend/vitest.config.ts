@@ -14,7 +14,6 @@ export default defineConfig({
     env: {
       NODE_ENV: "test",
     },
-    maxWorkers: 1,
     setupFiles: ["./src/tests/setup.ts"],
   },
 });

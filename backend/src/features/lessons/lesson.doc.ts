@@ -178,7 +178,7 @@ registry.registerPath({
 });
 
 registry.registerPath({
-  path: "/lessons/{courseSlug}",
+  path: "/lessons/{courseSlug}/reset",
   method: "delete",
   security: [{ cookieAuth: [] }],
   tags: ["Lessons"],

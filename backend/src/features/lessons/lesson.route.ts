@@ -51,7 +51,7 @@ export class LessonRoutes {
       this.controller.videoStreaming
     );
     this.router.delete(
-      "/",
+      "/reset",
       validateMiddleware({ params: courseSlugParamsSchema }),
       this.controller.resetCourseCompleted
     );

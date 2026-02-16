@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import chalk from "chalk";
+import { envCheck } from "../helper/env-check.helper";
 
 /**
  * Middleware de log para requisições HTTP
@@ -7,6 +8,7 @@ import chalk from "chalk";
  * + Body, Params e Query quando presentes
  */
 export const logMiddleware = (req: Request, res: Response, next: NextFunction) => {
+  if (envCheck().NODE_ENV === "test") return next();
   const startTime = Date.now();
 
   // Captura quando a resposta termina

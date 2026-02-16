@@ -12,6 +12,10 @@ export class LessonService {
   ) {}
 
   async findManyByCourseSlug(userId: string, courseSlug: string) {
+    const course = await this.courseRepository.findBySlug(courseSlug);
+    if (!course) {
+      throw new NotfoundError("Curso não encontrado");
+    }
     const lessons = await this.lessonRepository.findManyByCourseSlugWithProgress(
       userId,
       courseSlug
@@ -30,7 +34,7 @@ export class LessonService {
     const prevLesson = lessonNav[i - 1]?.slug ?? null;
     const nextLesson = lessonNav[i + 1]?.slug ?? null;
 
-    let completed = "";
+    let completed = null;
     const whenComplete = await this.lessonRepository.findWhenLessonCompleted(
       userId,
       lesson.courseId,

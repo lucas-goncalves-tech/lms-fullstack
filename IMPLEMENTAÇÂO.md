@@ -186,35 +186,35 @@
 
 ### 4.2 Lessons Tests
 
-#### `GET /api/courses/:courseSlug/lessons`
+#### `GET /api/lessons/:courseSlug`
 
 - [ ] **TEST**: should return lessons for course
 - [ ] **TEST**: should return 404 when course not found
 - [ ] **TEST**: should return lessons ordered by order field
 - [ ] **TEST**: should mark completed lessons correctly
 
-#### `GET /api/courses/:courseSlug/lessons/:lessonSlug`
+#### `GET /api/lessons/:courseSlug/:lessonSlug`
 
 - [ ] **TEST**: should return lesson details
 - [ ] **TEST**: should return 404 when lesson not found
 - [ ] **TEST**: should return 404 when course not found
 - [ ] **TEST**: should include videoUrl in response
 
-#### `GET /api/courses/:courseSlug/lessons/:lessonSlug/video`
+#### `GET /api/lessons/:courseSlug/:lessonSlug/video`
 
 - [ ] **TEST**: should stream video file
 - [ ] **TEST**: should support range requests (206 Partial Content)
 - [ ] **TEST**: should return 404 when video file not found
 - [ ] **TEST**: should set correct content-type header
 
-#### `GET /api/courses/:courseSlug/lessons/:lessonSlug/complete`
+#### `GET /api/lessons/:courseSlug/:lessonSlug/complete`
 
 - [ ] **TEST**: should mark lesson as completed
 - [ ] **TEST**: should update course progress
 - [ ] **TEST**: should generate certificate when course 100% completed
 - [ ] **TEST**: should not duplicate completion record
 
-#### `DELETE /api/courses/:courseSlug/lessons`
+#### `DELETE /api/lessons/:courseSlug`
 
 - [ ] **TEST**: should reset all lessons progress
 - [ ] **TEST**: should delete all completion records
