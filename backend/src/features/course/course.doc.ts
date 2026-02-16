@@ -1,7 +1,6 @@
 import { notFoundResponse, unauthorizedResponse } from "../../doc/errors/errors";
 import { registry } from "../../doc/openapi.registry";
-import { findLessonParamsSchema } from "../lessons/dto/lesson-params.dto";
-import { findCourseResponse } from "./dto/course.dto";
+import { findCourseResponse, findManyWithProgressResponse } from "./dto/course.dto";
 
 registry.registerPath({
   path: "/courses",
@@ -14,7 +13,7 @@ registry.registerPath({
       description: "Lista de cursos",
       content: {
         "application/json": {
-          schema: findLessonParamsSchema,
+          schema: findManyWithProgressResponse,
         },
       },
     },

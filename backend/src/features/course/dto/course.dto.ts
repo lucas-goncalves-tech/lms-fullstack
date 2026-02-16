@@ -15,3 +15,5 @@ export const findManyWithProgressResponse = z.array(
     completedLessons: z.number().nullable(),
   })
 );
+
+export type FindCourseResponse = z.infer<typeof findCourseResponse>;

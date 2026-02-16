@@ -130,36 +130,36 @@
 
 ### 3.2 Lessons Endpoints - Documentação
 
-#### `GET /api/courses/:courseSlug/lessons`
+#### `GET /api/lessons/:courseSlug`
 
-- [ ] **3.2.1** Documentar parâmetro de path (`courseSlug`)
-- [ ] **3.2.2** Documentar schema de response (lista de lessons)
-- [ ] **3.2.3** Documentar schema de Lesson (id, title, slug, description, duration, isCompleted, order)
+- [x] **3.2.1** Documentar parâmetro de path (`courseSlug`)
+- [x] **3.2.2** Documentar schema de response (lista de lessons)
+- [x] **3.2.3** Documentar schema de Lesson (id, title, slug, description, duration, isCompleted, order)
 
-#### `GET /api/courses/:courseSlug/lessons/:lessonSlug`
+#### `GET /api/lessons/:courseSlug/:lessonSlug`
 
-- [ ] **3.2.4** Documentar parâmetros de path (`courseSlug`, `lessonSlug`)
-- [ ] **3.2.5** Documentar schema de response (200, 404)
-- [ ] **3.2.6** Documentar schema de LessonDetail (com videoUrl, resources)
+- [x] **3.2.4** Documentar parâmetros de path (`courseSlug`, `lessonSlug`)
+- [x] **3.2.5** Documentar schema de response (200, 404)
+- [x] **3.2.6** Documentar schema de LessonDetail (com videoUrl, resources)
 
-#### `GET /api/courses/:courseSlug/lessons/:lessonSlug/video`
+#### `GET /api/lessons/:courseSlug/:lessonSlug/video`
 
-- [ ] **3.2.7** Documentar parâmetros de path
-- [ ] **3.2.8** Documentar header `Range` para streaming
-- [ ] **3.2.9** Documentar response 206 (Partial Content) e 200
-- [ ] **3.2.10** Documentar content-type `video/mp4`
+- [x] **3.2.7** Documentar parâmetros de path
+- [x] **3.2.8** Documentar header `Range` para streaming
+- [x] **3.2.9** Documentar response 206 (Partial Content) e 200
+- [x] **3.2.10** Documentar content-type `video/mp4`
 
-#### `GET /api/courses/:courseSlug/lessons/:lessonSlug/complete`
+#### `GET /api/lessons/:courseSlug/:lessonSlug/complete`
 
-- [ ] **3.2.11** Documentar parâmetros de path
-- [ ] **3.2.12** Documentar schema de response (200 com progresso atualizado)
-- [ ] **3.2.13** Documentar geração automática de certificado quando 100%
+- [x] **3.2.11** Documentar parâmetros de path
+- [x] **3.2.12** Documentar schema de response (200 com progresso atualizado)
+- [x] **3.2.13** Documentar geração automática de certificado quando 100%
 
-#### `DELETE /api/courses/:courseSlug/lessons`
+#### `DELETE /api/lessons/:courseSlug`
 
-- [ ] **3.2.14** Documentar parâmetro de path (`courseSlug`)
-- [ ] **3.2.15** Documentar schema de response (204)
-- [ ] **3.2.16** Documentar que reseta todo o progresso do curso
+- [x] **3.2.14** Documentar parâmetro de path (`courseSlug`)
+- [x] **3.2.15** Documentar schema de response (204)
+- [x] **3.2.16** Documentar que reseta todo o progresso do curso
 
 ---
 
@@ -169,18 +169,18 @@
 
 #### `GET /api/courses`
 
-- [ ] **TEST**: should return list of courses with progress
-- [ ] **TEST**: should return empty array when no courses
-- [ ] **TEST**: should return 401 when not authenticated
-- [ ] **TEST**: should calculate progress correctly (completed/total lessons)
-- [ ] **TEST**: should return courses ordered by createdAt
+- [x] **TEST**: should return list of courses with progress
+- [x] **TEST**: should return empty array when no courses
+- [x] **TEST**: should return 401 when not authenticated
+- [x] **TEST**: should calculate progress correctly (completed/total lessons)
+- [x] **TEST**: should return courses ordered by createdAt
 
 #### `GET /api/courses/:courseSlug`
 
-- [ ] **TEST**: should return course details by slug
-- [ ] **TEST**: should return 404 when course not found
-- [ ] **TEST**: should return 401 when not authenticated
-- [ ] **TEST**: should include lessons array in response
+- [x] **TEST**: should return course details by slug
+- [x] **TEST**: should return 404 when course not found
+- [x] **TEST**: should return 401 when not authenticated
+- [x] **TEST**: should include lessons array in response
 
 ---
 
