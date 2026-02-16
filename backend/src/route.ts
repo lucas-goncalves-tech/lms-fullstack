@@ -1,5 +1,6 @@
-import "./features/auth/auth.docs";
-import "./features/user/user.docs";
+import "./features/auth/auth.doc";
+import "./features/user/user.doc";
+import "./features/course/course.doc";
 
 import { Router } from "express";
 import { DataBase } from "./db";
