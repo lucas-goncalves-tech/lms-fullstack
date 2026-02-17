@@ -2,6 +2,7 @@ import "./features/auth/auth.doc";
 import "./features/user/user.doc";
 import "./features/course/course.doc";
 import "./features/lessons/lesson.doc";
+import "./features/certificates/certificate.doc";
 
 import { Router } from "express";
 import { DataBase } from "./db";
@@ -13,7 +14,7 @@ import { SessionsService } from "./features/sessions/sessions.service";
 import { SessionsRepository } from "./features/sessions/sessions.repository";
 import { UserRepository } from "./features/user/user.repository";
 import { CryptoService } from "./shared/security/crypto-service.security";
-import { CertificatesRoutes } from "./features/certificates/certificates.routes";
+import { CertificatesRoutes } from "./features/certificates/certificate.routes";
 import { AdminRoutes } from "./features/admin/admin.routes";
 import { UserRoutes } from "./features/user/user.routes";
 

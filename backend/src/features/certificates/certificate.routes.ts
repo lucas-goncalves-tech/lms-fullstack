@@ -1,8 +1,8 @@
 import { DataBase } from "../../db";
 import { validateMiddleware } from "../../shared/middlewares/validate.middleware";
 import { CertificateRepository } from "./certificate.repository";
-import { CertificatesController } from "./certificates.controller";
-import { CertificatesService } from "./certificates.service";
+import { CertificatesController } from "./certificate.controller";
+import { CertificatesService } from "./certificate.service";
 import { Router } from "express";
 import { certificateIdParamsDto } from "./dto/certificate-params.dto";
 import { ValidateSessionMiddleware } from "../../shared/middlewares/validate-session.middleware";
@@ -29,7 +29,11 @@ export class CertificatesRoutes {
   }
 
   private initRoutes() {
-    this.router.get("/", this.validateSessionMiddleware.validateSession, this.controller.findManyCertificatesByUserId);
+    this.router.get(
+      "/",
+      this.validateSessionMiddleware.validateSession,
+      this.controller.findManyCertificatesByUserId
+    );
     this.router.get(
       "/:certificateId",
       validateMiddleware({ params: certificateIdParamsDto }),

@@ -1,9 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { req } from "../../../tests/setup";
+import { and, eq } from "drizzle-orm";
+import { req, db_tests } from "../../../tests/setup";
 import { loginWithUser } from "../../../tests/helpers/auth.helper";
 import { createCourse } from "../../../tests/factory/course.factory";
 import { createLesson } from "../../../tests/factory/lesson.factory";
 import { LessonResponse, FindLessonBySlugResponse } from "../dto/lesson.dto";
+import { lessonsCompleted, certificates } from "../../../db/schema";
 
 function expectFindManyByCourseSlugShape(overrides?: Partial<LessonResponse>) {
   return {
@@ -134,39 +136,98 @@ describe("Lesson Integration Tests", () => {
     });
   });
 
-  describe.todo("GET /api/v1/lessons/:courseSlug/:lessonSlug/complete", () => {
+  describe("GET /api/v1/lessons/:courseSlug/:lessonSlug/complete", () => {
     it("should mark lesson as completed", async () => {
-      // TODO: Implement test
+      const { reqAgent } = await loginWithUser();
+      const course = createCourse();
+      const lesson = createLesson(course.id);
+
+      const { body } = await reqAgent
+        .get(`${BASE_URL}/${course.slug}/${lesson.slug}/complete`)
+        .expect(200);
+
+      expect(body).toHaveProperty("completed");
+      expect(body.completed).toBeDefined();
     });
 
     it("should update course progress", async () => {
-      // TODO: Implement test
+      const { reqAgent, user } = await loginWithUser();
+      const course = createCourse();
+      const lesson = createLesson(course.id);
+
+      await reqAgent.get(`${BASE_URL}/${course.slug}/${lesson.slug}/complete`).expect(200);
+
+      const progress = db_tests.connection
+        .select()
+        .from(lessonsCompleted)
+        .where(and(eq(lessonsCompleted.userId, user.id), eq(lessonsCompleted.lessonId, lesson.id)))
+        .get();
+
+      expect(progress).toBeDefined();
+      expect(progress?.completed).toBeDefined();
     });
 
     it("should generate certificate when course 100% completed", async () => {
-      // TODO: Implement test
+      const { reqAgent, user } = await loginWithUser();
+      const course = createCourse();
+      const lesson1 = createLesson(course.id, { slug: "lesson-1", order: 1 });
+      const lesson2 = createLesson(course.id, { slug: "lesson-2", order: 2 });
+
+      await reqAgent.get(`${BASE_URL}/${course.slug}/${lesson1.slug}/complete`).expect(200);
+
+      const { body } = await reqAgent
+        .get(`${BASE_URL}/${course.slug}/${lesson2.slug}/complete`)
+        .expect(200);
+
+      expect(body.hasCertificate).toBeTruthy();
+      expect(typeof body.hasCertificate).toBe("string");
+
+      const certificate = db_tests.connection
+        .select()
+        .from(certificates)
+        .where(and(eq(certificates.userId, user.id), eq(certificates.courseId, course.id)))
+        .get();
+
+      expect(certificate).toBeDefined();
+      expect(certificate?.id).toBe(body.hasCertificate);
     });
 
     it("should not duplicate completion record", async () => {
-      // TODO: Implement test
+      const { reqAgent, user } = await loginWithUser();
+      const course = createCourse();
+      const lesson = createLesson(course.id);
+
+      await reqAgent.get(`${BASE_URL}/${course.slug}/${lesson.slug}/complete`).expect(200);
+
+      await reqAgent.get(`${BASE_URL}/${course.slug}/${lesson.slug}/complete`).expect(400);
+
+      const completions = db_tests.connection
+        .select()
+        .from(lessonsCompleted)
+        .where(and(eq(lessonsCompleted.userId, user.id), eq(lessonsCompleted.lessonId, lesson.id)))
+        .all();
+
+      expect(completions).toHaveLength(1);
+    });
+
+    it("should return 401 when is nonauthenticated", async () => {
+      const { body } = await req
+        .get(`${BASE_URL}/non-existent-course/non-existent-lesson/complete`)
+        .expect(401);
+
+      expect(body).toHaveProperty("message");
     });
   });
 
   describe.todo("DELETE /api/v1/lessons/:courseSlug/reset", () => {
-    it("should reset all lessons progress", async () => {
-      // TODO: Implement test
-    });
+    it.todo("should reset all lessons progress", async () => {});
 
-    it("should delete all completion records", async () => {
-      // TODO: Implement test
-    });
+    it.todo("should delete all completion records", async () => {});
 
-    it("should return 204 on success", async () => {
-      // TODO: Implement test
-    });
+    it.todo("should return 204 on success", async () => {});
 
-    it("should return 404 when course not found", async () => {
-      // TODO: Implement test
-    });
+    it.todo("should return 404 when course not found", async () => {});
+
+    it.todo("should return 401 when is nonauthenticated", async () => {});
   });
 });
