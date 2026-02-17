@@ -229,16 +229,16 @@
 
 #### `GET /api/certificates`
 
-- [ ] **5.1.1** Documentar schema de response (lista de certificados)
-- [ ] **5.1.2** Documentar schema de Certificate (id, courseName, issuedAt, pdfUrl)
-- [ ] **5.1.3** Adicionar exemplos de response
+- [x] **5.1.1** Documentar schema de response (lista de certificados)
+- [x] **5.1.2** Documentar schema de Certificate (id, courseName, issuedAt, pdfUrl)
+- [x] **5.1.3** Adicionar exemplos de response
 
 #### `GET /api/certificates/:certificateId`
 
-- [ ] **5.1.4** Documentar parâmetro de path (`certificateId`)
-- [ ] **5.1.5** Documentar schema de response (200, 404)
-- [ ] **5.1.6** Documentar que retorna PDF do certificado
-- [ ] **5.1.7** Documentar content-type `application/pdf`
+- [x] **5.1.4** Documentar parâmetro de path (`certificateId`)
+- [x] **5.1.5** Documentar schema de response (200, 404)
+- [x] **5.1.6** Documentar que retorna PDF do certificado
+- [x] **5.1.7** Documentar content-type `application/pdf`
 
 ---
 
