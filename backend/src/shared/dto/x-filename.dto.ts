@@ -2,8 +2,6 @@
 import z from "zod";
 import path from "path";
 
-const ALLOWED_EXTENSIONS = [".mp4", ".webm", ".mov", ".avi"];
-
 export const xFilenameSchema = z
   .string()
   .min(1, "Nome do arquivo é obrigatório")

@@ -11,7 +11,7 @@ import { logMiddleware } from "./shared/middlewares/log.middleware";
 import { apiReference } from "@scalar/express-api-reference";
 import { generateOpenAPISpec } from "./doc/openapi.generator";
 import { CleanUpSessionsExpiresJob } from "./jobs/cleanup-sessions-expires.job";
-import { envCheck } from "./shared/helper/env-check.helper";
+
 class App {
   public readonly app: express.Express;
   private readonly mainRoutes: MainRoutes;

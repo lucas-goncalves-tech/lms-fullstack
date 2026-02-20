@@ -17,6 +17,9 @@
     "docker:up": "docker compose up -d",
     "docker:down": "docker compose down",
     "docker:logs": "docker compose logs -f",
-    "logs:api": "docker compose logs api -f"
+    "logs:api": "docker compose logs api -f",
+    "lint:back": "npm run lint:fix --prefix backend",
+    "lint:front": "npm run lint:fix --prefix frontend",
+    "lint": "npm run lint:back && npm run lint:front"
   }
 }

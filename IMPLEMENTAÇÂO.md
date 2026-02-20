@@ -164,9 +164,9 @@
 
 [x] `PUT /api/admin/users/:userId/update`
 
-[ ] `DELETE /api/admin/users/:userId/delete`
+[x] `DELETE /api/admin/users/:userId/delete`
 
-[ ] `PATCH /api/admin/users/:userId/toggle-active`
+[x] `PATCH /api/admin/users/:userId/toggle-active`
 
 ---
 
@@ -174,9 +174,9 @@
 
 ### Qualidade
 
-- [ ] Rodar lint em todos os arquivos
-- [ ] Testar manualmente endpoints críticos no Scalar
-- [ ] Revisar tratamento de erros em todos os endpoints
+- [x] Rodar lint em todos os arquivos
+- [x] Testar manualmente endpoints críticos no Scalar
+- [x] Revisar tratamento de erros em todos os endpoints
 
 ---
 
@@ -186,57 +186,18 @@
 
 **Triggers:**
 
-- [ ] `name: CI/CD Pipeline`
-- [ ] `on: push` (branches: main, develop)
-- [ ] `on: pull_request` (branches: main)
+- [x] `name: CI/CD Pipeline`
+- [x] `on: push` (branches: main, develop)
+- [x] `on: pull_request` (branches: main)
 
 **Jobs:**
 
 #### Job: `backend-lint`
 
-- [ ] `name: Checkout repository`
-- [ ] `name: Setup Node.js`
-- [ ] `name: Install backend dependencies`
-- [ ] `name: Run ESLint`
-
-#### Job: `frontend-lint-and-build`
-
-- [ ] `name: Checkout repository`
-- [ ] `name: Setup Node.js`
-- [ ] `name: Install frontend dependencies`
-- [ ] `name: Run ESLint`
-- [ ] `name: Run TypeScript check`
-- [ ] `name: Build frontend`
-
----
-
-### Arquivo: `.github/workflows/deploy.yml` (Production)
-
-**Triggers:**
-
-- [ ] `name: Deploy to Production`
-- [ ] `on: workflow_dispatch` (manual)
-- [ ] `on: push` (tags: 'v\*')
-
-**Jobs:**
-
-#### Job: `deploy-backend`
-
-- [ ] `name: Checkout repository`
-- [ ] `name: Setup Node.js`
-- [ ] `name: Install dependencies`
-- [ ] `name: Build application`
-- [ ] `name: Deploy to Railway/Render`
-- [ ] `name: Verify deployment health`
-
-#### Job: `deploy-frontend`
-
-- [ ] `name: Checkout repository`
-- [ ] `name: Setup Node.js`
-- [ ] `name: Install dependencies`
-- [ ] `name: Build for production`
-- [ ] `name: Deploy to Vercel`
-- [ ] `name: Purge CDN cache`
+- [x] `name: Checkout repository`
+- [x] `name: Setup Node.js`
+- [x] `name: Install backend dependencies`
+- [x] `name: Run ESLint`
 
 ---
 
