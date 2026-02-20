@@ -13,7 +13,7 @@ export class AdminController {
   constructor(
     private readonly adminService: AdminService,
     private readonly uploadService: UploadService
-  ) {}
+  ) { }
 
   // Courses
   findManyCourses = async (_req: Request, res: Response) => {
@@ -48,6 +48,12 @@ export class AdminController {
   };
 
   // Lessons
+  findManyLessons = async (req: Request, res: Response) => {
+    const { courseSlug } = req.params;
+    const result = await this.adminService.findManyLessons(courseSlug);
+    res.status(200).json(result);
+  };
+
   createLesson = async (req: Request, res: Response) => {
     const lessonData = req.body as CreateLessonDTO;
     const { courseSlug } = req.params;
@@ -58,13 +64,19 @@ export class AdminController {
     });
   };
 
+  uploadVideo = async (req: Request, res: Response) => {
+    const fileName = req.headers["x-filename"] as string;
+    const path = await this.uploadService.save(req, fileName);
+    res.status(200).json(path);
+  };
+
   updateLesson = async (req: Request, res: Response) => {
     const lessonData = req.body as UpdateLessonDTO;
     const { courseSlug, lessonSlug } = req.params;
     const { title } = await this.adminService.updateLesson(courseSlug, lessonSlug, lessonData);
 
     res.status(201).json({
-      message: `Aula ${title} criada com sucesso!`,
+      message: `Aula ${title} atualizada com sucesso!`,
     });
   };
 
@@ -75,11 +87,6 @@ export class AdminController {
     res.status(204).json();
   };
 
-  findManyLessons = async (req: Request, res: Response) => {
-    const { courseSlug } = req.params;
-    const result = await this.adminService.findManyLessons(courseSlug);
-    res.status(200).json(result);
-  };
 
   // Users
   findManyUsers = async (req: Request, res: Response) => {
@@ -129,9 +136,5 @@ export class AdminController {
     res.status(204).json();
   };
 
-  uploadVideo = async (req: Request, res: Response) => {
-    const fileName = req.headers["x-filename"] as string;
-    const path = await this.uploadService.save(req, fileName);
-    res.status(200).json(path);
-  };
+
 }

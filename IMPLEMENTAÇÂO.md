@@ -140,41 +140,19 @@
 
 [x] `DELETE /api/admin/courses/:courseSlug/delete`
 
-[x] `PUT /api/admin/courses/:courseSlug/update`
-
-[x] `DELETE /api/admin/courses/:courseSlug/delete`
-
 ---
 
 ### 4.2 Admin Lessons - Documentação
 
-#### `GET /api/admin/lessons/:courseSlug`
+[x] `GET /api/admin/lessons/:courseSlug`
 
-- [ ] **4.2.1** Documentar parâmetro de path (`courseSlug`)
-- [ ] **4.2.2** Documentar schema de response (lista de lessons)
+[x] `POST /api/admin/lessons/:courseSlug/new`
 
-#### `POST /api/admin/lessons/:courseSlug/new`
+[x] `POST /api/admin/lessons/upload-video`
 
-- [ ] **4.2.3** Documentar schema de request (`createLessonSchema`)
-- [ ] **4.2.4** Documentar schema de response (201, 404, 409)
+[x] `PUT /api/admin/lessons/:courseSlug/:lessonSlug/update`
 
-#### `POST /api/admin/lessons/upload-video`
-
-- [ ] **4.2.5** Documentar header `x-filename`
-- [ ] **4.2.6** Documentar content-type `multipart/form-data` ou stream
-- [ ] **4.2.7** Documentar schema de response (200 com path e seconds)
-- [ ] **4.2.8** Documentar limite de tamanho (500MB)
-- [ ] **4.2.9** Documentar tipos permitidos (video/mp4, video/webm)
-
-#### `PUT /api/admin/lessons/:courseSlug/:lessonSlug/update`
-
-- [ ] **4.2.10** Documentar schema de request (`updateLessonSchema`)
-- [ ] **4.2.11** Documentar schema de response (200, 404)
-
-#### `DELETE /api/admin/lessons/:courseSlug/:lessonSlug/delete`
-
-- [ ] **4.2.12** Documentar schema de response (204, 404)
-- [ ] **4.2.13** Documentar que deleta arquivo de vídeo também
+[x] `DELETE /api/admin/lessons/:courseSlug/:lessonSlug/delete`
 
 ---
 

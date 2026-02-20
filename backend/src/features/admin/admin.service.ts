@@ -22,7 +22,7 @@ export class AdminService {
     private readonly userRepository: UserRepository,
     private readonly cryptoService: CryptoService,
     private readonly uploadService: UploadService
-  ) {}
+  ) { }
 
   // Courses
   async createCourse(courseData: ICreateCourseInput) {
@@ -54,6 +54,14 @@ export class AdminService {
   }
 
   // Lessons
+  async findManyLessons(courseSlug: string) {
+    const result = await this.lessonRepository.findManyByCourseSlug(courseSlug);
+    if (result.length === 0) {
+      throw new NotfoundError("Nenhuma aula encontrada");
+    }
+    return result;
+  }
+
   async createLesson(courseSlug: string, lessonData: CreateLessonDTO) {
     const course = await this.courseRepository.findBySlug(courseSlug);
     if (!course) {
@@ -118,13 +126,7 @@ export class AdminService {
     await this.uploadService.rm(lesson.video);
   }
 
-  async findManyLessons(courseSlug: string) {
-    const result = await this.lessonRepository.findManyByCourseSlug(courseSlug);
-    if (!result) {
-      throw new NotfoundError("Nenhuma aula encontrada");
-    }
-    return result;
-  }
+
 
   // Users
   async findManyUsers(query: UserQueryDTO) {
