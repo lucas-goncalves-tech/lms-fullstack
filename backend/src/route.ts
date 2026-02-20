@@ -3,6 +3,7 @@ import "./features/user/user.doc";
 import "./features/course/course.doc";
 import "./features/lessons/lesson.doc";
 import "./features/certificates/certificate.doc";
+import "./features/admin/admin.doc";
 
 import { Router } from "express";
 import { DataBase } from "./db";

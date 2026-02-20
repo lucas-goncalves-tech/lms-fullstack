@@ -132,26 +132,17 @@
 
 ### 4.1 Admin Courses - Documentação
 
-#### `GET /api/admin/courses`
+[x] `GET /api/admin/courses`
 
-- [ ] **4.1.1** Documentar schema de response (lista completa de cursos)
-- [ ] **4.1.2** Documentar schema AdminCourse (com stats: totalStudents, completionRate)
+[x] `POST /api/admin/courses/new`
 
-#### `POST /api/admin/courses/new`
+[x] `PUT /api/admin/courses/:courseSlug/update`
 
-- [ ] **4.1.3** Documentar schema de request (`createCourseSchema`)
-- [ ] **4.1.4** Documentar schema de response (201, 409, 400)
-- [ ] **4.1.5** Documentar requisito de role ADMIN
+[x] `DELETE /api/admin/courses/:courseSlug/delete`
 
-#### `PUT /api/admin/courses/:courseSlug/update`
+[x] `PUT /api/admin/courses/:courseSlug/update`
 
-- [ ] **4.1.6** Documentar schema de request (`updateCourseSchema`)
-- [ ] **4.1.7** Documentar schema de response (200, 404)
-
-#### `DELETE /api/admin/courses/:courseSlug/delete`
-
-- [ ] **4.1.8** Documentar schema de response (204, 404)
-- [ ] **4.1.9** Documentar que deleta em cascata (lessons, videos, progressos)
+[x] `DELETE /api/admin/courses/:courseSlug/delete`
 
 ---
 
