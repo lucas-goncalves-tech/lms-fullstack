@@ -35,7 +35,7 @@ export class CryptoService {
     keyLength: 32,
     separator: "$",
     params: {
-      N: 2 ** 14,
+      N: process.env.NODE_ENV === "test" ? 1024 : 2 ** 14,
       r: 8,
       p: 1,
     },
@@ -46,8 +46,8 @@ export class CryptoService {
   private readonly NORM: Normalize = "NFC";
   private readonly ENCODE: BufferEncoding = "hex";
   private readonly ALGORITHM: Algorithm = "sha256";
-  
-  
+
+
 
   private parseHash(storedHash: string) {
     const [stored_salt_hex, stored_dk_hex] = storedHash.split(this.SCRYPT_CONFIG.separator);

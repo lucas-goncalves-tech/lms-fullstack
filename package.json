@@ -12,10 +12,11 @@
   },
   "license": "ISC",
   "author": "Drummonds",
-  "type": "commonjs",
-  "main": "index.js",
   "scripts": {
     "test": "docker compose exec api npx vitest",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f",
     "logs:api": "docker compose logs api -f"
   }
 }

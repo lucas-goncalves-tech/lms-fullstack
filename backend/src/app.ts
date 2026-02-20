@@ -28,7 +28,6 @@ class App {
   }
 
   private jobs() {
-    if (envCheck().NODE_ENV === "test") return;
     this.cleanupSessionsExpires.start();
   }
 
