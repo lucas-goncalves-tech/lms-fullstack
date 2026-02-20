@@ -158,45 +158,19 @@
 
 ### 4.3 Admin Users - Documentação
 
-#### `GET /api/admin/users`
+[x] `GET /api/admin/users`
 
-- [ ] **4.3.1** Documentar query params (search, page, limit)
-- [ ] **4.3.2** Documentar schema de response (paginação)
-- [ ] **4.3.3** Documentar schema AdminUser (id, name, email, role, isActive, createdAt)
+[x] `POST /api/admin/users/new`
 
-#### `POST /api/admin/users/new`
+[x] `PUT /api/admin/users/:userId/update`
 
-- [ ] **4.3.4** Documentar schema de request (`adminCreateUserSchema`)
-- [ ] **4.3.5** Documentar schema de response (201, 409)
-- [ ] **4.3.6** Documentar que cria user com role ADMIN ou USER
+[ ] `DELETE /api/admin/users/:userId/delete`
 
-#### `PUT /api/admin/users/:userId/update`
-
-- [ ] **4.3.7** Documentar schema de request (`updateUserSchema`)
-- [ ] **4.3.8** Documentar schema de response (200, 404)
-- [ ] **4.3.9** Documentar que admin não pode mudar próprio role
-
-#### `PATCH /api/admin/users/:userId/toggle-active`
-
-- [ ] **4.3.10** Documentar schema de response (200 com novo status)
-- [ ] **4.3.11** Documentar que desativa/ativa usuário
-- [ ] **4.3.12** Documentar que admin não pode desativar a si mesmo
-
-#### `DELETE /api/admin/users/:userId/delete`
-
-- [ ] **4.3.13** Documentar schema de response (204, 404)
-- [ ] **4.3.14** Documentar que admin não pode deletar a si mesmo
+[ ] `PATCH /api/admin/users/:userId/toggle-active`
 
 ---
 
 ## Checklist Geral
-
-### Documentação
-
-- [ ] Gerar `openapi.json` completo
-- [ ] Validar spec no Swagger Editor
-- [ ] Revisar exemplos de request/response
-- [ ] Documentar códigos de erro globais (500, 429 rate limit)
 
 ### Qualidade
 
