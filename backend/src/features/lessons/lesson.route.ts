@@ -1,8 +1,3 @@
-import {
-  findLessonParamsRequest,
-  completeLessonParamsRequest,
-  courseSlugParamsRequest,
-} from "@lms/dtos";
 import { DataBase } from "../../db";
 import { LessonRepository } from "./lesson.repository";
 import { LessonService } from "./lesson.service";
@@ -13,6 +8,9 @@ import { Router } from "express";
 import { validateMiddleware } from "../../shared/middlewares/validate.middleware";
 
 import { UploadService } from "../upload/upload.service";
+import { courseSlugParamsRequest } from "../course/dtos/course-params";
+import { completeLessonParamsRequest } from "./dtos/complete-lesson.request";
+import { findLessonParamsRequest } from "./dtos/lesson-params.dto";
 
 export class LessonRoutes {
   private readonly controller: LessonController;
